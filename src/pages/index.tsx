@@ -14,7 +14,7 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ animal: input }),
+        body: JSON.stringify({ input: input }),
       });
 
       const data = await response.json();

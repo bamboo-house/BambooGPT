@@ -52,6 +52,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
 function generatePrompt(input: string) {
   const capitalizedInput = input[0].toUpperCase() + input.slice(1).toLowerCase();
+
   return `Suggest three names for an animal that is a superhero.
 
 Animal: Cat
