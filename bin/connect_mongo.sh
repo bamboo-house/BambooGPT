@@ -1,0 +1,1 @@
+docker-compose exec mongo mongo -u mongo -p mongo --authenticationDatabase=bamboogptDB

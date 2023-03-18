@@ -4,10 +4,10 @@ var user = {
   roles: [
     {
       role: "dbOwner",
-      db: "sample",
+      db: "bamboogptDB",
     },
   ],
 };
 
 db.createUser(user);
-db.createCollection("sample_collection");
+db.createCollection("prompts");
