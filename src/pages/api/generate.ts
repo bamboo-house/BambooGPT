@@ -16,11 +16,11 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     return;
   }
 
-  const animal = req.body.animal || '';
-  if (animal.trim().length === 0) {
+  const input = req.body.input || '';
+  if (input.trim().length === 0) {
     res.status(400).json({
       error: {
-        message: 'Please enter a valid animal',
+        message: 'Please enter a valid input',
       },
     });
     return;
@@ -29,7 +29,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   try {
     const completion = await openai.createCompletion({
       model: 'text-davinci-003',
-      prompt: generatePrompt(animal),
+      prompt: generatePrompt(input),
       temperature: 0.6,
     });
     console.log(completion.data);
@@ -50,14 +50,14 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-function generatePrompt(animal: string) {
-  const capitalizedAnimal = animal[0].toUpperCase() + animal.slice(1).toLowerCase();
+function generatePrompt(input: string) {
+  const capitalizedInput = input[0].toUpperCase() + input.slice(1).toLowerCase();
   return `Suggest three names for an animal that is a superhero.
 
 Animal: Cat
 Names: Captain Sharpclaw, Agent Fluffball, The Incredible Feline
 Animal: Dog
 Names: Ruff the Protector, Wonder Canine, Sir Barks-a-Lot
-Animal: ${capitalizedAnimal}
+Animal: ${capitalizedInput}
 Names:`;
 }
