@@ -1,6 +1,18 @@
-version: '3.9'
+version: "3.9"
 
 services:
+  app:
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
+    tty: true
+    volumes:
+      - ./app:/usr/src/app
+    ports:
+      - 3000:3000
+    command: sh -c "npm run dev"
+    depends_on:
+      - mongo
   mongo:
     container_name: bamboogpt-mongo
     image: mongo:5.0.6-focal

@@ -6,14 +6,17 @@
       "type": "node",
       "request": "attach",
       "skipFiles": ["<node_internals>/**"],
-      "port": 9229
+      "port": 9229,
+      "localRoot": "${workspaceFolder}/app",
+      "remoteRoot": "/usr/src/app",
+      "address": "localhost"
     },
     {
       "name": "Next.js クライアントサイド用のデバッガ設定",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}",
+      "webRoot": "${workspaceFolder}/app",
       "sourceMaps": true,
       "sourceMapPathOverrides": {
         "webpack://_N_E/*": "${webRoot}/*"
