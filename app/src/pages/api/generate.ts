@@ -59,11 +59,23 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     const db = getFirestore();
     // 全てのデータ取得
     const docRef = await db.collection('prompts').doc('takeuchi').get();
-    const docRef2 = await db.collection('prompts').get();
-    console.log('ifififififiififififififififiif=~=================================');
-    docRef2.forEach((doc) => {
-      console.log(doc.id, '=>', doc.data());
+    const docRef2 = db.collection('prompts').doc();
+    await docRef2.set({
+      name: 'Osaka',
+      country: 'Japan',
     });
+    const fres = await db.collection('prompts').add({
+      name: 'Tokyo',
+      country: 'Japan',
+    });
+
+    const snapshot = await db.collection('prompts').get();
+    console.log('ifififififiififififififififiif=~=================================');
+    console.log(snapshot.docs[0].data());
+    console.log(snapshot.size);
+    console.log(snapshot.empty);
+    console.log('Added document with ID', fres.id);
+
     console.log('ifififififiififififififififiif=~=================================');
 
     res.status(200).json({ result: { email: 'unko' } });

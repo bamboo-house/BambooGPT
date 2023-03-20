@@ -1,1 +1,0 @@
-mongoimport -u mongo -p mongo --db bamboogptDB --collection prompts --file /docker-entrypoint-initdb.d/sample.json --jsonArray
