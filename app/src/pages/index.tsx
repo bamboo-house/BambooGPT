@@ -29,7 +29,7 @@ export default function Home() {
         throw data.error || new Error(`Request failed with status ${response.status}`);
       }
 
-      setResult(data.result.username);
+      setResult(data.result.email);
       setInput('');
     } catch (error) {
       // Consider implementing your own error handling logic here

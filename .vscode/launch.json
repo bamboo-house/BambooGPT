@@ -6,10 +6,10 @@
       "type": "node",
       "request": "attach",
       "skipFiles": ["<node_internals>/**"],
+      "address": "localhost",
       "port": 9229,
-      "localRoot": "${workspaceFolder}/app",
-      "remoteRoot": "/usr/src/app",
-      "address": "localhost"
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/usr/src/app"
     },
     {
       "name": "Next.js クライアントサイド用のデバッガ設定",

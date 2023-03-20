@@ -1,24 +1,31 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Configuration, OpenAIApi } from 'openai';
 import { MongoClient, Db } from 'mongodb';
-
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
+import * as serviceAccount from '../../../firebase-test-serviceAccount.json';
+import { initializeApp, applicationDefault, cert } from 'firebase-admin/app';
+import { getFirestore, Timestamp, FieldValue } from 'firebase-admin/firestore';
+// const configuration = new Configuration({
+//   apiKey: process.env.OPENAI_API_KEY,
+// });
+// const openai = new OpenAIApi(configuration);
 
 const dbName = process.env.MONGO_DB_NAME;
 const client: MongoClient = new MongoClient(process.env.MONGO_URI!);
 
+// Firestore初期化
+initializeApp({
+  credential: cert(serviceAccount as any),
+});
+
 export default async function (req: NextApiRequest, res: NextApiResponse) {
-  if (!configuration.apiKey) {
-    res.status(500).json({
-      error: {
-        message: 'OpenAI API key not configured, please follow instructions in README.md',
-      },
-    });
-    return;
-  }
+  // if (!configuration.apiKey) {
+  //   res.status(500).json({
+  //     error: {
+  //       message: 'OpenAI API key not configured, please follow instructions in README.md',
+  //     },
+  //   });
+  //   return;
+  // }
 
   const input = req.body.input || '';
   if (input.trim().length === 0) {
@@ -30,9 +37,6 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     return;
   }
 
-  // こいつをmongoDBに保存する
-  // const prompt = generatePrompt(input);
-
   try {
     // const completion = await openai.createCompletion({
     //   model: 'text-davinci-003',
@@ -42,15 +46,18 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     // console.log(completion.data);
     // res.status(200).json({ result: completion.data.choices[0].text });
 
-    await client.connect();
-    console.log('Connected successfully to server');
-    const db: Db = client.db(dbName);
-    // prettier-ignore
-    const query = { "username": 'sample_user_001' };
-    const result = await db.collection('prompts').findOne(query);
-    console.log(result);
+    // await client.connect();
+    // console.log('Connected successfully to server');
+    // const db: Db = client.db(dbName);
+    // // prettier-ignore
+    // const query = { "name": "sample_user_001" };
+    // const result = await db.collection('prompts').findOne(query);
+    // console.log(result);
 
-    res.status(200).json({ result: result });
+    const db = getFirestore();
+    console.log(db);
+
+    res.status(200).json({ result: { email: 'unko' } });
   } catch (error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {

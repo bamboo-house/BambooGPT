@@ -10,34 +10,35 @@ services:
       - ./app:/usr/src/app
     ports:
       - 3000:3000
+      - 9229:9229
     command: sh -c "npm run dev"
-    depends_on:
-      - mongo
-  mongo:
-    container_name: bamboogpt-mongo
-    image: mongo:5.0.6-focal
-    restart: unless-stopped
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=password
-      - MONGO_INITDB_DATABASE=bamboogptDB
-      - TZ=Asia/Tokyo
-    ports:
-      - 27017:27017
-    volumes:
-      - type: bind
-        source: ./mongo/docker-entrypoint-initdb.d
-        target: /docker-entrypoint-initdb.d
-      - type: volume
-        source: mongo
-        target: /data/db
-        volume:
-          nocopy: true
-      - type: volume
-        source: mongo
-        target: /data/configdb
-        volume:
-          nocopy: true
+    # depends_on:
+    #   - mongo
+#   mongo:
+#     container_name: bamboogpt-mongo
+#     image: mongo:5.0.6-focal
+#     restart: unless-stopped
+#     environment:
+#       - MONGO_INITDB_ROOT_USERNAME=root
+#       - MONGO_INITDB_ROOT_PASSWORD=password
+#       - MONGO_INITDB_DATABASE=bamboogptDB
+#       - TZ=Asia/Tokyo
+#     ports:
+#       - 27017:27017
+#     volumes:
+#       - type: bind
+#         source: ./mongo/docker-entrypoint-initdb.d
+#         target: /docker-entrypoint-initdb.d
+#       - type: volume
+#         source: mongo
+#         target: /data/db
+#         volume:
+#           nocopy: true
+#       - type: volume
+#         source: mongo
+#         target: /data/configdb
+#         volume:
+#           nocopy: true
 
-volumes:
-  mongo:
+# volumes:
+#   mongo:
