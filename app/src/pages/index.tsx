@@ -2,12 +2,6 @@ import Head from 'next/head';
 import styles from '@/styles/Home.module.css';
 import { useState } from 'react';
 
-type Data = {
-  _id: string;
-  sampleDate: string;
-  username: string;
-};
-
 export default function Home() {
   const [input, setInput] = useState('');
   const [result, setResult] = useState();

@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Configuration, OpenAIApi } from 'openai';
-import { MongoClient, Db } from 'mongodb';
 import * as serviceAccount from '../../../firebase-test-serviceAccount.json';
 import { initializeApp, applicationDefault, cert, getApps } from 'firebase-admin/app';
 import { getFirestore, Timestamp, FieldValue } from 'firebase-admin/firestore';
@@ -41,13 +40,6 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     // console.log(completion.data);
     // res.status(200).json({ result: completion.data.choices[0].text });
 
-    // await client.connect();
-    // console.log('Connected successfully to server');
-    // const db: Db = client.db(dbName);
-    // // prettier-ignore
-    // const query = { "name": "sample_user_001" };
-    // const result = await db.collection('prompts').findOne(query);
-    // console.log(result);
     // Firestore初期化
 
     if (admin.apps.length === 0) {
