@@ -9,7 +9,7 @@ export default function Home() {
   async function onSubmit(event: { preventDefault: () => void }) {
     event.preventDefault();
     try {
-      const response = await fetch('/api/generate', {
+      const response = await fetch('/api/openai/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -23,7 +23,7 @@ export default function Home() {
         throw data.error || new Error(`Request failed with status ${response.status}`);
       }
 
-      setResult(data.result.email);
+      setResult(data.result);
       setInput('');
     } catch (error) {
       // Consider implementing your own error handling logic here

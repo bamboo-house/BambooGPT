@@ -7,11 +7,36 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
-  try {
-    // プロンプトを作成
-    // レスポンスを受け取る
+  if (!configuration.apiKey) {
+    res.status(500).json({
+      error: {
+        message: 'OpenAI API key not configured, please follow instructions in README.md',
+      },
+    });
+    return;
+  }
+  // プロンプトを作成
+  // レスポンスを受け取る
+  const input = req.body.input || '';
+  if (input.trim().length === 0) {
+    res.status(400).json({
+      error: {
+        message: 'Please enter a valid input',
+      },
+    });
+    return;
+  }
 
-    return res.status(200).json({ result: 'test' });
+  try {
+    const completion = await openai.createCompletion({
+      model: 'text-davinci-003',
+      prompt: input,
+      temperature: 0.6,
+    });
+    console.log(completion.data.choices[0].text);
+    // res.status(200).json({ result: completion.data.choices[0].text });
+
+    return res.status(200).json({ result: completion.data.choices[0].text });
   } catch (e) {
     res.status(500).json({
       error: {
