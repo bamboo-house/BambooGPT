@@ -17,11 +17,11 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   }
   // プロンプトを作成
   // レスポンスを受け取る
-  const input = req.body.input || '';
-  if (input.trim().length === 0) {
+  const prompt = req.body.prompt || '';
+  if (prompt.trim().length === 0) {
     res.status(400).json({
       error: {
-        message: 'Please enter a valid input',
+        message: 'Please enter a valid prompt',
       },
     });
     return;
@@ -30,7 +30,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   try {
     const completion = await openai.createCompletion({
       model: 'text-davinci-003',
-      prompt: input,
+      prompt: prompt,
       temperature: 0.6,
     });
     console.log(completion.data.choices[0].text);
