@@ -5,18 +5,20 @@ type FormProps = {
 };
 
 export const Form = (props: FormProps) => {
-  const [prompt, setPrompt] = useState('');
+  const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('A name was submitted: ', prompt);
+    console.log('A name was submitted: ', message);
+    setIsLoading(true);
     try {
       const response = await fetch('/api/openai/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ prompt: prompt }),
+        body: JSON.stringify({ message: message }),
       });
 
       const data = await response.json();
@@ -26,25 +28,26 @@ export const Form = (props: FormProps) => {
       }
 
       props.setResult(data.result);
-      setPrompt('');
     } catch (error) {
       // Consider implementing your own error handling logic here
       console.error(error);
       alert(error.message);
     }
+
+    setIsLoading(false);
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <label htmlFor="prompt" className="mb-2 block text-sm font-medium text-gray-900">
-        Enter prompt
+      <label htmlFor="message" className="mb-2 block text-sm font-medium text-gray-900">
+        Enter message
       </label>
       <textarea
-        id="prompt"
+        id="message"
         rows={4}
         className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
         placeholder="Write your thoughts here..."
-        onChange={(e) => setPrompt(e.target.value)}
+        onChange={(e) => setMessage(e.target.value)}
       ></textarea>
 
       <button
@@ -53,6 +56,7 @@ export const Form = (props: FormProps) => {
       >
         <span>Submit</span>
       </button>
+      <div>{isLoading ? <div>Loading...</div> : <div>Content loaded</div>}</div>
     </form>
   );
 };
