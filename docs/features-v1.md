@@ -1,5 +1,11 @@
 # 機能
 
+# openapi 関連
+
+### completion について
+
+- openai
+
 # 入力プロンプト関連
 
 chatGPT ブラウザ版に機能を追加する形
