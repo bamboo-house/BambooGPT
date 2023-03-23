@@ -26,6 +26,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     });
     return;
   }
+  console.log(prompt);
 
   try {
     const completion = await openai.createCompletion({

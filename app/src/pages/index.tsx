@@ -14,8 +14,10 @@ export default function Home() {
         <link rel="icon" href="/bamboogpt-icon.png" />
       </Head>
 
-      <Form setResult={setResult} />
-      <div>{result}</div>
+      <div className="mx-10">
+        <Form setResult={setResult} />
+        <div>{result}</div>
+      </div>
     </>
   );
 }
