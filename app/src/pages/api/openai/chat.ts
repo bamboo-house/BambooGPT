@@ -1,5 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Configuration, OpenAIApi, ChatCompletionRequestMessage } from 'openai';
+import {
+  Configuration,
+  OpenAIApi,
+  ChatCompletionRequestMessage,
+  CreateChatCompletionResponse,
+} from 'openai';
+import { Readable } from 'stream';
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -44,14 +50,41 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   console.log(message);
 
   try {
-    const completion = await openai.createChatCompletion({
-      model: 'gpt-3.5-turbo',
-      messages: createChatCompletionMessage(message),
-      temperature: 0.6,
-    });
-    console.log(completion.data.choices[0].message);
+    const response: any = await openai.createChatCompletion(
+      {
+        model: 'gpt-3.5-turbo',
+        messages: createChatCompletionMessage(message),
+        stream: true,
+        temperature: 0.6,
+      },
+      { responseType: 'stream' }
+    );
+    // console.log(completion.data.choices[0].message);
 
-    return res.status(200).json({ result: completion.data.choices[0].message?.content });
+    const stream = response.data as any as Readable;
+    // javascriptでresponseをfor文で回す
+    stream.on('data', (chunk: any) => {
+      try {
+        let str: string = chunk.toString();
+
+        // [DONE] は最後の行なので無視
+        if (str.indexOf('[DONE]') > 0) {
+          return;
+        }
+
+        // nullは無視
+        if (str.indexOf('delta":{}') > 0) {
+          return;
+        }
+
+        console.log(str);
+        // ※APIからの応答をクライアントに返す。後で説明。
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    // return res.status(200).json({ result: completion.data.choices[0].message?.content });
   } catch (e) {
     res.status(500).json({
       error: {
