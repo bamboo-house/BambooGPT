@@ -62,29 +62,66 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     // console.log(completion.data.choices[0].message);
 
     const stream = response.data as any as Readable;
-    // javascriptでresponseをfor文で回す
-    stream.on('data', (chunk: any) => {
-      try {
-        let str: string = chunk.toString();
 
-        // [DONE] は最後の行なので無視
-        if (str.indexOf('[DONE]') > 0) {
-          return;
-        }
+    // stream.on('data', (chunk: any) => {
+    //   try {
+    //     let str: string = chunk.toString();
 
-        // nullは無視
-        if (str.indexOf('delta":{}') > 0) {
-          return;
-        }
+    //     // // [DONE] は最後の行なので無視
+    //     // if (str.indexOf('[DONE]') > 0) {
+    //     //   return;
+    //     // }
 
-        console.log(str);
-        // ※APIからの応答をクライアントに返す。後で説明。
-      } catch (error) {
-        console.error(error);
-      }
+    //     // nullは無視
+    //     // if (str.indexOf('delta":{}') > 0) {
+    //     //   return;
+    //     // }
+
+    //     console.log(str);
+    //     // ※APIからの応答をクライアントに返す。後で説明。
+    //     const lines: Array<string> = str.split('\n');
+    //     lines.forEach((line) => {
+    //       // 先頭部分は削除
+    //       if (line.startsWith('data: ')) {
+    //         line = line.substring('data: '.length);
+    //       }
+
+    //       // 空行は無視
+    //       if (line.trim() == '') {
+    //         return;
+    //       }
+
+    //       // JSONにparse
+    //       const data = JSON.parse(line);
+    //       if (
+    //         data.choices[0].delta.content === null ||
+    //         data.choices[0].delta.content === undefined
+    //       ) {
+    //         return;
+    //       }
+
+    //       // 標準出力（確認用）
+    //       process.stdout.write(data.choices[0].delta.content);
+
+    //       // フロントに返却
+    //       res.write(JSON.stringify({ result: data.choices[0].delta.content }));
+    //     });
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // });
+    stream.on('end', () => {
+      console.log('end＝＝＝＝＝＝＝＝＝＝');
+      res.end();
+    });
+    stream.on('error', (error) => {
+      console.error(error);
+      res.end(JSON.stringify({ error: true, message: 'Error generating response.' }));
     });
 
-    // return res.status(200).json({ result: completion.data.choices[0].message?.content });
+    stream.pipe(res);
+    // console.log(stream);
+    return res.status(200);
   } catch (e) {
     res.status(500).json({
       error: {

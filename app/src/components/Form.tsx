@@ -21,13 +21,29 @@ export const Form = (props: FormProps) => {
         body: JSON.stringify({ message: message }),
       });
 
-      const data = await response.json();
-      console.log('============', data);
-      if (response.status !== 200) {
-        throw data.error || new Error(`Request failed with status ${response.status}`);
+      if (!response.body) {
+        throw new Error('Network response was not ok');
+      }
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+
+      while (true) {
+        const result = await reader.read();
+        console.log('result', result);
+        if (result.done) {
+          break;
+        }
+        const text = decoder.decode(result.value);
+        console.log(text);
       }
 
-      props.setResult(data.result);
+      // const data = await response.json();
+      // console.log('============', data);
+      // if (response.status !== 200) {
+      //   throw data.error || new Error(`Request failed with status ${response.status}`);
+      // }
+
+      // props.setResult(data.result);
     } catch (error) {
       // Consider implementing your own error handling logic here
       console.error(error);
