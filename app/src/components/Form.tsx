@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 type FormProps = {
-  setResult: React.Dispatch<React.SetStateAction<string>>;
+  onChangeResult: (str: string) => void;
 };
 
 export const Form = (props: FormProps) => {
@@ -33,17 +33,16 @@ export const Form = (props: FormProps) => {
         if (result.done) {
           break;
         }
-        const text = decoder.decode(result.value);
-        console.log(text);
+        const dataString = decoder.decode(result.value);
+        let data;
+        try {
+          data = JSON.parse(dataString);
+        } catch (error) {
+          console.error(error);
+        }
+        console.log(data);
+        props.onChangeResult(data?.text || '');
       }
-
-      // const data = await response.json();
-      // console.log('============', data);
-      // if (response.status !== 200) {
-      //   throw data.error || new Error(`Request failed with status ${response.status}`);
-      // }
-
-      // props.setResult(data.result);
     } catch (error) {
       // Consider implementing your own error handling logic here
       console.error(error);

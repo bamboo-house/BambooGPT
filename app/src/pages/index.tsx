@@ -6,6 +6,10 @@ import { Form } from '@/components/Form';
 export default function Home() {
   const [result, setResult] = useState('');
 
+  const accumulateResult = (str: string) => {
+    setResult((prevResult) => prevResult + str);
+  };
+
   return (
     <>
       <Head>
@@ -15,7 +19,7 @@ export default function Home() {
       </Head>
 
       <div className="mx-10">
-        <Form setResult={setResult} />
+        <Form onChangeResult={accumulateResult} />
         <div>{result}</div>
       </div>
     </>
