@@ -1,3 +1,4 @@
+import React from 'react';
 import Head from 'next/head';
 import styles from '@/styles/Home.module.css';
 import { useState } from 'react';
@@ -20,7 +21,7 @@ export default function Home() {
 
       <div className="mx-10">
         <Form onChangeResult={accumulateResult} />
-        <div>{result}</div>
+        <div style={{ whiteSpace: 'pre-line' }}>{result}</div>
       </div>
     </>
   );

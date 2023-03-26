@@ -47,7 +47,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     });
     return;
   }
-  console.log(message);
+  console.log('messages: ', message);
 
   try {
     const response: any = await openai.createChatCompletion(
@@ -63,6 +63,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     const stream = response.data;
 
     stream.on('data', (chunk: any) => {
+      console.log('================= START =================');
       let str: string = chunk.toString();
 
       // [DONE] は最後の行なので無視
@@ -99,7 +100,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     });
 
     stream.on('end', () => {
-      console.log('end＝＝＝＝＝＝＝＝＝＝');
+      console.log('================= END =================');
       res.end();
     });
 

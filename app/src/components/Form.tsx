@@ -12,6 +12,7 @@ export const Form = (props: FormProps) => {
     event.preventDefault();
     console.log('A name was submitted: ', message);
     setIsLoading(true);
+
     try {
       const response = await fetch('/api/openai/chat', {
         method: 'POST',
@@ -29,7 +30,7 @@ export const Form = (props: FormProps) => {
 
       while (true) {
         const result = await reader.read();
-        console.log('result', result);
+        // console.log('result', result);
         if (result.done) {
           break;
         }
@@ -44,7 +45,6 @@ export const Form = (props: FormProps) => {
         props.onChangeResult(data?.text || '');
       }
     } catch (error) {
-      // Consider implementing your own error handling logic here
       console.error(error);
       alert(error.message);
     }
