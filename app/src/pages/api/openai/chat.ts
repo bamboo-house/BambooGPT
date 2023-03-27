@@ -5,6 +5,7 @@ import * as serviceAccount from '../../../../firebase-test-serviceAccount.json';
 import { initializeApp, applicationDefault, cert, getApps } from 'firebase-admin/app';
 import { getFirestore, Timestamp, FieldValue } from 'firebase-admin/firestore';
 import admin from 'firebase-admin';
+import { PromptGateway } from '@/infrastructure/promptGateway';
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -27,6 +28,8 @@ const openai = new OpenAIApi(configuration);
 // };
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
+  const promptGateway = new PromptGateway();
+
   if (!configuration.apiKey) {
     res.status(500).json({
       error: {
@@ -61,8 +64,9 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
     const stream = response.data;
 
+    let result = '';
+    console.log('================= START =================');
     stream.on('data', (chunk: any) => {
-      console.log('================= START =================');
       let str: string = chunk.toString();
 
       // [DONE] は最後の行なので無視
@@ -92,23 +96,26 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
         if (data.choices[0].delta.content === null || data.choices[0].delta.content === undefined) {
           return;
         }
+        const text = data.choices[0].delta.content;
+        result += text;
 
         // フロントに返却
-        res.write(JSON.stringify({ text: data.choices[0].delta.content }));
+        res.write(JSON.stringify({ text: text }));
       });
     });
 
     stream.on('end', () => {
+      console.log(result);
       console.log('================= END =================');
       res.end();
+
+      promptGateway.create('shuto', result);
     });
 
     stream.on('error', (error: any) => {
       console.error(error);
       res.end(JSON.stringify({ error: true, message: 'Error generating response.' }));
     });
-
-    return res.status(200);
   } catch (e) {
     res.status(500).json({
       error: {
@@ -117,6 +124,8 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     });
   }
 }
+
+const validateRequest = (req: NextApiRequest) => {};
 
 const createChatCompletionMessage = (message: string): ChatCompletionRequestMessage[] => {
   return [

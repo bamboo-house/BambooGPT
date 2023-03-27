@@ -1,9 +1,11 @@
-import { DocumentData, DocumentReference, Firestore, Timestamp } from 'firebase-admin/firestore';
+import { getFirestore, DocumentData, Timestamp } from 'firebase-admin/firestore';
+import { connectFirestore } from './connectFirestore';
 
 export class PromptGateway {
   collection: FirebaseFirestore.CollectionReference<DocumentData>;
-  constructor(private _db: Firestore) {
-    this.collection = this._db.collection('prompts');
+  constructor() {
+    connectFirestore();
+    this.collection = getFirestore().collection('prompts');
   }
 
   async create(uid: string, prompt: string) {
@@ -16,8 +18,12 @@ export class PromptGateway {
       updatedAt: updatedAt,
     };
 
-    const docRef = this.collection.doc();
-
-    docRef.set(data);
+    try {
+      const docRef = this.collection.doc();
+      docRef.set(data);
+      console.log('=== success create doc ===');
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
