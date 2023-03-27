@@ -1,31 +1,30 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import {
-  Configuration,
-  OpenAIApi,
-  ChatCompletionRequestMessage,
-  CreateChatCompletionResponse,
-} from 'openai';
-import { Readable } from 'stream';
+import { Configuration, OpenAIApi, ChatCompletionRequestMessage } from 'openai';
+
+import * as serviceAccount from '../../../../firebase-test-serviceAccount.json';
+import { initializeApp, applicationDefault, cert, getApps } from 'firebase-admin/app';
+import { getFirestore, Timestamp, FieldValue } from 'firebase-admin/firestore';
+import admin from 'firebase-admin';
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
-type ChatRequest = {
-  model: string;
-  messages: [];
-  tempature: number | null;
-  top_p: number | null;
-  n: number | null;
-  stream: boolean | null;
-  stop: string | string[] | null;
-  max_tokens: number | null;
-  presence_penalty: number | null;
-  frequency_penalty: number | null;
-  logit_bias: { [key: string]: number } | null;
-  user: string | null;
-};
+// type ChatRequest = {
+//   model: string;
+//   messages: [];
+//   tempature: number | null;
+//   top_p: number | null;
+//   n: number | null;
+//   stream: boolean | null;
+//   stop: string | string[] | null;
+//   max_tokens: number | null;
+//   presence_penalty: number | null;
+//   frequency_penalty: number | null;
+//   logit_bias: { [key: string]: number } | null;
+//   user: string | null;
+// };
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   if (!configuration.apiKey) {
