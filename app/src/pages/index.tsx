@@ -16,8 +16,13 @@ export default function Home() {
   //     try {
   //       const response = await fetch('/api/hello');
   //       const data = await response.json();
+  //       console.log(response);
+  //       console.log(data);
+  //       if (!response.ok) {
+  //         throw new Error(data.name);
+  //       }
   //       console.log('呼び出し');
-  //       console.log(data.name);
+  //       console.log(data);
   //     } catch (error) {
   //       console.log('errorの呼び出し');
   //       console.error(error);

@@ -45,7 +45,6 @@ export default async function (req: NextApiRequest, res: NextApiResponse<ChatRes
         message: 'Please enter a valid message',
       },
     });
-    return;
   }
   console.log('messages: ', message);
 

@@ -25,6 +25,12 @@ export const Form = (props: FormProps) => {
       if (!response.body) {
         throw new Error('Network response was not ok');
       }
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error.message);
+      }
+
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
 
@@ -45,7 +51,7 @@ export const Form = (props: FormProps) => {
         props.onChangeResult(data?.text || '');
       }
     } catch (error) {
-      console.error(error);
+      console.error(error.name + ': ' + error.message);
       alert(error.message);
     }
 
