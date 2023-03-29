@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Head from 'next/head';
 import styles from '@/styles/Home.module.css';
 import { useState } from 'react';
@@ -10,6 +10,21 @@ export default function Home() {
   const accumulateResult = (str: string) => {
     setResult((prevResult) => prevResult + str);
   };
+
+  // useEffect(() => {
+  //   const fetchChat = async () => {
+  //     try {
+  //       const response = await fetch('/api/hello');
+  //       const data = await response.json();
+  //       console.log('呼び出し');
+  //       console.log(data.name);
+  //     } catch (error) {
+  //       console.log('errorの呼び出し');
+  //       console.error(error);
+  //     }
+  //   };
+  //   fetchChat();
+  // }, []);
 
   return (
     <>

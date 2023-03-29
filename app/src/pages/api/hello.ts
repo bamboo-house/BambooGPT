@@ -8,5 +8,7 @@ type Data = {
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   const response = await fetch('https://jsonplaceholder.typicode.com/users/');
   const users = await response.json();
-  res.status(200).json({ name: users[0].name });
+  // res.status(400).send({ name: 'Bad Request!' });
+  throw new Error('=================error');
+  // res.status(200).json({ name: users[0].name });
 }

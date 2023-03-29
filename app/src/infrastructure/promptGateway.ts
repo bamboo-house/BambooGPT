@@ -4,7 +4,9 @@ import { connectFirestore } from './connectFirestore';
 export class PromptGateway {
   collection: FirebaseFirestore.CollectionReference<DocumentData>;
   constructor() {
+    // firestore初期化
     connectFirestore();
+    // promptsコレクション取得
     this.collection = getFirestore().collection('prompts');
   }
 
