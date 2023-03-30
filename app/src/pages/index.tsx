@@ -7,8 +7,8 @@ import { Form } from '@/components/Form';
 export default function Home() {
   const [result, setResult] = useState('');
 
-  const accumulateResult = (str: string) => {
-    setResult((prevResult) => prevResult + str);
+  const accumulateResult = (text: string) => {
+    setResult((prevResult) => prevResult + text);
   };
 
   // useEffect(() => {
