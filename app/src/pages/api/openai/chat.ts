@@ -1,8 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { OpenaiService } from '@/application/openaiService';
 
-const openaiService = new OpenaiService();
-
 // type ChatRequest = {
 //   model: string;
 //   messages: [];
@@ -26,18 +24,7 @@ type ChatResponseBody = {
 };
 
 export default async function (req: NextApiRequest, res: NextApiResponse<ChatResponseBody>) {
-  // const promptGateway = new PromptGateway();
-
-  // if (!configuration.apiKey) {
-  //   res.status(500).json({
-  //     error: {
-  //       message: 'OpenAI API key not configured, please follow instructions in README.md',
-  //     },
-  //   });
-  //   return;
-  // }
-  // プロンプトを作成
-  // プロンプトを受け取る
+  const openaiService = new OpenaiService();
   const message = req.body.message || '';
   if (message.trim().length === 0) {
     res.status(400).json({

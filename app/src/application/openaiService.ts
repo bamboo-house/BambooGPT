@@ -74,7 +74,6 @@ export class OpenaiService {
         result += text;
 
         // フロントに返却
-        console.log(text);
         resWrite(text);
       });
     });
@@ -82,7 +81,7 @@ export class OpenaiService {
     stream.on('end', () => {
       console.log(result);
       console.log('================= END =================');
-      this._promptGateway.create('shuto', result);
+      // this._promptGateway.create('shuto', result);
       resEnd();
     });
 
