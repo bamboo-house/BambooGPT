@@ -12,15 +12,12 @@ export class OpenaiService {
     });
     this._openai = new OpenAIApi(this._configuration);
     this._promptGateway = new PromptGateway();
+
+    if (!this._configuration.apiKey) {
+      throw new Error('OpenAI API key not configured');
+    }
   }
-  // if (!this._configuration.apiKey) {
-  //   res.status(500).json({
-  //     error: {
-  //       message: 'OpenAI API key not configured, please follow instructions in README.md',
-  //     },
-  //   });
-  //   return;
-  // }
+
   async createChatCompletion(
     model: string,
     message: string,
@@ -77,7 +74,6 @@ export class OpenaiService {
         result += text;
 
         // フロントに返却
-        console.log(text);
         resWrite(text);
       });
     });

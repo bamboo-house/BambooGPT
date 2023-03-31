@@ -25,27 +25,43 @@ export const Form = (props: FormProps) => {
       if (!response.body) {
         throw new Error('Network response was not ok');
       }
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error.message);
+      }
+
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
 
       while (true) {
-        const result = await reader.read();
+        const { value, done } = await reader.read();
         // console.log('result', result);
-        if (result.done) {
+        if (done) {
           break;
         }
-        const dataString = decoder.decode(result.value);
-        let data;
+
         try {
-          data = JSON.parse(dataString);
+          const dataString = decoder.decode(value);
+          let text;
+
+          // ここでdataStringが"{"text":"ダルビッシュ"}{"text":"影山"}"になっていた場合は、"ダルビッシュ影山"を保存する
+          const counter = dataString.match(/text/g)?.length;
+          if (counter && counter > 1) {
+            const str = '[' + dataString.replace(/"}{"/g, '"},{"') + ']';
+            const array = JSON.parse(str);
+            text = array.map((obj: { text: string }) => obj.text).join('');
+          } else {
+            text = JSON.parse(dataString).text;
+          }
+
+          props.onChangeResult(text || '');
         } catch (error) {
           console.error(error);
         }
-        console.log(data);
-        props.onChangeResult(data?.text || '');
       }
     } catch (error) {
-      console.error(error);
+      console.error(error.name + ': ' + error.message);
       alert(error.message);
     }
 
