@@ -1,4 +1,4 @@
-import * as serviceAccount from '../../firebase-test-serviceAccount.json';
+import * as serviceAccount from '../../../firebase-test-serviceAccount.json';
 import { initializeApp, cert } from 'firebase-admin/app';
 import admin from 'firebase-admin';
 

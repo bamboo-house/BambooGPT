@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { OpenaiService } from '@/application/openaiService';
+import { OpenaiService } from '@/openai/application/openaiService';
 
 // type ChatRequest = {
 //   model: string;
