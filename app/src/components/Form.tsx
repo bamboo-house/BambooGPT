@@ -8,58 +8,56 @@ export const Form = (props: FormProps) => {
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const openaiChats = async (message: string) => {
+    const response = await fetch('/api/openai/chats');
+    const data = await response.json();
+
+    if (!response.body) {
+      throw new Error('Network response was not ok');
+    }
+
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.error.message);
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) {
+        break;
+      }
+
+      try {
+        const dataString = decoder.decode(value);
+        let text;
+
+        // ここでdataStringが"{"text":"ダルビッシュ"}{"text":"影山"}"になっていた場合は、"ダルビッシュ影山"を保存する
+        const counter = dataString.match(/text/g)?.length;
+        if (counter && counter > 1) {
+          const str = '[' + dataString.replace(/"}{"/g, '"},{"') + ']';
+          const array = JSON.parse(str);
+          text = array.map((obj: { text: string }) => obj.text).join('');
+        } else {
+          text = JSON.parse(dataString).text;
+        }
+
+        props.onChangeResult(text || '');
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log('A name was submitted: ', message);
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/openai/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message: message }),
-      });
-
-      if (!response.body) {
-        throw new Error('Network response was not ok');
-      }
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error.message);
-      }
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-
-      while (true) {
-        const { value, done } = await reader.read();
-        // console.log('result', result);
-        if (done) {
-          break;
-        }
-
-        try {
-          const dataString = decoder.decode(value);
-          let text;
-
-          // ここでdataStringが"{"text":"ダルビッシュ"}{"text":"影山"}"になっていた場合は、"ダルビッシュ影山"を保存する
-          const counter = dataString.match(/text/g)?.length;
-          if (counter && counter > 1) {
-            const str = '[' + dataString.replace(/"}{"/g, '"},{"') + ']';
-            const array = JSON.parse(str);
-            text = array.map((obj: { text: string }) => obj.text).join('');
-          } else {
-            text = JSON.parse(dataString).text;
-          }
-
-          props.onChangeResult(text || '');
-        } catch (error) {
-          console.error(error);
-        }
-      }
+      await openaiChats(message);
     } catch (error) {
       console.error(error.name + ': ' + error.message);
       alert(error.message);
