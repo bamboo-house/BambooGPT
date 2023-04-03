@@ -36,8 +36,8 @@ export default async function (req: NextApiRequest, res: NextApiResponse<ChatRes
   console.log('messages: ', message);
 
   try {
-    openaiService.createChatCompletion(
-      'gpt-3.5-turbo',
+    openaiService.createCompletion(
+      'text-ada-001',
       message,
       0.6,
       (text: string) => {
@@ -48,6 +48,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse<ChatRes
       }
     );
   } catch (e) {
+    console.log('error: ', e);
     res.status(500).json({
       error: {
         message: e.message,

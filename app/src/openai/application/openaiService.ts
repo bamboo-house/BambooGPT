@@ -96,4 +96,77 @@ export class OpenaiService {
       { role: 'user', content: message },
     ];
   };
+
+  async createCompletion(
+    model: string,
+    prompt: string,
+    temperature: number,
+    resWrite: (text: string) => void,
+    resEnd: () => void
+  ): Promise<void> {
+    const response: any = await this._openai.createCompletion(
+      {
+        model,
+        prompt: prompt,
+        max_tokens: 20,
+        stream: true,
+        temperature,
+      },
+      { responseType: 'stream' }
+    );
+
+    const stream = response.data;
+
+    let result = '';
+    console.log('================= START =================');
+
+    stream.on('data', (chunk: any) => {
+      let str: string = chunk.toString();
+
+      // [DONE] は最後の行なので無視
+      if (str.indexOf('[DONE]') > 0) {
+        return;
+      }
+
+      // nullは無視;
+      if (str.indexOf('delta":{}') > 0) {
+        return;
+      }
+
+      // ※APIからの応答をクライアントに返す。後で説明。
+      const lines: Array<string> = str.split('\n');
+      lines.forEach((line) => {
+        if (line.startsWith('data: ')) {
+          line = line.substring('data: '.length);
+        }
+
+        // 空行は無視
+        if (line.trim() == '') {
+          return;
+        }
+
+        // JSONにparse
+        const data = JSON.parse(line);
+        if (data.choices[0].text === null || data.choices[0].text === undefined) {
+          return;
+        }
+        const text = data.choices[0].text;
+        result += text;
+
+        // フロントに返却
+        resWrite(text);
+      });
+    });
+
+    stream.on('end', () => {
+      console.log(result);
+      console.log('================= END =================');
+      // this._promptGateway.create('shuto', result);
+      resEnd();
+    });
+
+    stream.on('error', (error: any) => {
+      console.error(error);
+    });
+  }
 }
