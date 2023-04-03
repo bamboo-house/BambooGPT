@@ -39,7 +39,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse<ChatRes
     openaiService.createCompletion(
       'text-ada-001',
       message,
-      0.6,
+      0.3,
       (text: string) => {
         res.write(JSON.stringify({ text: text }));
       },

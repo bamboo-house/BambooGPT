@@ -18,6 +18,10 @@ export class OpenaiService {
     }
   }
 
+  // ======================================
+  // Chat
+  // チャット会話が与えられた場合、モデルはチャット完了応答を返す。
+  // ======================================
   async createChatCompletion(
     model: string,
     message: string,
@@ -97,6 +101,11 @@ export class OpenaiService {
     ];
   };
 
+  // ======================================
+  // Completions
+  // プロンプトが与えられると、モデルは1つまたは複数の予測された完了を返し、
+  // 各位置での代替トークンの確率も返すことができる
+  // ======================================
   async createCompletion(
     model: string,
     prompt: string,
@@ -108,9 +117,12 @@ export class OpenaiService {
       {
         model,
         prompt: prompt,
-        max_tokens: 20,
+        max_tokens: 7,
         stream: true,
         temperature,
+        top_p: 1,
+        n: 1,
+        logprobs: null,
       },
       { responseType: 'stream' }
     );
@@ -159,7 +171,7 @@ export class OpenaiService {
     });
 
     stream.on('end', () => {
-      console.log(result);
+      console.log('recieved message:', result);
       console.log('================= END =================');
       // this._promptGateway.create('shuto', result);
       resEnd();
