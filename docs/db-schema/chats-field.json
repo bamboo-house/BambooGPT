@@ -1,0 +1,28 @@
+{
+  "id": "number",
+  "uuid": "string",
+  "chat": {
+    "model": "string",
+    "message": [
+      { "role": "system", "content": "You are a helpful assistant." },
+      { "role": "user", "content": "Who won the world series in 2020?" },
+      {
+        "role": "assistant",
+        "content": "The Los Angeles Dodgers won the World Series in 2020."
+      },
+      { "role": "user", "content": "Where was it played?" }
+    ],
+    "temperature": "number | null",
+    "top_p": "number | null",
+    "n": "number | null",
+    "stream": "boolean | null",
+    "stop": "string | string[] | null",
+    "max_tokens": "number | null",
+    "presence_penalty": "number | null",
+    "frequency_penalty": "number | null",
+    "logit_bias": "{ [key: string]: number } | null",
+    "user": "string | null"
+  },
+  "updatedAt": "string",
+  "createdAt": "string"
+}
