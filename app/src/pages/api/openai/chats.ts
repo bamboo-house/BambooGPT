@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { OpenaiService } from '@/openai/application/openaiService';
+import { OpenaiService } from '@/backend/openai/application/openaiService';
 
 type ChatResponseBody = {
   error?: {
