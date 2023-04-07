@@ -1,12 +1,6 @@
 import { initializeApp, getApps } from 'firebase/app';
 
-import {
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
-  onAuthStateChanged,
-  Auth,
-} from 'firebase/auth';
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 
 const firebaseConfig = {
@@ -53,13 +47,6 @@ export const Firebase = () => {
       }
     });
     console.log('currentUser', auth.currentUser);
-
-    // const user: any = currentUser(auth);
-    // if (user) {
-    //   console.log('current', user);
-    // } else {
-    //   console.log('なし');
-    // }
   }, []);
   return (
     <>
