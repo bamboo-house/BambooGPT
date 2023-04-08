@@ -1,6 +1,12 @@
 import { initializeApp, getApps } from 'firebase/app';
 
-import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'firebase/auth';
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signOut,
+} from 'firebase/auth';
 import { useEffect, useState } from 'react';
 
 const firebaseConfig = {
@@ -20,7 +26,7 @@ if (!getApps().length) {
 }
 
 export const Firebase = () => {
-  const [user, setUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
@@ -28,10 +34,24 @@ export const Firebase = () => {
       const auth = getAuth();
       const result: any = await signInWithPopup(auth, provider);
       console.log(result.user);
-      setUser(result.user.displayName);
+      setCurrentUser(result.user.displayName);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleLogout = async () => {
+    const auth = getAuth();
+    await signOut(auth)
+      .then(() => {
+        console.log('ログアウトしました');
+      })
+      .catch((e) => {
+        alert('ログアウトに失敗しました');
+        console.log(e);
+      });
+
+    setCurrentUser(null);
   };
 
   useEffect(() => {
@@ -48,10 +68,19 @@ export const Firebase = () => {
     });
     console.log('currentUser', auth.currentUser);
   }, []);
+
   return (
     <>
-      {user ? (
-        <p>ログインしました: {user}</p>
+      {currentUser ? (
+        <div>
+          <p>ログインしました: {currentUser}</p>
+          <button
+            className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+            onClick={handleLogout}
+          >
+            ログアウト
+          </button>
+        </div>
       ) : (
         <button
           className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
