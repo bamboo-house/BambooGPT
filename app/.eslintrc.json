@@ -5,11 +5,10 @@
     "plugin:import/warnings",
     "plugin:@typescript-eslint/recommended",
     "plugin:tailwindcss/recommended",
+    "plugin:react-hooks/recommended",
     "prettier"
   ],
-  "ignorePatterns": [
-    "*.config.js"
-  ],
+  "ignorePatterns": ["*.config.js"],
   "rules": {
     "import/order": [
       "error",

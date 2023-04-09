@@ -6,6 +6,8 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
   signOut,
+  browserLocalPersistence,
+  setPersistence,
 } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 
@@ -27,21 +29,22 @@ if (!getApps().length) {
 
 export const Firebase = () => {
   const [currentUser, setCurrentUser] = useState(null);
+  const auth = getAuth();
 
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      const auth = getAuth();
-      const result: any = await signInWithPopup(auth, provider);
-      console.log(result.user);
-      setCurrentUser(result.user.displayName);
+      await setPersistence(auth, browserLocalPersistence).then(async () => {
+        const result: any = await signInWithPopup(auth, provider);
+        console.log(result.user);
+        setCurrentUser(result.user.displayName);
+      });
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleLogout = async () => {
-    const auth = getAuth();
     await signOut(auth)
       .then(() => {
         console.log('ログアウトしました');
@@ -55,11 +58,7 @@ export const Firebase = () => {
   };
 
   useEffect(() => {
-    const auth = getAuth();
-
-    console.log('getApps()', getApps());
-
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log('authchanged', user);
       } else {
@@ -67,19 +66,20 @@ export const Firebase = () => {
       }
     });
     console.log('currentUser', auth.currentUser);
+    return unsubscribe;
   }, []);
 
   return (
     <>
+      <button
+        className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+        onClick={handleLogout}
+      >
+        ログアウト
+      </button>
       {currentUser ? (
         <div>
           <p>ログインしました: {currentUser}</p>
-          <button
-            className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
-            onClick={handleLogout}
-          >
-            ログアウト
-          </button>
         </div>
       ) : (
         <button
