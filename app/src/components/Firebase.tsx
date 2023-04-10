@@ -6,8 +6,6 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
   signOut,
-  browserLocalPersistence,
-  setPersistence,
 } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 
@@ -28,17 +26,15 @@ if (!getApps().length) {
 }
 
 export const Firebase = () => {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState<string | null>(null);
   const auth = getAuth();
 
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      await setPersistence(auth, browserLocalPersistence).then(async () => {
-        const result: any = await signInWithPopup(auth, provider);
-        console.log(result.user);
-        setCurrentUser(result.user.displayName);
-      });
+      const result: any = await signInWithPopup(auth, provider);
+      console.log(result.user);
+      setCurrentUser(result.user.displayName);
     } catch (error) {
       console.log(error);
     }
@@ -61,6 +57,7 @@ export const Firebase = () => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log('authchanged', user);
+        setCurrentUser(user.displayName);
       } else {
         console.log('なし');
       }
