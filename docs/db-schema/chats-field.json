@@ -1,6 +1,6 @@
 {
-  "id": "number",
-  "uuid": "string",
+  "uid": "string",
+  "threadId": "string",
   "chat": {
     "model": "string",
     "message": [

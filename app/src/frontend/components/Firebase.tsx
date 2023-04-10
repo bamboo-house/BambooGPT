@@ -1,5 +1,4 @@
 import { initializeApp, getApps } from 'firebase/app';
-
 import {
   getAuth,
   signInWithPopup,
@@ -8,6 +7,8 @@ import {
   signOut,
 } from 'firebase/auth';
 import { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { currentUserState } from '../globalStates/atoms/currentUserState';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -26,7 +27,7 @@ if (!getApps().length) {
 }
 
 export const Firebase = () => {
-  const [currentUser, setCurrentUser] = useState<string | null>(null);
+  const [currentUser, setCurrentUser] = useRecoilState(currentUserState);
   const auth = getAuth();
 
   const handleGoogleLogin = async () => {
@@ -34,13 +35,18 @@ export const Firebase = () => {
     try {
       const result: any = await signInWithPopup(auth, provider);
       console.log(result.user);
-      setCurrentUser(result.user.displayName);
+      setCurrentUser({
+        uid: result.user.uid,
+        name: result.user.displayName,
+        photoURL: result.user.photoURL,
+      });
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleLogout = async () => {
+    const auth = getAuth();
     await signOut(auth)
       .then(() => {
         console.log('ログアウトしました');
@@ -50,14 +56,22 @@ export const Firebase = () => {
         console.log(e);
       });
 
-    setCurrentUser(null);
+    setCurrentUser({
+      uid: null,
+      name: null,
+      photoURL: null,
+    });
   };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log('authchanged', user);
-        setCurrentUser(user.displayName);
+        setCurrentUser({
+          uid: user.uid,
+          name: user.displayName,
+          photoURL: user.photoURL,
+        });
       } else {
         console.log('なし');
       }
@@ -74,9 +88,11 @@ export const Firebase = () => {
       >
         ログアウト
       </button>
-      {currentUser ? (
+      {currentUser.uid ? (
         <div>
-          <p>ログインしました: {currentUser}</p>
+          <p>
+            ログインしました:{currentUser.name}, {currentUser.uid}
+          </p>
         </div>
       ) : (
         <button
