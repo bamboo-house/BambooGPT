@@ -1,14 +1,9 @@
 import { initializeApp, getApps } from 'firebase/app';
-import {
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
-  onAuthStateChanged,
-  signOut,
-} from 'firebase/auth';
-import { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { currentUserState } from '../globalStates/atoms/currentUserState';
+import { useAuth } from '../utils/googleAuth';
+import { useEffect } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -22,69 +17,33 @@ const firebaseConfig = {
 
 // Initialize Firebase
 // const analytics = getAnalytics(app);
-if (!getApps().length) {
-  initializeApp(firebaseConfig);
-}
 
 export const Firebase = () => {
-  const [currentUser, setCurrentUser] = useRecoilState(currentUserState);
-  const auth = getAuth();
+  const { loginWithGoogle, logout } = useAuth();
+  const currentUser = useRecoilValue(currentUserState);
 
-  const handleGoogleLogin = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      const result: any = await signInWithPopup(auth, provider);
-      console.log(result.user);
-      setCurrentUser({
-        uid: result.user.uid,
-        name: result.user.displayName,
-        photoURL: result.user.photoURL,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleLogout = async () => {
-    const auth = getAuth();
-    await signOut(auth)
-      .then(() => {
-        console.log('ログアウトしました');
-      })
-      .catch((e) => {
-        alert('ログアウトに失敗しました');
-        console.log(e);
-      });
-
-    setCurrentUser({
-      uid: null,
-      name: null,
-      photoURL: null,
-    });
-  };
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log('authchanged', user);
-        setCurrentUser({
-          uid: user.uid,
-          name: user.displayName,
-          photoURL: user.photoURL,
-        });
-      } else {
-        console.log('なし');
-      }
-    });
-    console.log('currentUser', auth.currentUser);
-    return unsubscribe;
-  }, []);
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       console.log('authchanged', user);
+  //       setCurrentUser({
+  //         uid: user.uid,
+  //         name: user.displayName,
+  //         photoURL: user.photoURL,
+  //       });
+  //     } else {
+  //       console.log('なし');
+  //     }
+  //   });
+  //   console.log('currentUser', auth.currentUser);
+  //   return unsubscribe;
+  // }, []);
 
   return (
     <>
       <button
         className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
-        onClick={handleLogout}
+        onClick={logout}
       >
         ログアウト
       </button>
@@ -97,7 +56,7 @@ export const Firebase = () => {
       ) : (
         <button
           className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
-          onClick={handleGoogleLogin}
+          onClick={loginWithGoogle}
         >
           Googleでログイン
         </button>
