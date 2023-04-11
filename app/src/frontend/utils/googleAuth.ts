@@ -19,10 +19,9 @@ export const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_AMESUREMENT_ID,
 };
 
-export const useAuth = () => {
+export const useAuthEffect = () => {
   const auth = getAuth();
   const setCurrentUser = useSetRecoilState(currentUserState);
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -39,6 +38,12 @@ export const useAuth = () => {
     console.log('currentUser', auth.currentUser);
     return unsubscribe;
   }, []);
+};
+
+export const useAuth = () => {
+  // const auth = useRecoilValue(authState);
+  const auth = getAuth();
+  const setCurrentUser = useSetRecoilState(currentUserState);
 
   const loginWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
