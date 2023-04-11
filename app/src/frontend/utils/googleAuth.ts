@@ -1,7 +1,13 @@
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import {
+  getAuth,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithPopup,
+  signOut,
+} from 'firebase/auth';
 import { useSetRecoilState } from 'recoil';
 import { currentUserState } from '../globalStates/atoms/currentUserState';
-import { getApps, initializeApp } from 'firebase/app';
+import { useEffect } from 'react';
 
 export const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,11 +20,25 @@ export const firebaseConfig = {
 };
 
 export const useAuth = () => {
-  if (!getApps().length) {
-    initializeApp(firebaseConfig);
-  }
   const auth = getAuth();
   const setCurrentUser = useSetRecoilState(currentUserState);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log('authchanged', user);
+        setCurrentUser({
+          uid: user.uid,
+          name: user.displayName,
+          photoURL: user.photoURL,
+        });
+      } else {
+        console.log('なし');
+      }
+    });
+    console.log('currentUser', auth.currentUser);
+    return unsubscribe;
+  }, []);
 
   const loginWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
