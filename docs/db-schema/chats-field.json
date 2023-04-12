@@ -1,6 +1,6 @@
 {
-  "uid": "string",
-  "threadId": "string",
+  "user": "reference",
+  "thread": "reference",
   "chat": {
     "model": "string",
     "message": [
