@@ -5,13 +5,13 @@ import { useState } from 'react';
 import { Form } from '@/frontend/components/Form';
 import { Firebase } from '@/frontend/components/Firebase';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
-import { useAuthEffect } from '@/frontend/utils/googleAuth';
+import { useFirebaseAuthEffect } from '@/frontend/utils/firebaseAuth';
 
 export default function Home() {
   const [result, setResult] = useState('');
 
   // ユーザーを指定
-  useAuthEffect();
+  useFirebaseAuthEffect();
 
   const accumulateResult = (text: string) => {
     setResult((prevResult) => prevResult + text);
