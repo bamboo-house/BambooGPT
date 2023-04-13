@@ -31,7 +31,6 @@ export const useFirebaseAuthEffect = () => {
 };
 
 export const useFirebaseAuth = () => {
-  // const auth = useRecoilValue(authState);
   const auth = getAuth();
   const setCurrentUser = useSetRecoilState(currentUserState);
 

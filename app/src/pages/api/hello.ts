@@ -12,12 +12,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
     // クライアントサイドから送信されたIDトークンを取得
     const { idToken } = req.body;
-    console.log(idToken);
 
     try {
       // IDトークンを検証して認証情報を取得
       const decodedToken = await getAuth().verifyIdToken(idToken);
       const { uid, email } = decodedToken;
+      console.log('uid:', uid);
+      console.log('email:', email);
 
       // Firestoreへの操作を行う（例: ドキュメントの作成）
       const firestore = getFirestore();
