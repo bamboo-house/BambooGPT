@@ -7,6 +7,21 @@ info:
   version: 1.0.0
 
 paths:
+  /api/login/google:
+    post:
+      summary: Create a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                idToken:
+                  type: string
+                  example: "ej9G9geGfe93fbn28fnguucnuFuBUBW3482YFb3ffb"
+      responses:
+        200:
+          description: OK
   /api/openai/threads:
     post:
       summary: Create a new thread

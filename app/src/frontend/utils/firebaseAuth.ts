@@ -38,6 +38,11 @@ export const useFirebaseAuth = () => {
     const provider = new GoogleAuthProvider();
     try {
       const result: any = await signInWithPopup(auth, provider);
+      // signInWithPopupが成功したら、POSTリクエスト
+      // const idToken = await result.user.getIdToken(true);
+      // POST /api/login/google { idToken }
+      // response => なし？
+
       console.log(result.user);
       setCurrentUser(result.user.displayName);
     } catch (error) {

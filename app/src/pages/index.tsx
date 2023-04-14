@@ -12,7 +12,7 @@ export default function Home() {
   // ユーザーを指定
   useCurrentUserSetter();
 
-  const accumulateResult = (text: string) => {
+  const handleAccumulatingResult = (text: string) => {
     setResult((prevResult) => prevResult + text);
   };
 
@@ -24,7 +24,7 @@ export default function Home() {
       // ログイン成功時にサーバーサイドのAPIにIDトークンを送信
       const idToken = await result.user.getIdToken(true);
       console.log(idToken);
-      await fetch('/api/hello', {
+      const response = await fetch('/api/hello', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,7 +33,8 @@ export default function Home() {
       });
 
       // ログイン成功の処理
-      console.log('ログイン成功');
+      const data = await response.json();
+      console.log(data);
     } catch (error) {
       console.error(error);
       // ログイン失敗の処理
@@ -49,16 +50,9 @@ export default function Home() {
       </Head>
 
       <div className="mx-10">
-        <Form onChangeResult={accumulateResult} />
+        <Form onChangeResult={handleAccumulatingResult} />
         <div style={{ whiteSpace: 'pre-line' }}>{result}</div>
       </div>
-
-      <button
-        className="rounded bg-red-500 py-2 px-4 font-bold text-white hover:bg-red-700"
-        onClick={handleHelloGoogleLogin}
-      >
-        Helloボタン
-      </button>
 
       <Firebase />
     </>
