@@ -1,11 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { connectFirestore } from '@/backend/openai/infrastructure/connectFirestore';
 
 // クライアントサイドからのGoogleログイン処理
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   connectFirestore();
   console.log('=====================================');
   console.log(req.body);
@@ -33,4 +33,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   } else {
     res.status(400).json({ success: false, message: '無効なリクエストです' });
   }
-};
+}

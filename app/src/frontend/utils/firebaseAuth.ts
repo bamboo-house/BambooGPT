@@ -5,11 +5,11 @@ import {
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
+import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { currentUserState } from '../globalStates/atoms/currentUserState';
-import { useEffect } from 'react';
 
-export const useFirebaseAuthEffect = () => {
+export const useCurrentUserSetter = () => {
   const auth = getAuth();
   const setCurrentUser = useSetRecoilState(currentUserState);
   useEffect(() => {

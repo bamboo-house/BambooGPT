@@ -1,17 +1,16 @@
-import React from 'react';
-import Head from 'next/head';
-import styles from '@/styles/Home.module.css';
-import { useState } from 'react';
-import { Form } from '@/frontend/components/Form';
-import { Firebase } from '@/frontend/components/Firebase';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
-import { useFirebaseAuthEffect } from '@/frontend/utils/firebaseAuth';
+import Head from 'next/head';
+import React, { useState } from 'react';
+import { Firebase } from '@/frontend/components/Firebase';
+import { Form } from '@/frontend/components/Form';
+import { useCurrentUserSetter } from '@/frontend/utils/firebaseAuth';
+import styles from '@/styles/Home.module.css';
 
 export default function Home() {
   const [result, setResult] = useState('');
 
   // ユーザーを指定
-  useFirebaseAuthEffect();
+  useCurrentUserSetter();
 
   const accumulateResult = (text: string) => {
     setResult((prevResult) => prevResult + text);

@@ -8,7 +8,7 @@ type ChatResponseBody = {
   text?: string;
 };
 
-export default async function (req: NextApiRequest, res: NextApiResponse<ChatResponseBody>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<ChatResponseBody>) {
   const { method } = req;
   console.log('method: ', method);
   switch (method) {
