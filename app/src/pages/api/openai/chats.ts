@@ -26,9 +26,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         });
       }
       console.log('messages: ', message);
-
-      const openaiService = new OpenaiService();
       try {
+        const openaiService = new OpenaiService();
         // TODO: テスト的にCompletionを利用している
         openaiService.createCompletion(
           'text-ada-001',

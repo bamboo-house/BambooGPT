@@ -2,11 +2,11 @@
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { connectFirestore } from '@/backend/openai/infrastructure/connectFirestore';
+import { initializeFirebase } from '@/backend/openai/infrastructure/initializeFirebase';
 
 // クライアントサイドからのGoogleログイン処理
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  connectFirestore();
+  initializeFirebase();
   console.log('=====================================');
   console.log(req.body);
   if (req.method === 'POST') {
