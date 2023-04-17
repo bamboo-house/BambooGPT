@@ -1,34 +1,12 @@
 import { GoogleAuthProvider, UserMetadata, getAuth, signInWithPopup } from 'firebase/auth';
 import Head from 'next/head';
 import React, { useState } from 'react';
+import { GoogleUserInfo } from '@/bff/types/firestore/usersCollection';
+import { ReqLoginGoogle, ResLoginGoogle } from '@/bff/types/login';
 import { Firebase } from '@/frontend/components/Firebase';
 import { Form } from '@/frontend/components/Form';
 import { useCurrentUserSetter } from '@/frontend/utils/firebaseAuth';
 import styles from '@/styles/Home.module.css';
-
-type GoogleUserInfo = {
-  idToken: string;
-  displayName: string | null;
-  email: string | null;
-  phoneNumber: string | null;
-  photoURL: string | null;
-  uid: string;
-  providerId: string;
-  createdAt: string;
-  creationTime: string;
-  lastLoginAt: string;
-  lastSignInTime: string;
-  lastRefreshAt: string;
-};
-
-type ReqLoginGoogleBody = {
-  googleUserInfo: GoogleUserInfo;
-};
-
-type ResLoginGoogle = {
-  name: string;
-  image: string;
-};
 
 export default function Home() {
   const [result, setResult] = useState('');
@@ -63,7 +41,7 @@ export default function Home() {
         lastSignInTime: metadata.lastSignInTime,
         lastRefreshAt: metadata.lastRefreshAt,
       };
-      const reqBody: ReqLoginGoogleBody = { googleUserInfo };
+      const reqBody: ReqLoginGoogle = { googleUserInfo };
 
       const response = await fetch('/api/login/google', {
         method: 'POST',

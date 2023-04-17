@@ -2,46 +2,17 @@ import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { initializeFirebase } from '@/backend/openai/infrastructure/initializeFirebase';
-
-type GoogleUserInfo = {
-  idToken: string;
-  displayName: string | null;
-  email: string | null;
-  phoneNumber: string | null;
-  photoURL: string | null;
-  uid: string;
-  providerId: string;
-  createdAt: string;
-  creationTime: string;
-  lastLoginAt: string;
-  lastSignInTime: string;
-  lastRefreshAt: string;
-};
-
-type User = {
-  name: string;
-  description: string | null;
-  image: string;
-  googleUserInfo: GoogleUserInfo;
-};
-
-type ReqLoginGoogleBody = {
-  googleUserInfo: GoogleUserInfo;
-};
-
-type ResLoginGoogle = {
-  name: string;
-  image: string;
-};
+import { GoogleUserInfo, User } from '@/bff/types/firestore/usersCollection';
+import { ReqLoginGoogle, ResLoginGoogle } from '@/bff/types/login';
 
 // api/login/googleの理由は、twitterやfacebookなどのログインも増える可能性を考慮するため
 // あと、loginは割と特殊な処理なので、api/login/以下にまとめておきたい
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   initializeFirebase();
-  const body: ReqLoginGoogleBody = req.body;
+  const reqBody: ReqLoginGoogle = req.body;
 
   if (req.method === 'POST') {
-    const googleUserInfo: GoogleUserInfo = req.body.googleUserInfo;
+    const googleUserInfo: GoogleUserInfo = reqBody.googleUserInfo;
 
     try {
       // IDトークンを検証して認証情報を取得
