@@ -34,10 +34,6 @@ type ResLoginGoogle = {
   image: string;
 };
 
-// パターン１：ログインボタンからログインする -> userドキュメントが存在すれば、〜　しなければ、 〜 -> nameとimageをフロントに返す
-// パターン２：onAuthStateChangedで自動ログインする -> userドキュメントが存在すれば、〜　しなければ、 〜 -> nameとimageをフロントに返す
-//　パターン１もパターン２も同じ
-
 // api/login/googleの理由は、twitterやfacebookなどのログインも増える可能性を考慮するため
 // あと、loginは割と特殊な処理なので、api/login/以下にまとめておきたい
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -59,19 +55,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const firestore = getFirestore();
       const userRef = firestore.collection('users').doc(uid);
 
-      let resBody: ResLoginGoogle = {
-        name: googleUserInfo.displayName || '',
-        image: googleUserInfo.photoURL || '',
-      };
-      userRef.get().then((docSnapshot) => {
+      let name;
+      let image;
+      await userRef.get().then((docSnapshot) => {
+        console.log('docSnapshot', docSnapshot.exists);
         if (docSnapshot.exists) {
-          // プロフィール情報を取得する
-          // フィールドが変更されていた場合は、下記のフィールド更新する？
-          // idToken, displayName, email, phoneNumber, photoURL, lastLoginAt, lastSignInTime, lastRefreshAt
+          // TODO: GoogleUserInfoが変更されていたら、その変更を反映する
+          const data = docSnapshot.data() as User;
           // nameとimageを保持する
+          name = data.name;
+          image = data.image;
         } else {
-          // userドキュメントを作成する
-          // nameとimageは勝手に埋める
           userRef.set({
             name: googleUserInfo.displayName,
             description: null,
@@ -79,13 +73,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             googleUserInfo: googleUserInfo,
           });
           // nameとimgaeを保持する
-          resBody.name = googleUserInfo.displayName || '';
-          resBody.image = googleUserInfo.photoURL || '';
+          name = googleUserInfo.displayName;
+          image = googleUserInfo.photoURL;
         }
       });
 
-      // レスポンスを返す
-      res.status(200).json(body);
+      const resBody: ResLoginGoogle = {
+        name: name || '',
+        image: image || '',
+      };
+
+      res.status(200).json(resBody);
     } catch (e) {
       res.status(500).json({ error: { message: e.message } });
     }
