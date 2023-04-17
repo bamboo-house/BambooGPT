@@ -6,7 +6,7 @@ import { Form } from '@/frontend/components/Form';
 import { useCurrentUserSetter } from '@/frontend/utils/firebaseAuth';
 import styles from '@/styles/Home.module.css';
 
-type User = {
+type GoogleUserInfo = {
   idToken: string;
   displayName: string | null;
   email: string | null;
@@ -21,9 +21,13 @@ type User = {
   lastRefreshAt: string;
 };
 
+type ReqLoginGoogleBody = {
+  googleUserInfo: GoogleUserInfo;
+};
+
 type ResLoginGoogle = {
-  success: boolean;
-  message: string;
+  name: string;
+  image: string;
 };
 
 export default function Home() {
@@ -45,7 +49,7 @@ export default function Home() {
       const idToken = await result.user.getIdToken(true);
 
       const metadata: any = result.user.metadata;
-      const user: User = {
+      const googleUserInfo: GoogleUserInfo = {
         idToken: idToken,
         displayName: result.user.displayName,
         email: result.user.email,
@@ -59,18 +63,19 @@ export default function Home() {
         lastSignInTime: metadata.lastSignInTime,
         lastRefreshAt: metadata.lastRefreshAt,
       };
+      const reqBody: ReqLoginGoogleBody = { googleUserInfo };
 
       const response = await fetch('/api/login/google', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ user }),
+        body: JSON.stringify(reqBody),
       });
 
       // ログイン成功の処理
-      const data: ResLoginGoogle = await response.json();
-      console.log(data);
+      const resBody: ResLoginGoogle = await response.json();
+      console.log(resBody);
     } catch (error) {
       console.error(error);
       // ログイン失敗の処理

@@ -1,0 +1,19 @@
+{
+  "name": "string | null",
+  "description": "string",
+  "image": "string",
+  "google_user_info": {
+    "idToken": "string",
+    "displayName": "string | null",
+    "email": "string | null",
+    "phoneNumber": "string | null",
+    "photoURL": "string | null",
+    "uid": "string",
+    "providerId": "string",
+    "createdAt": "string",
+    "creationTime": "string",
+    "lastLoginAt": "string",
+    "lastSignInTime": "string",
+    "lastRefreshAt": "string"
+  }
+}
