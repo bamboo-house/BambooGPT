@@ -5,6 +5,11 @@ export type ReqLoginGoogle = {
 };
 
 export type ResLoginGoogle = {
-  name: string;
-  image: string;
+  body?: {
+    name: string;
+    image: string;
+  }
+  error?: {
+    message: string;
+  };
 };

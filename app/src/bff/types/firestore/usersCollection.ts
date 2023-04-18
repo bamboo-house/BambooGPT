@@ -1,3 +1,10 @@
+export type User = {
+  name: string;
+  description: string | null;
+  image: string;
+  googleUserInfo: GoogleUserInfo;
+};
+
 export type GoogleUserInfo = {
   idToken: string;
   displayName: string | null;
@@ -13,9 +20,3 @@ export type GoogleUserInfo = {
   lastRefreshAt: string;
 };
 
-export type User = {
-  name: string;
-  description: string | null;
-  image: string;
-  googleUserInfo: GoogleUserInfo;
-};
