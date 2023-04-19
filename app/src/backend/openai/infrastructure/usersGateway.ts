@@ -7,7 +7,6 @@ export class UsersGateway {
 
   constructor() {
     initializeFirebase();
-
     this._collection = getFirestore().collection('users')
   }
 
@@ -21,7 +20,7 @@ export class UsersGateway {
         googleUserInfo: googleUserInfo,
       });
     } catch (error) {
-      throw new Error("ユーザー作成ができませんでした：", error);
+      throw new Error(`ユーザー作成ができませんでした：${error}`);
     }
   }
 
