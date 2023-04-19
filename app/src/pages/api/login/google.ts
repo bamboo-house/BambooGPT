@@ -14,12 +14,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
       const loginService = new LoginService();
-      const output = await loginService.loginWithGoogle(googleUserInfo);
+      const user = await loginService.loginWithGoogle(googleUserInfo);
 
       const resBody: ResLoginGoogle = { 
         body: {
-          name: output.name || '',
-          image: output.image || '',
+          name: user.name || '',
+          image: user.image || '',
         }
       };
 
