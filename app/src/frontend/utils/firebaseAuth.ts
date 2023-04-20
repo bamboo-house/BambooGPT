@@ -29,6 +29,7 @@ export const useCurrentUserSetter = () => {
     });
     console.log('currentUser', auth.currentUser);
     return unsubscribe;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
 
