@@ -25,6 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         image: user.image || '',
       }
     };
+    console.log('resBody', resBody);
 
     res.status(200).json(resBody);
   } catch (e) {

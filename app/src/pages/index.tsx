@@ -1,4 +1,4 @@
-import { GoogleAuthProvider, UserMetadata, getAuth, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import Head from 'next/head';
 import React, { useState } from 'react';
 import { GoogleUserInfo } from '@/bff/types/firestore/usersCollection';
@@ -18,48 +18,6 @@ export default function Home() {
     setResult((prevResult) => prevResult + text);
   };
 
-  const handleHelloGoogleLogin = async () => {
-    try {
-      const auth = getAuth();
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
-      // ログイン成功時にサーバーサイドのAPIにIDトークンを送信
-      const idToken = await result.user.getIdToken(true);
-
-      const metadata: any = result.user.metadata;
-      const googleUserInfo: GoogleUserInfo = {
-        idToken: idToken,
-        displayName: result.user.displayName,
-        email: result.user.email,
-        phoneNumber: result.user.phoneNumber,
-        photoURL: result.user.photoURL,
-        uid: result.user.uid,
-        providerId: result.user.providerId,
-        createdAt: metadata.createdAt,
-        creationTime: metadata.creationTime,
-        lastLoginAt: metadata.lastLoginAt,
-        lastSignInTime: metadata.lastSignInTime,
-        lastRefreshAt: metadata.lastRefreshAt,
-      };
-      const reqBody: ReqLoginGoogle = { googleUserInfo };
-
-      const response = await fetch('/api/login/google', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(reqBody),
-      });
-
-      // ログイン成功の処理
-      const resBody: ResLoginGoogle = await response.json();
-      console.log(resBody);
-    } catch (error) {
-      console.error(error);
-      // ログイン失敗の処理
-    }
-  };
-
   return (
     <>
       <Head>
@@ -72,8 +30,6 @@ export default function Home() {
         <Form onChangeResult={handleAccumulatingResult} />
         <div style={{ whiteSpace: 'pre-line' }}>{result}</div>
       </div>
-
-      <button onClick={handleHelloGoogleLogin}>butom</button>
 
       <Firebase />
     </>
