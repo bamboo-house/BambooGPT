@@ -1,13 +1,20 @@
-import React from 'react';
+import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import Head from 'next/head';
+import React, { useState } from 'react';
+import { GoogleUserInfo } from '@/bff/types/firestore/usersCollection';
+import { ReqLoginGoogle, ResLoginGoogle } from '@/bff/types/login';
+import { Firebase } from '@/frontend/components/Firebase';
+import { Form } from '@/frontend/components/Form';
+import { useCurrentUserSetter } from '@/frontend/utils/firebaseAuth';
 import styles from '@/styles/Home.module.css';
-import { useState } from 'react';
-import { Form } from '@/components/Form';
 
 export default function Home() {
   const [result, setResult] = useState('');
 
-  const accumulateResult = (text: string) => {
+  // ユーザーを指定
+  useCurrentUserSetter();
+
+  const handleAccumulatingResult = (text: string) => {
     setResult((prevResult) => prevResult + text);
   };
 
@@ -20,9 +27,11 @@ export default function Home() {
       </Head>
 
       <div className="mx-10">
-        <Form onChangeResult={accumulateResult} />
+        <Form onChangeResult={handleAccumulatingResult} />
         <div style={{ whiteSpace: 'pre-line' }}>{result}</div>
       </div>
+
+      <Firebase />
     </>
   );
 }

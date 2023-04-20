@@ -79,15 +79,12 @@ export const Form = (props: FormProps) => {
       <textarea
         id="message"
         rows={4}
-        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
         placeholder="Write your thoughts here..."
         onChange={(e) => setMessage(e.target.value)}
       ></textarea>
 
-      <button
-        className="text-grey-darkest rounded bg-amber-300 py-2 px-4 font-bold hover:bg-amber-400"
-        type="submit"
-      >
+      <button className="rounded bg-amber-300 py-2 px-4 font-bold hover:bg-amber-400" type="submit">
         <span>Submit</span>
       </button>
       <div>{isLoading ? <div>Loading...</div> : <div>Content loaded</div>}</div>
