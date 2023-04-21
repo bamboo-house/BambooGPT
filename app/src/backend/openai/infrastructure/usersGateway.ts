@@ -1,16 +1,23 @@
-import { DocumentData, getFirestore } from "firebase-admin/firestore";
-import { initializeFirebase } from "./initializeFirebase";
-import { GoogleUserInfo, User } from "@/bff/types/firestore/usersCollection";
+import { DocumentData, getFirestore } from 'firebase-admin/firestore';
+import { initializeFirebase } from './initializeFirebase';
+import { UserRecord } from './userRecord';
+import { GoogleUserInfo, User } from '@/bff/types/firestore/usersCollection';
 
 export class UsersGateway {
   private _collection: FirebaseFirestore.CollectionReference<DocumentData>;
 
   constructor() {
     initializeFirebase();
-    this._collection = getFirestore().collection('users')
+    this._collection = getFirestore().collection('users');
   }
 
-  async create(uid: string, name: string | null, description: string | null, image: string | null, googleUserInfo: GoogleUserInfo): Promise<void> {
+  async create(
+    uid: string,
+    name: string | null,
+    description: string | null,
+    image: string | null,
+    googleUserInfo: GoogleUserInfo
+  ): Promise<void> {
     const userCollectionRef = this._collection.doc(uid);
     try {
       await userCollectionRef.set({
@@ -24,14 +31,14 @@ export class UsersGateway {
     }
   }
 
-  async getUser(uid: string): Promise<User | null> {
+  async getUser(uid: string): Promise<UserRecord | undefined> {
     const userDocSnapshot = await this._collection.doc(uid).get();
     let user;
     if (userDocSnapshot.exists && userDocSnapshot.data() !== undefined) {
       user = userDocSnapshot.data() as User;
     } else {
-      user = null
+      return undefined;
     }
-    return user;
+    return new UserRecord(user.name, user.description, user.image, user.googleUserInfo);
   }
 }
