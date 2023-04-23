@@ -1,6 +1,6 @@
 import { getAuth } from 'firebase-admin/auth';
+import { UsersGateway } from '../infrastructure/userGateway';
 import { UserRecord } from '../infrastructure/userRecord';
-import { UsersGateway } from '../infrastructure/usersGateway';
 import { GoogleUserInfo } from '@/bff/types/firestore/usersCollection';
 
 export class LoginService {
