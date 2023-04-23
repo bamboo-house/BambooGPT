@@ -25,4 +25,3 @@ export type GoogleUserInfo = {
   lastSignInTime: string;
   lastRefreshAt: string;
 };
-
