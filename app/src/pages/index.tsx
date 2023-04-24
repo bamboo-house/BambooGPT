@@ -1,8 +1,6 @@
-import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import Head from 'next/head';
 import React, { useState } from 'react';
-import { GoogleUserInfo } from '@/bff/types/firestore/usersCollection';
-import { ReqLoginGoogle, ResLoginGoogle } from '@/bff/types/login';
+import { ReqCreateThread, ResCreateThread } from '@/bff/types/thread';
 import { Firebase } from '@/frontend/components/Firebase';
 import { Form } from '@/frontend/components/Form';
 import { useCurrentUserSetter } from '@/frontend/utils/firebaseAuth';
@@ -18,6 +16,20 @@ export default function Home() {
     setResult((prevResult) => prevResult + text);
   };
 
+  const createThread = async () => {
+    const reqBody: ReqCreateThread = { uid: 'ii' };
+
+    const response = await fetch('/api/thread', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(reqBody),
+    });
+    const resBody: ResCreateThread = await response.json();
+    console.log(resBody);
+  };
+
   return (
     <>
       <Head>
@@ -30,6 +42,13 @@ export default function Home() {
         <Form onChangeResult={handleAccumulatingResult} />
         <div style={{ whiteSpace: 'pre-line' }}>{result}</div>
       </div>
+
+      <button
+        className="rounded bg-red-500 py-2 px-4 font-bold text-white hover:bg-red-700"
+        onClick={createThread}
+      >
+        スレッド新規作成
+      </button>
 
       <Firebase />
     </>

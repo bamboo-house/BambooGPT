@@ -22,7 +22,7 @@ paths:
       responses:
         200:
           description: OK
-  /api/openai/threads:
+  /api/threads:
     post:
       summary: Create a new thread
       responses:
