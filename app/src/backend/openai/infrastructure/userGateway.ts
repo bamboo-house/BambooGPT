@@ -17,18 +17,24 @@ export class UsersGateway {
     description: string | null,
     image: string | null,
     googleUserInfo: GoogleUserInfo
-  ): Promise<void> {
-    const userCollectionRef = this._collection.doc(uid);
+  ): Promise<UserRecord> {
+    const userDocRef = this._collection.doc(uid);
+    const updatedAt = new Date().toISOString();
+    const createdAt = new Date().toISOString();
     try {
-      await userCollectionRef.set({
+      await userDocRef.set({
         name: name,
         description: description,
         image: image,
+        deletedAt: null,
+        updatedAt: updatedAt,
+        createdAt: createdAt,
         googleUserInfo: googleUserInfo,
       });
     } catch (error) {
       throw new Error(`ユーザー作成ができませんでした：${error}`);
     }
+    return new UserRecord(name, description, image, null, updatedAt, createdAt, googleUserInfo);
   }
 
   async getUser(uid: string): Promise<UserRecord | undefined> {
@@ -39,6 +45,14 @@ export class UsersGateway {
     } else {
       return undefined;
     }
-    return new UserRecord(user.name, user.description, user.image, user.googleUserInfo);
+    return new UserRecord(
+      user.name,
+      user.description,
+      user.image,
+      user.deletedAt,
+      user.updatedAt,
+      user.createdAt,
+      user.googleUserInfo
+    );
   }
 }

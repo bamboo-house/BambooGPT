@@ -2,9 +2,20 @@ import { GoogleUserInfo } from '@/bff/types/firestore/usersCollection';
 
 export class UserRecord {
   constructor(
-    public name: string | null,
-    public description: string | null,
-    public image: string | null,
-    public googleUserInfo: GoogleUserInfo | null
+    private _name: string | null,
+    private _description: string | null,
+    private _image: string | null,
+    private _deletedAt: string | null,
+    private _updatedAt: string,
+    private _createdAt: string,
+    private _googleUserInfo: GoogleUserInfo | null
   ) {}
+
+  get name(): string | null {
+    return this._name;
+  }
+
+  get image(): string | null {
+    return this._image;
+  }
 }

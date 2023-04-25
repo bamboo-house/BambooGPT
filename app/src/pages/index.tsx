@@ -1,13 +1,17 @@
 import Head from 'next/head';
 import React, { useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import { ReqCreateThread, ResCreateThread } from '@/bff/types/thread';
 import { Firebase } from '@/frontend/components/Firebase';
 import { Form } from '@/frontend/components/Form';
+import { currentUserState } from '@/frontend/globalStates/atoms/currentUserState';
 import { useCurrentUserSetter } from '@/frontend/utils/firebaseAuth';
 import styles from '@/styles/Home.module.css';
 
 export default function Home() {
   const [result, setResult] = useState('');
+
+  const currentUser = useRecoilValue(currentUserState);
 
   // ユーザーを指定
   useCurrentUserSetter();
@@ -17,7 +21,8 @@ export default function Home() {
   };
 
   const createThread = async () => {
-    const reqBody: ReqCreateThread = { uid: 'ii' };
+    console.log(currentUser);
+    const reqBody: ReqCreateThread = { uid: currentUser.uid };
 
     const response = await fetch('/api/thread', {
       method: 'POST',

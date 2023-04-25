@@ -1,5 +1,5 @@
 export type ReqCreateThread = {
-  uid: string;
+  uid: string | null;
 };
 
 export type ResCreateThread = {

@@ -18,19 +18,13 @@ export class LoginService {
 
     let userRecord = await this._usersGateway.getUser(uid);
     if (userRecord === undefined) {
-      await this._usersGateway.create(
+      userRecord = await this._usersGateway.create(
         uid,
         googleUserInfo.displayName,
         null,
         googleUserInfo.photoURL,
         googleUserInfo
       );
-      userRecord = {
-        name: googleUserInfo.displayName || null,
-        description: null,
-        image: googleUserInfo.photoURL,
-        googleUserInfo: googleUserInfo,
-      };
     }
 
     return userRecord;

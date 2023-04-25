@@ -10,7 +10,7 @@ export const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_AMESUREMENT_ID,
 };
 
-export const initFirebase = () => {
+export const initializeFirebase = () => {
   if (!getApps().length) {
     initializeApp(firebaseConfig);
   }

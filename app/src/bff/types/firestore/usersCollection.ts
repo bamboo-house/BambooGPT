@@ -2,6 +2,9 @@ export type User = {
   name: string | null;
   description: string | null;
   image: string | null;
+  deletedAt: string | null;
+  updatedAt: string;
+  createdAt: string;
   googleUserInfo: GoogleUserInfo | null;
 };
 
