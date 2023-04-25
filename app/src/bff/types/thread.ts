@@ -1,7 +1,12 @@
 export type ReqCreateThread = {
-  uid: string | null;
+  uid: string;
 };
 
 export type ResCreateThread = {
-  threadId: string;
+  body?: {
+    threadId: string;
+  };
+  error?: {
+    message: string;
+  };
 };

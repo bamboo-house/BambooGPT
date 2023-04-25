@@ -22,6 +22,10 @@ export default function Home() {
 
   const createThread = async () => {
     console.log(currentUser);
+    if (!currentUser.uid) {
+      // TODO: ログインしていない場合なので、ログイン画面に飛ばす
+      return;
+    }
     const reqBody: ReqCreateThread = { uid: currentUser.uid };
 
     const response = await fetch('/api/thread', {

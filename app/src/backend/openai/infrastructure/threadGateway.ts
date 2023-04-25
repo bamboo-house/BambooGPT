@@ -21,13 +21,14 @@ export class ThreadGateway {
 
     const updatedAt = FieldValue.serverTimestamp();
     const createdAt = FieldValue.serverTimestamp();
-    await this._collection.add({
+    const threadDocRef = await this._collection.add({
       user: userRef,
       name: null,
       deletedAt: null,
       updatedAt: updatedAt,
       createdAt: createdAt,
     });
-    return new ThreadRecord(userRef, null, null, updatedAt, createdAt);
+
+    return new ThreadRecord(threadDocRef.id, userRef, null, null, updatedAt, createdAt);
   }
 }
