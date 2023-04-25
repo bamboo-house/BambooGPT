@@ -1,9 +1,9 @@
 import { DocumentData, getFirestore } from 'firebase-admin/firestore';
 import { initializeFirebase } from './initializeFirebase';
 import { UserRecord } from './userRecord';
-import { GoogleUserInfo, User } from '@/bff/types/firestore/usersCollection';
+import { GoogleUserInfo } from '@/bff/types/firestore/usersCollection';
 
-export class UsersGateway {
+export class UserGateway {
   private _collection: FirebaseFirestore.CollectionReference<DocumentData>;
 
   constructor() {
@@ -41,7 +41,8 @@ export class UsersGateway {
     const userDocSnapshot = await this._collection.doc(uid).get();
     let user;
     if (userDocSnapshot.exists && userDocSnapshot.data() !== undefined) {
-      user = userDocSnapshot.data() as User;
+      user = userDocSnapshot.data();
+      if (!user) return undefined;
     } else {
       return undefined;
     }
@@ -54,5 +55,16 @@ export class UsersGateway {
       user.createdAt,
       user.googleUserInfo
     );
+  }
+
+  async getUserDocRef(
+    uid: string
+  ): Promise<FirebaseFirestore.DocumentReference<DocumentData> | undefined> {
+    const userDocRef = this._collection.doc(uid);
+    const userDocSnapshot = await userDocRef.get();
+    if (!userDocSnapshot.exists) {
+      return undefined;
+    }
+    return userDocRef;
   }
 }

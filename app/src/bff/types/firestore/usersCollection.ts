@@ -1,17 +1,3 @@
-export type User = {
-  name: string | null;
-  description: string | null;
-  image: string | null;
-  deletedAt: string | null;
-  updatedAt: string;
-  createdAt: string;
-  googleUserInfo: GoogleUserInfo | null;
-};
-
-// 2023/4/19
-// TwitterUserInfoなどを作りたい場合は、ProviderUserInfoを作成して継承するようにする。
-// このような抽象オブジェクトはtypeではなく、クラスを作りimplementsできるようにしたほうがいいかもしれない。
-
 // 下記を参考に型を決めた。setするときはundefinedだとエラーが出るので、nullにしておく。
 // https://firebase.google.com/docs/reference/js/auth.userinfo.md#userinfodisplayname
 export type GoogleUserInfo = {

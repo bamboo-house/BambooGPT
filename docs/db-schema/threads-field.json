@@ -1,7 +1,7 @@
 {
   "user": "reference",
   "name": "string",
-  "deletedAt": "string",
-  "updatedAt": "string",
-  "createdAt": "string"
+  "deletedAt": "timestamp",
+  "updatedAt": "timestamp",
+  "createdAt": "timestamp"
 }

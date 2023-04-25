@@ -1,9 +1,11 @@
-export class TreadRecord {
+import { DocumentReference, FieldValue, Timestamp } from 'firebase-admin/firestore';
+
+export class ThreadRecord {
   constructor(
-    private _user: string,
-    private _name: string,
-    private _deletedAt: boolean,
-    private _updatedAt: string,
-    private _createdAt: string
+    private _user: DocumentReference,
+    private _name: string | null,
+    private _deletedAt: Timestamp | FieldValue | null,
+    private _updatedAt: Timestamp | FieldValue,
+    private _createdAt: Timestamp | FieldValue
   ) {}
 }
