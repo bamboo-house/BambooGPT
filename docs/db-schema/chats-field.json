@@ -1,7 +1,7 @@
 {
   "user": "reference",
   "thread": "reference",
-  "chat": {
+  "content": {
     "model": "string",
     "message": [
       { "role": "system", "content": "You are a helpful assistant." },
