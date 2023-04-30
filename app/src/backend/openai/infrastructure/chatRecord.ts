@@ -1,6 +1,6 @@
-type Chat = {
+type ChatContent = {
   model: string;
-  message: ChatMessage[];
+  message: ChatContent[];
   temperature?: number;
   top_p?: number;
   n?: number;
@@ -23,7 +23,7 @@ export class ChatRecord {
   constructor(
     private _user: string,
     private _thread: string,
-    private _chat: Chat,
+    private _chatContent: ChatContent,
     private _destroy: boolean,
     private _updatedAt: string,
     private _createdAt: string
