@@ -1,11 +1,5 @@
 import { atom } from 'recoil';
 
-type ChatMessage = {
-  role: 'system' | 'user' | 'assistant';
-  content: string;
-  name?: string;
-};
-
 type ChatOption = {
   model: string;
   temperature?: number;
@@ -18,6 +12,12 @@ type ChatOption = {
   frequency_penalty?: number;
   logit_bias?: { [key: string]: number };
   user?: string;
+};
+
+type ChatMessage = {
+  role: 'system' | 'user' | 'assistant';
+  content: string;
+  name?: string;
 };
 
 export const chatOptionState = atom<ChatOption>({

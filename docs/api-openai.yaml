@@ -59,6 +59,24 @@ paths:
                   name:
                     type: string
                     example: "My First Thread"
+    get:
+      summary: Get all threads
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    threadId:
+                      type: string
+                      example: "K230V3vZkEgDd9bL78zh"
+                    name:
+                      type: string
+                      example: "My First Thread"
 
   /api/openai/chats:
     post:
