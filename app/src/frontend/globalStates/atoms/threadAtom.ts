@@ -5,7 +5,7 @@ type Thread = {
   name: string | null;
 };
 
-export const threadsState = atom<Thread[]>({
-  key: 'threadsState',
+export const threadListState = atom<Thread[]>({
+  key: 'threadListState',
   default: [],
 });

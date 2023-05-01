@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil';
 import { ReqCreateThread, ResCreateThread } from '@/bff/types/thread';
 import { Firebase } from '@/frontend/components/Firebase';
 import { Form } from '@/frontend/components/Form';
-import { currentUserState } from '@/frontend/globalStates/atoms/currentUserState';
+import { currentUserState } from '@/frontend/globalStates/atoms/currentUserAtom';
 import { useCurrentUserSetter } from '@/frontend/utils/firebaseAuth';
 import styles from '@/styles/Home.module.css';
 

@@ -1,5 +1,5 @@
 import { useRecoilValue } from 'recoil';
-import { currentUserState } from '../globalStates/atoms/currentUserState';
+import { currentUserState } from '../globalStates/atoms/currentUserAtom';
 import { useFirebaseAuth } from '../utils/firebaseAuth';
 
 export const Firebase = () => {

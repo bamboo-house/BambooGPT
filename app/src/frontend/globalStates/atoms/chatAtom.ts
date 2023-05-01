@@ -1,12 +1,13 @@
+import { atom } from 'recoil';
+
 type ChatMessage = {
   role: 'system' | 'user' | 'assistant';
   content: string;
   name?: string;
 };
 
-type ChatContent = {
+type ChatOption = {
   model: string;
-  message: ChatMessage[];
   temperature?: number;
   top_p?: number;
   n?: number;
@@ -19,13 +20,15 @@ type ChatContent = {
   user?: string;
 };
 
-export class ChatRecord {
-  constructor(
-    private _user: string,
-    private _thread: string,
-    private _chatContent: ChatContent,
-    private _destroy: boolean,
-    private _updatedAt: string,
-    private _createdAt: string
-  ) {}
-}
+export const chatOptionState = atom<ChatOption>({
+  key: 'chatOptionState',
+  default: { model: 'text-ada-001' },
+});
+
+export const chatMessageState = atom<ChatMessage[]>({
+  key: 'chatMessageState',
+  default: [
+    { role: 'system', content: '' },
+    { role: 'user', content: '' },
+  ],
+});

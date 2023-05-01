@@ -7,7 +7,7 @@ import {
 } from 'firebase/auth';
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { currentUserState } from '../globalStates/atoms/currentUserState';
+import { currentUserState } from '../globalStates/atoms/currentUserAtom';
 import { GoogleUserInfo } from '@/bff/types/firestore/usersCollection';
 import { ReqLoginGoogle, ResLoginGoogle } from '@/bff/types/login';
 
