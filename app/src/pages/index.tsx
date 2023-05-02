@@ -37,6 +37,7 @@ export default function Home() {
       body: JSON.stringify(reqBody),
     });
     // const resBody: ResCreateThread = await response.json();
+    console.log(response);
   };
 
   return (

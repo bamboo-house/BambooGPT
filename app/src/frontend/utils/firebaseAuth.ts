@@ -43,6 +43,7 @@ export const useFirebaseAuth = () => {
       const result: any = await signInWithPopup(auth, provider);
       // ログイン成功時にサーバーサイドのAPIにIDトークンを送信
       const idToken = await result.user.getIdToken(true);
+      console.log('ログインに成功です', idToken);
 
       const metadata: any = result.user.metadata;
       const googleUserInfo: GoogleUserInfo = {
