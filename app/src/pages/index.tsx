@@ -20,23 +20,23 @@ export default function Home() {
     setResult((prevResult) => prevResult + text);
   };
 
-  const createThread = async () => {
-    console.log(currentUser);
-    if (!currentUser.uid) {
-      // TODO: ログインしていない場合なので、ログイン画面に飛ばす
-      return;
-    }
-    const reqBody: ReqCreateThread = { uid: currentUser.uid };
+  const firebaseYaru = async () => {
+    // if (!currentUser.uid) {
+    //   // TODO: ログインしていない場合なので、ログイン画面に飛ばす
+    //   return;
+    // }
+    // const reqBody: ReqCreateThread = { uid: currentUser.uid };
 
-    const response = await fetch('/api/thread', {
+    const reqBody = { uid: '77bYuSRZs2YzWp4GdFOuKgBdCOw2' };
+
+    const response = await fetch('/api/hello', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(reqBody),
     });
-    const resBody: ResCreateThread = await response.json();
-    console.log(resBody);
+    // const resBody: ResCreateThread = await response.json();
   };
 
   return (
@@ -54,9 +54,9 @@ export default function Home() {
 
       <button
         className="rounded bg-red-500 py-2 px-4 font-bold text-white hover:bg-red-700"
-        onClick={createThread}
+        onClick={firebaseYaru}
       >
-        スレッド新規作成
+        firebaseやるべ
       </button>
 
       <Firebase />
