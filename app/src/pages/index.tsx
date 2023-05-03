@@ -1,3 +1,5 @@
+import { getAuth, onAuthStateChanged } from '@firebase/auth';
+import { getFirestore, doc, getDoc, Firestore, DocumentReference } from '@firebase/firestore';
 import Head from 'next/head';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
@@ -21,13 +23,18 @@ export default function Home() {
   };
 
   const firebaseYaru = async () => {
+    const auth = getAuth().currentUser;
+
     // if (!currentUser.uid) {
     //   // TODO: ログインしていない場合なので、ログイン画面に飛ばす
     //   return;
     // }
     // const reqBody: ReqCreateThread = { uid: currentUser.uid };
 
-    const reqBody = { uid: '77bYuSRZs2YzWp4GdFOuKgBdCOw2' };
+    const reqBody = {
+      idToken:
+        'eyJhbGciOiJSUzI1NiIsImtpZCI6ImU3OTMwMjdkYWI0YzcwNmQ2ODg0NGI4MDk2ZTBlYzQzMjYyMjIwMDAiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiU2h1dG8gVGFrZXVjaGkiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUdObXl4WnhycGJ0YmtXUWEtdG55azhMZjdpcjQ4TVlmTFptWUptTk9IVTIxQT1zOTYtYyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9iYW1ib29ncHQiLCJhdWQiOiJiYW1ib29ncHQiLCJhdXRoX3RpbWUiOjE2ODMwOTQ4MzIsInVzZXJfaWQiOiJsMmpCMmJIYWFmYVNCOFlQM3dNaUhqd1hPcjMyIiwic3ViIjoibDJqQjJiSGFhZmFTQjhZUDN3TWlIandYT3IzMiIsImlhdCI6MTY4MzA5NDgzMiwiZXhwIjoxNjgzMDk4NDMyLCJlbWFpbCI6InRha2VzaHUwMDFAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZ29vZ2xlLmNvbSI6WyIxMTc1OTMyMTkyMzI2Mjg0NTQ3MDciXSwiZW1haWwiOlsidGFrZXNodTAwMUBnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJnb29nbGUuY29tIn19.GwXbCz7QHExJsrHdL9moH8jT7tTglAryUjceBnXvNOVyNWe_JitUQStdVsfMWUww2vlvuZcV1RlNqs8Sb88CBZqZkUJn1lalJ5KizBY4ds1EugAGq8-sHDdjO6a5vpWU5FH8QXAm-yAmLH4_PoOVjPPgKvJWUArZB1HP6j_-MT-RCO2dZJED0lMzPiuV_6LoJAwGmG2HL9UsOloxkPx--IN1iXk-VWt1Rroq4ZgbJsi81_dV9m0nrG2uOV3SBpeXp1cRmmFhdxFXYWvR1OYXF7kJaqdTt2k3e0K7O-6viL9ExLbNpR015baV_1lNh5EYngEbdgIFCJ6MgRjUHu7gRA',
+    };
 
     const response = await fetch('/api/hello', {
       method: 'POST',
@@ -36,8 +43,19 @@ export default function Home() {
       },
       body: JSON.stringify(reqBody),
     });
-    // const resBody: ResCreateThread = await response.json();
-    console.log(response);
+    const resBody: ResCreateThread = await response.json();
+
+    // const uid = 'l2jB2bHaafaSB8YP3wMiHjwXOr32';
+    // const db: Firestore = getFirestore();
+    // const userRef: DocumentReference = doc(db, 'users', uid);
+    // const docSnapshot = await getDoc(userRef);
+    // if (docSnapshot.exists()) {
+    //   console.log('Document data:', docSnapshot.data());
+    // } else {
+    //   console.log('No such document!');
+    // }
+    // console.log('user', getAuth().currentUser);
+    // console.log(response);
   };
 
   return (
