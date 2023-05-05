@@ -18,7 +18,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   console.log(req.body);
   if (req.method === 'POST') {
     // クライアントサイドから送信されたIDトークンを取得
-    const { idToken } = req.body;
+    const body = req.body;
+    console.log(body);
+    const authorization = req.headers.authorization;
+    if (!authorization) {
+      res.status(400).json({ success: false, message: '無効なリクエストです' });
+      return;
+    }
+    const idToken = authorization.split('Bearer ')[1];
 
     // initializeFirebase();
     try {
