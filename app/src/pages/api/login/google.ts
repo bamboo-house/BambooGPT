@@ -1,29 +1,41 @@
+import { getAuth } from 'firebase-admin/auth';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { LoginService } from '@/backend/openai/application/loginService';
-import { GoogleUserInfo} from '@/bff/types/firestore/usersCollection';
+import { GoogleUserInfo } from '@/bff/types/firestore/usersCollection';
 import { ReqLoginGoogle, ResLoginGoogle } from '@/bff/types/login';
 
 // api/login/googleの理由は、twitterやfacebookなどのログインも増える可能性を考慮するため
 // あと、loginは割と特殊な処理なので、api/login/配下にまとめておきたい
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  
   if (req.method !== 'POST') {
     res.status(400).json({ error: { message: '無効なリクエストです' } });
   }
-  
+
+  // headersの取得
+  const idToken = req.headers.authorization?.split('Bearer ')[1];
+  if (!idToken) {
+    res.status(400).json({ success: false, message: '無効なリクエストです' });
+  }
   // リクエストボディの取得
   const reqBody: ReqLoginGoogle = req.body;
   const googleUserInfo: GoogleUserInfo = reqBody.googleUserInfo;
 
   try {
+    // クライアントサイドから送信されたJWTトークンを検証
+    const decodedToken = await getAuth().verifyIdToken(idToken as string);
+    const { uid } = decodedToken;
+    if (uid !== googleUserInfo.uid) {
+      throw new Error('IDトークンの検証に失敗しました');
+    }
+
     const loginService = new LoginService();
     const user = await loginService.loginWithGoogle(googleUserInfo);
 
-    const resBody: ResLoginGoogle = { 
+    const resBody: ResLoginGoogle = {
       body: {
         name: user.name || '',
         image: user.image || '',
-      }
+      },
     };
     console.log('resBody', resBody);
 

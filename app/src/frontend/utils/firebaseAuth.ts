@@ -47,7 +47,6 @@ export const useFirebaseAuth = () => {
 
       const metadata: any = result.user.metadata;
       const googleUserInfo: GoogleUserInfo = {
-        idToken: idToken,
         displayName: result.user.displayName,
         email: result.user.email,
         phoneNumber: result.user.phoneNumber,
@@ -66,6 +65,7 @@ export const useFirebaseAuth = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${idToken}`,
         },
         body: JSON.stringify(reqBody),
       });

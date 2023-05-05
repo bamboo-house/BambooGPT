@@ -10,16 +10,10 @@ export class LoginService {
   }
 
   async loginWithGoogle(googleUserInfo: GoogleUserInfo): Promise<UserRecord> {
-    const decodedToken = await getAuth().verifyIdToken(googleUserInfo.idToken);
-    const { uid } = decodedToken;
-    if (uid !== googleUserInfo.uid) {
-      throw new Error('IDトークンの検証に失敗しました');
-    }
-
-    let userRecord = await this._usersGateway.getUser(uid);
+    let userRecord = await this._usersGateway.getUser(googleUserInfo.uid);
     if (userRecord === undefined) {
       userRecord = await this._usersGateway.create(
-        uid,
+        googleUserInfo.uid,
         googleUserInfo.displayName,
         null,
         googleUserInfo.photoURL,
