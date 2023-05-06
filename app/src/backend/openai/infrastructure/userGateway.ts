@@ -32,6 +32,7 @@ export class UserGateway {
         googleUserInfo: googleUserInfo,
       });
     } catch (error) {
+      console.log(`ユーザー作成ができませんでした：${error}`);
       throw new Error(`ユーザー作成ができませんでした：${error}`);
     }
     return new UserRecord(name, description, image, null, updatedAt, createdAt, googleUserInfo);
@@ -48,6 +49,7 @@ export class UserGateway {
         return undefined;
       }
     } catch (error) {
+      console.log(`ユーザーを取得できませんでした：${error}`);
       throw new Error(`ユーザーを取得できませんでした：${error}`);
     }
 

@@ -72,7 +72,7 @@ export const useFirebaseAuth = () => {
 
       // ログイン成功の処理
       const resBody: ResLoginGoogle = await response.json();
-      console.log(reqBody);
+      console.log('resBody', resBody);
 
       // console.log(result.user);
       if (resBody.body) {

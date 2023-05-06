@@ -1,4 +1,6 @@
-import { getAuth } from 'firebase-admin/auth';
+import { getAuth, signInWithCustomToken } from '@firebase/auth';
+import * as admin from 'firebase-admin';
+// import { getAuth } from 'firebase-admin/auth';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { LoginService } from '@/backend/openai/application/loginService';
 import { GoogleUserInfo } from '@/bff/types/firestore/usersCollection';
@@ -21,12 +23,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const googleUserInfo: GoogleUserInfo = reqBody.googleUserInfo;
 
   try {
+    // TODO： 共通化したい /////////////////////
     // クライアントサイドから送信されたJWTトークンを検証
-    const decodedToken = await getAuth().verifyIdToken(idToken as string);
+    const adminAuth = admin.auth();
+    const decodedToken = await adminAuth.verifyIdToken(idToken as string);
     const { uid } = decodedToken;
     if (uid !== googleUserInfo.uid) {
+      console.log('IDトークンの検証に失敗しました');
       throw new Error('IDトークンの検証に失敗しました');
     }
+    // カスタムトークンを作成
+    const customToken = await adminAuth.createCustomToken(uid);
+
+    // ここからはfirebase/auth
+    // firebase authで認証
+    const auth = getAuth();
+    await signInWithCustomToken(auth, customToken);
+    ///////////////////////
 
     const loginService = new LoginService();
     const user = await loginService.loginWithGoogle(googleUserInfo);
