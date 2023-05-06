@@ -1,14 +1,14 @@
-import { DocumentData, getFirestore } from 'firebase-admin/firestore';
+import { getFirestore, collection, doc, setDoc, getDoc } from '@firebase/firestore';
 import { initializeFirebase } from './initializeFirebase';
 import { UserRecord } from './userRecord';
-import { GoogleUserInfo } from '@/bff/types/firestore/usersCollection';
+import type { GoogleUserInfo } from '@/bff/types/firestore/usersCollection';
 
 export class UserGateway {
-  private _collection: FirebaseFirestore.CollectionReference<DocumentData>;
+  private _collection: ReturnType<typeof collection>;
 
   constructor() {
     initializeFirebase();
-    this._collection = getFirestore().collection('users');
+    this._collection = collection(getFirestore(), 'users');
   }
 
   async create(
@@ -18,11 +18,11 @@ export class UserGateway {
     image: string | null,
     googleUserInfo: GoogleUserInfo
   ): Promise<UserRecord> {
-    const userDocRef = this._collection.doc(uid);
+    const userDocRef = doc(this._collection, uid);
     const updatedAt = new Date().toISOString();
     const createdAt = new Date().toISOString();
     try {
-      await userDocRef.set({
+      await setDoc(userDocRef, {
         name: name,
         description: description,
         image: image,
@@ -38,14 +38,19 @@ export class UserGateway {
   }
 
   async getUser(uid: string): Promise<UserRecord | undefined> {
-    const userDocSnapshot = await this._collection.doc(uid).get();
     let user;
-    if (userDocSnapshot.exists && userDocSnapshot.data() !== undefined) {
-      user = userDocSnapshot.data();
-      if (!user) return undefined;
-    } else {
-      return undefined;
+    try {
+      const userDocSnapshot = await getDoc(doc(this._collection, uid));
+      if (userDocSnapshot.exists() && userDocSnapshot.data() !== undefined) {
+        user = userDocSnapshot.data();
+        if (!user) return undefined;
+      } else {
+        return undefined;
+      }
+    } catch (error) {
+      throw new Error(`ユーザーを取得できませんでした：${error}`);
     }
+
     return new UserRecord(
       user.name,
       user.description,
@@ -57,12 +62,10 @@ export class UserGateway {
     );
   }
 
-  async getUserDocRef(
-    uid: string
-  ): Promise<FirebaseFirestore.DocumentReference<DocumentData> | undefined> {
-    const userDocRef = this._collection.doc(uid);
-    const userDocSnapshot = await userDocRef.get();
-    if (!userDocSnapshot.exists) {
+  async getUserDocRef(uid: string): Promise<ReturnType<typeof doc> | undefined> {
+    const userDocRef = doc(this._collection, uid);
+    const userDocSnapshot = await getDoc(userDocRef);
+    if (!userDocSnapshot.exists()) {
       return undefined;
     }
     return userDocRef;

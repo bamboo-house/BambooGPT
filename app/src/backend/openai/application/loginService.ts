@@ -1,4 +1,3 @@
-import { getAuth } from 'firebase-admin/auth';
 import { UserGateway } from '../infrastructure/userGateway';
 import { UserRecord } from '../infrastructure/userRecord';
 import { GoogleUserInfo } from '@/bff/types/firestore/usersCollection';

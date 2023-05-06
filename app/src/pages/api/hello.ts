@@ -25,10 +25,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.status(400).json({ success: false, message: '無効なリクエストです' });
     }
 
-    // initializeFirebase();
+    initializeFirebase();
     try {
       const adminAuth = admin.auth();
-      const decodedToken = await adminAuth.verifyIdToken(idToken);
+      const decodedToken = await adminAuth.verifyIdToken(idToken as string);
       const { uid } = decodedToken;
       const customToken = await adminAuth.createCustomToken(uid);
 
