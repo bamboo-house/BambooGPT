@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const googleUserInfo: GoogleUserInfo = reqBody.googleUserInfo;
 
   try {
-    // TODO： 共通化したい /////////////////////
+    // TODO：トークン検証と認証の処理、共通化したい
     // クライアントサイドから送信されたJWTトークンを検証
     const adminAuth = admin.auth();
     const decodedToken = await adminAuth.verifyIdToken(idToken as string);

@@ -1,13 +1,13 @@
-import { DocumentData, FieldValue, getFirestore } from 'firebase-admin/firestore';
+import { getFirestore, collection, doc, setDoc, serverTimestamp } from '@firebase/firestore';
 import { initializeFirebase } from './initializeFirebase';
 import { ThreadRecord } from './threadRecord';
 import { UserGateway } from './userGateway';
 
 export class ThreadGateway {
-  private _collection: FirebaseFirestore.CollectionReference<DocumentData>;
+  private _collection: ReturnType<typeof collection>;
   constructor() {
     initializeFirebase();
-    this._collection = getFirestore().collection('threads');
+    this._collection = collection(getFirestore(), 'threads');
   }
 
   async create(uid: string): Promise<ThreadRecord> {
@@ -19,9 +19,10 @@ export class ThreadGateway {
       throw new Error('ユーザーが存在しません');
     }
 
-    const updatedAt = FieldValue.serverTimestamp();
-    const createdAt = FieldValue.serverTimestamp();
-    const threadDocRef = await this._collection.add({
+    const updatedAt = serverTimestamp();
+    const createdAt = serverTimestamp();
+    const threadDocRef = doc(this._collection);
+    await setDoc(threadDocRef, {
       user: userRef,
       name: null,
       deletedAt: null,

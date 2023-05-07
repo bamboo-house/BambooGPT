@@ -1,4 +1,4 @@
-import { DocumentReference, FieldValue, Timestamp } from 'firebase-admin/firestore';
+import { DocumentReference, FieldValue, Timestamp } from '@firebase/firestore';
 
 export class ThreadRecord {
   constructor(
