@@ -8,7 +8,7 @@ import * as admin from 'firebase-admin';
 // import { getAuth } from 'firebase-admin/auth';
 // import { getFirestore } from 'firebase-admin/firestore';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { initializeFirebase } from '@/backend/openai/infrastructure/initializeFirebase';
+import { initializeFirebase } from '@/backend/util/initializeFirebase';
 // import { initializeFirebase } from '@/frontend/utils/initializeFirebase';
 
 // クライアントサイドからのGoogleログイン処理

@@ -1,5 +1,5 @@
 import { getFirestore, collection, doc, setDoc, serverTimestamp } from '@firebase/firestore';
-import { initializeFirebase } from './initializeFirebase';
+import { initializeFirebase } from '../util/initializeFirebase';
 import { ThreadRecord } from './threadRecord';
 import { UserGateway } from './userGateway';
 

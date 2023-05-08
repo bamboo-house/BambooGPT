@@ -1,5 +1,5 @@
 import { Configuration, OpenAIApi, ChatCompletionRequestMessage } from 'openai';
-import { PromptGateway } from '@/backend/openai/infrastructure/promptGateway';
+import { PromptGateway } from '@/backend/infrastructure/promptGateway';
 
 export class OpenaiService {
   private _configuration: Configuration;

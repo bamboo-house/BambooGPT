@@ -1,5 +1,5 @@
 import { getFirestore, DocumentData, Timestamp } from 'firebase-admin/firestore';
-import { initializeFirebase } from './initializeFirebase';
+import { initializeFirebase } from '../util/initializeFirebase';
 
 export class PromptGateway {
   collection: FirebaseFirestore.CollectionReference<DocumentData>;

@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { OpenaiService } from '@/backend/openai/application/openaiService';
+import { OpenaiService } from '@/backend/application/openaiService';
 
 type ChatResponseBody = {
   text?: string;
@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     case 'GET':
       res.status(200).json({ text: 'GETリクエスト' });
       break;
-    
+
     case 'POST':
       console.log('======================');
       const message = req.body.message || '';
@@ -49,11 +49,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         });
       }
       break;
-    
+
     case 'PATCH':
       res.status(200).json({ text: 'PATCHリクエスト' });
       break;
-    
+
     default:
       res.status(200).json({ text: 'GET/POST/PATCHでもないリクエストです。' });
       break;
