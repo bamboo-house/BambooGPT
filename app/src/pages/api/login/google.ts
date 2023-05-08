@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { LoginService } from '@/backend/application/loginService';
-import { verifyAndAuthForFirestore } from '@/backend/util/verifyAndAuthForFirestore';
+import { verifyAndAuthForFirestore } from '@/backend/utils/verifyAndAuthForFirestore';
 import { GoogleUserInfo } from '@/bff/types/firestore/usersCollection';
 import { ReqLoginGoogle, ResLoginGoogle } from '@/bff/types/login';
 

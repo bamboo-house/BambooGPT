@@ -1,5 +1,5 @@
 import { getFirestore, collection, doc, setDoc, getDoc } from '@firebase/firestore';
-import { initializeFirebase } from '../util/initializeFirebase';
+import { initializeFirebase } from '../utils/initializeFirebase';
 import { UserRecord } from './userRecord';
 import type { GoogleUserInfo } from '@/bff/types/firestore/usersCollection';
 
@@ -7,7 +7,6 @@ export class UserGateway {
   private _collection: ReturnType<typeof collection>;
 
   constructor() {
-    initializeFirebase();
     this._collection = collection(getFirestore(), 'users');
   }
 

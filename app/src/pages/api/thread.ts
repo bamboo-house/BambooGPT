@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ThreadGateway } from '@/backend/infrastructure/threadGateway';
-import { verifyAndAuthForFirestore } from '@/backend/util/verifyAndAuthForFirestore';
+import { verifyAndAuthForFirestore } from '@/backend/utils/verifyAndAuthForFirestore';
 import { ResPostThread } from '@/bff/types/thread';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -9,7 +9,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!idToken) {
       res.status(400).json({ success: false, message: '無効なリクエストです' });
     }
-    await verifyAndAuthForFirestore(idToken as string);
+    const user = await verifyAndAuthForFirestore(idToken as string);
+    console.log(user.uid);
 
     switch (req.method) {
       case 'GET':
@@ -25,14 +26,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // スレッドのドキュメント作成する
         // create
-        // const threadGateway = new ThreadGateway();
-        // const threadRecord = await threadGateway.create();
+        const threadGateway = new ThreadGateway();
+        const threadRecord = await threadGateway.create(user.uid, 'new thread');
 
         // スレッドのドキュメントIDを返す
         const resBody: ResPostThread = {
           body: {
-            threadId: 'testtest',
-            name: 'shuto',
+            threadId: threadRecord.threadId,
+            name: threadRecord.name,
           },
         };
 

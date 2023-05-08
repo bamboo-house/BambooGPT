@@ -1,5 +1,5 @@
 import { DocumentData, getFirestore } from 'firebase-admin/firestore';
-import { initializeFirebase } from '../util/initializeFirebase';
+import { initializeFirebase } from '../utils/initializeFirebase';
 
 export class ChatGateway {
   private _collection: FirebaseFirestore.CollectionReference<DocumentData>;
