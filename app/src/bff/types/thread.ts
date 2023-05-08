@@ -1,10 +1,9 @@
-export type ReqCreateThread = {
-  uid: string;
-};
+export type ReqCreateThread = {};
 
-export type ResCreateThread = {
+export type ResPostThread = {
   body?: {
     threadId: string;
+    name: string;
   };
   error?: {
     message: string;

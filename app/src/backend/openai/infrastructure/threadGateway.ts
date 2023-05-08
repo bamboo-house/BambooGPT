@@ -12,7 +12,7 @@ export class ThreadGateway {
 
   async create(uid: string): Promise<ThreadRecord> {
     const userGateway = new UserGateway();
-    const userRef = await userGateway.getUserDocRef(uid);
+    const userRef = await userGateway.getDocRef(uid);
 
     // TODO: Gatewayではエラーを投げたくない。application層かdomain層でエラーを投げるようにする。
     if (!userRef) {
@@ -31,5 +31,13 @@ export class ThreadGateway {
     });
 
     return new ThreadRecord(threadDocRef.id, userRef, null, null, updatedAt, createdAt);
+  }
+
+  async get(threadId: string): Promise<ThreadRecord | undefined> {
+    return new ThreadRecord('', '', '', '', '', '');
+  }
+
+  async getAll(): Promise<ThreadRecord[]> {
+    return [];
   }
 }

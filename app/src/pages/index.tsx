@@ -3,7 +3,7 @@ import { getFirestore, doc, getDoc, Firestore, DocumentReference } from '@fireba
 import Head from 'next/head';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { ReqCreateThread, ResCreateThread } from '@/bff/types/thread';
+import { ResPostThread } from '@/bff/types/thread';
 import { Firebase } from '@/frontend/components/Firebase';
 import { Form } from '@/frontend/components/Form';
 import { currentUserState } from '@/frontend/globalStates/atoms/currentUserAtom';
@@ -44,7 +44,28 @@ export default function Home() {
       },
       body: JSON.stringify({ uid: currentUser.uid }),
     });
-    const resBody: ResCreateThread = await response.json();
+  };
+
+  const createThread = async () => {
+    // idTokenを取得するが、これは後々クッキーで管理すべき
+
+    const user = getAuth().currentUser;
+    if (!user) {
+      return;
+    }
+    const idToken = await user.getIdToken();
+    // console.log('idToken', idToken);
+
+    const response = await fetch('/api/thread', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${idToken}`,
+      },
+    });
+
+    const resBody: ResPostThread = await response.json();
+    console.log('resBody of createThread:', resBody);
   };
 
   return (
@@ -62,9 +83,9 @@ export default function Home() {
 
       <button
         className="rounded bg-red-500 py-2 px-4 font-bold text-white hover:bg-red-700"
-        onClick={firebaseYaru}
+        onClick={createThread}
       >
-        firebaseやるべ
+        thread作る
       </button>
 
       <Firebase />

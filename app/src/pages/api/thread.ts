@@ -1,31 +1,42 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ThreadGateway } from '@/backend/openai/infrastructure/threadGateway';
-import { ResCreateThread } from '@/bff/types/thread';
+import { ResPostThread } from '@/bff/types/thread';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    res.status(400).json({ error: { message: '無効なリクエストです' } });
-  } else if (!req.body.uid) {
-    res.status(400).json({ error: { message: '無効なユーザーです' } });
-  }
   try {
-    const uid = req.body.uid;
+    switch (req.method) {
+      case 'GET':
+        break;
 
-    // スレッドのドキュメント作成する
-    // create
-    const threadGateway = new ThreadGateway();
-    const threadRecord = await threadGateway.create(uid);
+      case 'POST':
+        console.log('==================================');
+        console.log('req', req);
+        console.log('==================================');
 
-    // スレッドのドキュメントIDを返す
+        const reqBody = req.body;
+        console.log('reqBody', reqBody);
 
-    const resBody: ResCreateThread = {
-      body: {
-        threadId: threadRecord.threadId,
-      },
-    };
+        // スレッドのドキュメント作成する
+        // create
+        // const threadGateway = new ThreadGateway();
+        // const threadRecord = await threadGateway.create();
 
-    res.status(200).json(resBody);
+        // スレッドのドキュメントIDを返す
+        const resBody: ResPostThread = {
+          body: {
+            threadId: 'testtest',
+            name: 'shuto',
+          },
+        };
+
+        res.status(200).json(resBody);
+        break;
+
+      default:
+        res.status(400).json({ error: { message: '無効なリクエストです' } });
+    }
   } catch (e) {
+    console.error('Error(500): ', e.message);
     res.status(500).json({ error: { message: e.message } });
   }
 }

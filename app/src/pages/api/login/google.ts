@@ -29,7 +29,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const decodedToken = await adminAuth.verifyIdToken(idToken as string);
     const { uid } = decodedToken;
     if (uid !== googleUserInfo.uid) {
-      console.log('IDトークンの検証に失敗しました');
       throw new Error('IDトークンの検証に失敗しました');
     }
     // カスタムトークンを作成
@@ -39,7 +38,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // firebase authで認証
     const auth = getAuth();
     await signInWithCustomToken(auth, customToken);
-    ///////////////////////
 
     const loginService = new LoginService();
     const user = await loginService.loginWithGoogle(googleUserInfo);

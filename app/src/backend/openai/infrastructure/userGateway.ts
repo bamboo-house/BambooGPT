@@ -32,13 +32,12 @@ export class UserGateway {
         googleUserInfo: googleUserInfo,
       });
     } catch (error) {
-      console.log(`ユーザー作成ができませんでした：${error}`);
       throw new Error(`ユーザー作成ができませんでした：${error}`);
     }
     return new UserRecord(name, description, image, null, updatedAt, createdAt, googleUserInfo);
   }
 
-  async getUser(uid: string): Promise<UserRecord | undefined> {
+  async get(uid: string): Promise<UserRecord | undefined> {
     let user;
     try {
       const userDocSnapshot = await getDoc(doc(this._collection, uid));
@@ -49,7 +48,6 @@ export class UserGateway {
         return undefined;
       }
     } catch (error) {
-      console.log(`ユーザーを取得できませんでした：${error}`);
       throw new Error(`ユーザーを取得できませんでした：${error}`);
     }
 
@@ -64,7 +62,7 @@ export class UserGateway {
     );
   }
 
-  async getUserDocRef(uid: string): Promise<ReturnType<typeof doc> | undefined> {
+  async getDocRef(uid: string): Promise<ReturnType<typeof doc> | undefined> {
     const userDocRef = doc(this._collection, uid);
     const userDocSnapshot = await getDoc(userDocRef);
     if (!userDocSnapshot.exists()) {

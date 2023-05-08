@@ -36,15 +36,6 @@ paths:
   /api/threads:
     post:
       summary: Create a new thread
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                uid:
-                  type: string
-                  example: "ASCcQXazh6rqxUdGdUNc"
       responses:
         200:
           description: OK
@@ -60,7 +51,7 @@ paths:
                     type: string
                     example: "My First Thread"
     get:
-      summary: Get all threads
+      summary: Get all threads owned by you
       responses:
         200:
           description: OK

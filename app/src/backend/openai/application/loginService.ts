@@ -9,7 +9,7 @@ export class LoginService {
   }
 
   async loginWithGoogle(googleUserInfo: GoogleUserInfo): Promise<UserRecord> {
-    let userRecord = await this._usersGateway.getUser(googleUserInfo.uid);
+    let userRecord = await this._usersGateway.get(googleUserInfo.uid);
     if (userRecord === undefined) {
       userRecord = await this._usersGateway.create(
         googleUserInfo.uid,
