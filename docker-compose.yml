@@ -3,8 +3,8 @@ version: "3.9"
 services:
   app:
     build:
-      context: .
-      dockerfile: ./app/Dockerfile
+      context: ./app
+      dockerfile: ./docker/app.dockerfile
     tty: true
     volumes:
       - ./app:/usr/src/app
@@ -12,3 +12,20 @@ services:
       - 3000:3000
       - 9229:9229
     command: sh -c "npm run dev"
+  firebase:
+    build:
+      context: ./app
+      dockerfile: ./docker/firebase.dockerfile
+    volumes:
+      - ./app/.firebaserc:/opt/firebase/.firebaserc
+      - ./app/firebase.json:/opt/firebase/firebase.json
+      - ./app/firestore.indexes.json:/opt/firebase/firestore.indexes.json
+      - ./app/firestore.rules:/opt/firebase/firestore.rules
+    ports:
+      - 4000:4000 # Emulator Suite UI
+      - 9099:9099 # Firebase Auth emulator
+      - 8080:8080 # Firebase Firestore emulator
+      - 9005:9005 # firebase loginする時に必要
+    working_dir: /opt/firebase
+    command: firebase emulators:start
+    tty: true
