@@ -1,11 +1,8 @@
 import { getFirestore, DocumentData, Timestamp } from 'firebase-admin/firestore';
-import { initializeFirebase } from '../utils/initializeFirebase';
 
 export class PromptGateway {
   collection: FirebaseFirestore.CollectionReference<DocumentData>;
   constructor() {
-    // firestore初期化
-    initializeFirebase();
     // promptsコレクション取得
     this.collection = getFirestore().collection('prompts');
   }

@@ -1,10 +1,10 @@
 import { DocumentData, getFirestore } from 'firebase-admin/firestore';
-import { initializeFirebase } from '../utils/initializeFirebase';
+import { initializeFirebaseForBE } from '../utils/initializeFirebaseForBE';
 
 export class ChatGateway {
   private _collection: FirebaseFirestore.CollectionReference<DocumentData>;
   constructor() {
-    initializeFirebase();
+    initializeFirebaseForBE();
     this._collection = getFirestore().collection('chats');
   }
 }

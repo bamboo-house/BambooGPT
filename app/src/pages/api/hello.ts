@@ -14,6 +14,7 @@ import { verifyAndAuthForFirestore } from '@/backend/utils/verifyAndAuthForFires
 
 // クライアントサイドからのGoogleログイン処理
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  console.log('process.env', process.env.NODE_ENV);
   if (req.method === 'POST') {
     // クライアントサイドから送信されたIDトークンを取得
     const idToken = req.headers.authorization?.split('Bearer ')[1];

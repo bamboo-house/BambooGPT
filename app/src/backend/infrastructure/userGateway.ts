@@ -1,5 +1,4 @@
 import { getFirestore, collection, doc, setDoc, getDoc } from '@firebase/firestore';
-import { initializeFirebase } from '../utils/initializeFirebase';
 import { UserRecord } from './userRecord';
 import type { GoogleUserInfo } from '@/bff/types/firestore/usersCollection';
 
