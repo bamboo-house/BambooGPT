@@ -21,11 +21,12 @@ services:
       - ./app/firebase.json:/opt/firebase/firebase.json
       - ./app/firestore.indexes.json:/opt/firebase/firestore.indexes.json
       - ./app/firestore.rules:/opt/firebase/firestore.rules
+      - ./app/dump/:/opt/firebase/dump/
     ports:
       - 4000:4000 # Emulator Suite UI
       - 9099:9099 # Firebase Auth emulator
       - 8080:8080 # Firebase Firestore emulator
       - 9005:9005 # firebase loginする時に必要
     working_dir: /opt/firebase
-    command: firebase emulators:start
+    command: firebase emulators:start --import=./dump --export-on-exit
     tty: true

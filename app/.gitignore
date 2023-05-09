@@ -42,3 +42,5 @@ firebase-test-serviceAccount.json
 firebase.json
 firestore-debug.log
 firestore.rules
+dump/
+ui-debug.log
