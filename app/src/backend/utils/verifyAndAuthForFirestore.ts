@@ -9,7 +9,6 @@ export const verifyAndAuthForFirestore = async (idToken: string): Promise<User> 
   const adminAuth = admin.auth();
   const decodedToken = await adminAuth.verifyIdToken(idToken);
   const { uid } = decodedToken;
-  console.log('トークン検証成功');
 
   // カスタムトークンを作成
   const customToken = await adminAuth.createCustomToken(uid);
@@ -18,6 +17,5 @@ export const verifyAndAuthForFirestore = async (idToken: string): Promise<User> 
   const auth = getAuth();
   const usercredential = await signInWithCustomToken(auth, customToken);
   const user = usercredential.user;
-  console.log('firebase authで認証成功');
   return user;
 };

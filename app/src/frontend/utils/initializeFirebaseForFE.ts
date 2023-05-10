@@ -19,8 +19,8 @@ export const initializeFirebaseForFE = () => {
 
   if (process.env.NODE_ENV === 'development') {
     const auth = getAuth();
-    connectAuthEmulator(auth, 'http://localhost:9099');
+    connectAuthEmulator(auth, 'http://127.0.0.1:9099');
     const db = getFirestore();
-    connectFirestoreEmulator(db, 'localhost', 8080);
+    connectFirestoreEmulator(db, '127.0.0.1', 8080);
   }
 };
