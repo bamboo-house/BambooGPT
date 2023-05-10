@@ -9,12 +9,13 @@ export const initializeFirebaseForBE = () => {
     initializeApp({
       credential: cert(serviceAccount as any),
     });
-  }
-  if (process.env.NODE_ENV === 'development') {
-    console.log('バックエンドからエミュレータに接続します');
-    const auth = getAuth();
-    connectAuthEmulator(auth, 'http://host.docker.internal:9099');
-    const db = getFirestore();
-    connectFirestoreEmulator(db, 'host.docker.internal', 8080);
+
+    // 開発環境の場合はエミュレータに接続
+    if (process.env.NODE_ENV === 'development') {
+      const auth = getAuth();
+      connectAuthEmulator(auth, 'http://host.docker.internal:9099');
+      const db = getFirestore();
+      connectFirestoreEmulator(db, 'host.docker.internal', 8080);
+    }
   }
 };

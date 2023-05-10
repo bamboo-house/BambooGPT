@@ -15,12 +15,13 @@ export const firebaseConfig = {
 export const initializeFirebaseForFE = () => {
   if (!getApps().length) {
     initializeApp(firebaseConfig);
-  }
 
-  if (process.env.NODE_ENV === 'development') {
-    const auth = getAuth();
-    connectAuthEmulator(auth, 'http://127.0.0.1:9099');
-    const db = getFirestore();
-    connectFirestoreEmulator(db, '127.0.0.1', 8080);
+    // 開発環境の場合はエミュレータに接続
+    if (process.env.NODE_ENV === 'development') {
+      const auth = getAuth();
+      connectAuthEmulator(auth, 'http://127.0.0.1:9099');
+      const db = getFirestore();
+      connectFirestoreEmulator(db, '127.0.0.1', 8080);
+    }
   }
 };

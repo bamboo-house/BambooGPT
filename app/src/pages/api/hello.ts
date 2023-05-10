@@ -14,7 +14,6 @@ import * as admin from 'firebase-admin';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { initializeFirebaseForBE } from '@/backend/utils/initializeFirebaseForBE';
 import { verifyAndAuthForFirestore } from '@/backend/utils/verifyAndAuthForFirestore';
-import { connectFirestoreEmulator } from 'firebase/firestore';
 
 // クライアントサイドからのGoogleログイン処理
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -25,31 +24,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!idToken) {
       res.status(400).json({ success: false, message: '無効なリクエストです' });
     }
-    console.log('idToken', idToken);
 
-    initializeFirebaseForBE();
-
-    // クライアントサイドから送信されたJWTトークンを検証
-    const adminAuth = admin.auth();
-    // console.log('adminAuth', adminAuth);
-    // console.log('idToken', idToken);
-    const decodedToken = await adminAuth.verifyIdToken(idToken as string);
-    // console.log('decodedToken', decodedToken);
-    const { uid } = decodedToken;
-    console.log('トークン検証成功');
-
-    // カスタムトークンを作成
-    const customToken = await adminAuth.createCustomToken(uid);
-    // console.log('customToken', customToken);
-
-    console.log('appの名前', admin.app().name);
-
-    // firebase authで認証
-    const auth = getAuth();
-    console.log('サインインします');
-    const usercredential = await signInWithCustomToken(auth, customToken);
-    const user = usercredential.user;
-    console.log('firebase authで認証成功');
+    const user = await verifyAndAuthForFirestore(idToken as string);
 
     // try {
     //   const threadCol = collection(getFirestore(), 'threads');
