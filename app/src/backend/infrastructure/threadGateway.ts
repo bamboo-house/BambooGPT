@@ -49,7 +49,7 @@ export class ThreadGateway {
           console.log('Document has been added successfully', docRef);
         })
         .catch((error) => {
-          console.log(error);
+          console.log('エラーですよー', error);
         });
     } catch (error) {
       throw new Error(`スレッド作成ができませんでした：${error}`);

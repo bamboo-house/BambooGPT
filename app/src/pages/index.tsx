@@ -80,7 +80,7 @@ export default function Home() {
 
       <button
         className="rounded bg-red-500 py-2 px-4 font-bold text-white hover:bg-red-700"
-        onClick={hello}
+        onClick={createThread}
       >
         thread作る
       </button>
