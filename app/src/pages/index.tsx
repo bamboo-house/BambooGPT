@@ -1,5 +1,4 @@
-import { getAuth, onAuthStateChanged } from '@firebase/auth';
-import { getFirestore, doc, getDoc, Firestore, DocumentReference } from '@firebase/firestore';
+import { getAuth } from '@firebase/auth';
 import Head from 'next/head';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
