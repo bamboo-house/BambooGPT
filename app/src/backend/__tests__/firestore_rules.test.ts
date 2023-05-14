@@ -5,7 +5,7 @@ import {
   assertSucceeds,
   initializeTestEnvironment,
 } from '@firebase/rules-unit-testing';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { v4 } from 'uuid';
 
 const projectID = v4();
@@ -49,21 +49,58 @@ const getDB = () => {
 };
 
 describe('users collection', () => {
-  describe('read, create, update', () => {
-    it('get: 未認証のとき、取得できない', async () => {
+  describe('認証済み + uidとドキュメントIDが同じとき', () => {
+    it('get: 取得できる', async () => {
+      const { clientDB } = getDB();
+      await assertSucceeds(getDoc(doc(clientDB, 'users', uid)));
+    });
+
+    it('create: 作成できる', async () => {
+      const { clientDB } = getDB();
+      await assertSucceeds(
+        setDoc(doc(clientDB, 'users', uid), { name: 'Takeuchi Shuto', image: 'https://sample.com' })
+      );
+    });
+
+    it('update: 更新できない', async () => {});
+  });
+
+  describe('未認証のとき', () => {
+    it('get: 取得できない', async () => {
       const { guestClientDB } = getDB();
       await assertFails(getDoc(doc(guestClientDB, 'users', uid)));
     });
 
-    it('get: 認証済み + uidとドキュメントIDが異なるとき、所得できない', async () => {
+    it('create: 作成できない', async () => {
+      const { guestClientDB } = getDB();
+      await assertFails(
+        setDoc(doc(guestClientDB, 'users', uid), {
+          name: 'Sam Smith',
+          image: 'https://sample.com',
+        })
+      );
+    });
+
+    it('update: 更新できない', async () => {});
+  });
+
+  describe('認証済み + uidとドキュメントIDが異なるとき', () => {
+    it('get: 所得できない', async () => {
       const { clientDB } = getDB();
       await assertFails(getDoc(doc(clientDB, 'users', otherUid)));
     });
 
-    it('get: 認証済み + uidとドキュメントIDが同じとき、取得できる', async () => {
+    it('create: 作成できない', async () => {
       const { clientDB } = getDB();
-      await assertSucceeds(getDoc(doc(clientDB, 'users', uid)));
+      await assertFails(
+        setDoc(doc(clientDB, 'users', otherUid), {
+          name: 'Sam Smith',
+          image: 'https://sample.com',
+        })
+      );
     });
+
+    it('update: 更新できない', async () => {});
   });
 });
 
