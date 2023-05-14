@@ -49,7 +49,7 @@ const getDB = () => {
 };
 
 describe('users collection', () => {
-  describe('get', () => {
+  describe('read, create, update', () => {
     it('get: 未認証のとき、取得できない', async () => {
       const { guestClientDB } = getDB();
       await assertFails(getDoc(doc(guestClientDB, 'users', uid)));
@@ -64,5 +64,15 @@ describe('users collection', () => {
       const { clientDB } = getDB();
       await assertSucceeds(getDoc(doc(clientDB, 'users', uid)));
     });
+  });
+});
+
+describe('threads collection', () => {
+  describe('create', () => {
+    // 作成者とログインユーザーが同じであること
+  });
+
+  describe('read, update', () => {
+    // オーナーがログインユーザーであること
   });
 });
