@@ -115,7 +115,23 @@ describe('usersコレクション', () => {
 
 describe('threadsコレクション', () => {
   describe('get', () => {
-    // 認証済み + オーナーがログインユーザーであること
+    beforeEach(async () => {
+      await testEnv.withSecurityRulesDisabled(async (context) => {
+        const noRuleDB = context.firestore();
+        const sampleUser = { name: 'Takeuchi Shuto', image: 'https://sample.com' };
+        // usersコレクションにユーザーを作成する必要がある
+        await setDoc(doc(noRuleDB, 'users', uid), sampleUser);
+        await setDoc(doc(noRuleDB, 'threads', 'sampleThreadId'), {
+          user: doc(noRuleDB, 'users', uid).path,
+          name: 'new Thread',
+        });
+      });
+    });
+
+    it('「認証済み」+「オーナーとログインユーザーが同じ」とき、取得できる', async () => {
+      const { clientDB } = getDB();
+      await assertSucceeds(getDoc(doc(clientDB, 'threads', 'sampleThreadId')));
+    });
   });
 
   describe('list', () => {

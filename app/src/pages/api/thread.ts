@@ -1,3 +1,4 @@
+import { collection, doc, getDoc, getFirestore } from 'firebase/firestore';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ThreadGateway } from '@/backend/infrastructure/threadGateway';
 import { verifyAndAuthForFirestore } from '@/backend/utils/verifyAndAuthForFirestore';
@@ -14,6 +15,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     switch (req.method) {
       case 'GET':
+        const collection1 = collection(getFirestore(), 'threads');
+        const threadDocSnapshot = await getDoc(doc(collection1, '9apVCtuea8PVkgnpOAP2'));
+        console.log('threadDocSnapshot', threadDocSnapshot.data());
+
         break;
 
       case 'POST':

@@ -42,6 +42,26 @@ export default function Home() {
     console.log('resBody of createThread:', resBody);
   };
 
+  const getThread = async () => {
+    const user = getAuth().currentUser;
+    if (!user) {
+      return;
+    }
+    const idToken = await user.getIdToken();
+    // console.log('idToken', idToken);
+
+    const response = await fetch('/api/thread', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${idToken}`,
+      },
+    });
+
+    const resBody: ResPostThread = await response.json();
+    console.log('resBody of getThread:', resBody);
+  };
+
   const createThread = async () => {
     // idTokenを取得するが、これは後々クッキーで管理すべき
 
@@ -79,7 +99,7 @@ export default function Home() {
 
       <button
         className="rounded bg-red-500 py-2 px-4 font-bold text-white hover:bg-red-700"
-        onClick={createThread}
+        onClick={getThread}
       >
         thread作る
       </button>
