@@ -5,7 +5,7 @@ import {
   assertSucceeds,
   initializeTestEnvironment,
 } from '@firebase/rules-unit-testing';
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { v4 } from 'uuid';
 
 const projectID = v4();
@@ -36,6 +36,7 @@ afterAll(async () => {
   await testEnv.cleanup();
 });
 
+// ※ guestClientDBはテスト実行時に警告が出るが、無視して良い
 const getDB = () => {
   // ログイン情報つきのContextを作成し、そこから Firestore インスタンスを得る。
   // authenticatedContextは引数をUIDにもつ認証済みContextを返す。
@@ -112,12 +113,42 @@ describe('usersコレクション', () => {
   });
 });
 
-describe('threads collection', () => {
-  describe('create', () => {
-    // 作成者とログインユーザーが同じであること
+describe('threadsコレクション', () => {
+  describe('get', () => {
+    // 認証済み + オーナーがログインユーザーであること
   });
 
-  describe('read, update', () => {
-    // オーナーがログインユーザーであること
+  describe('list', () => {
+    // 認証済み + オーナーがログインユーザーであること
+  });
+
+  describe('create', () => {
+    it('「作成者とログインユーザーが同じ」とき、作成できる', async () => {
+      const { clientDB } = getDB();
+      const userDocRef = doc(clientDB, 'users', uid);
+      const threadDocRef = doc(collection(clientDB, 'threads'));
+      await assertSucceeds(
+        setDoc(threadDocRef, {
+          user: userDocRef.path,
+          name: 'new Thread',
+        })
+      );
+    });
+
+    it('「作成者とログインユーザーが異なる」とき、作成できない', async () => {
+      const { clientDB } = getDB();
+      const userDocRef = doc(clientDB, 'users', 'loginUsertokotonaruUIDdesu');
+      const threadDocRef = doc(collection(clientDB, 'threads'));
+      await assertFails(
+        setDoc(threadDocRef, {
+          user: userDocRef.path,
+          name: 'new Thread',
+        })
+      );
+    });
+  });
+
+  describe('update', () => {
+    // 認証済み + オーナーがログインユーザーであること
   });
 });
