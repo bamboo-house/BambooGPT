@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
 
-type Thread = {
+export type Thread = {
   threadId: string;
   name: string | null;
 };

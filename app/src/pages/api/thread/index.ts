@@ -22,13 +22,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         break;
 
       case 'POST':
-        console.log('==================================');
-        // console.log('req', req);
-        console.log('==================================');
-
-        const reqBody = req.body;
-        // console.log('reqBody', reqBody);
-
         // スレッドのドキュメント作成する
         // create
         const threadGateway = new ThreadGateway();
