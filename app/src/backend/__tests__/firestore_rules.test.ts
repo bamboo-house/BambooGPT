@@ -5,7 +5,7 @@ import {
   assertSucceeds,
   initializeTestEnvironment,
 } from '@firebase/rules-unit-testing';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { v4 } from 'uuid';
 
 const projectID = v4();
@@ -26,6 +26,7 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
+  // beforeEachは、itの前に実行される。
   // Firestore エミュレータ用に構成された projectId に属する Firestore データベースのデータをクリアします。
   await testEnv.clearFirestore();
 });
@@ -48,59 +49,66 @@ const getDB = () => {
   return { clientDB, guestClientDB };
 };
 
-describe('users collection', () => {
-  describe('認証済み + uidとドキュメントIDが同じとき', () => {
-    it('get: 取得できる', async () => {
+describe('usersコレクション', () => {
+  describe('get', () => {
+    it('「認証済み」 + 「ログインユーザのuidとドキュメントIDが同じ」とき、取得できる', async () => {
       const { clientDB } = getDB();
       await assertSucceeds(getDoc(doc(clientDB, 'users', uid)));
     });
 
-    it('create: 作成できる', async () => {
-      const { clientDB } = getDB();
-      await assertSucceeds(
-        setDoc(doc(clientDB, 'users', uid), { name: 'Takeuchi Shuto', image: 'https://sample.com' })
-      );
-    });
-
-    it('update: 更新できない', async () => {});
-  });
-
-  describe('未認証のとき', () => {
-    it('get: 取得できない', async () => {
+    it('「未認証」のとき、取得できない', async () => {
       const { guestClientDB } = getDB();
       await assertFails(getDoc(doc(guestClientDB, 'users', uid)));
     });
 
-    it('create: 作成できない', async () => {
-      const { guestClientDB } = getDB();
-      await assertFails(
-        setDoc(doc(guestClientDB, 'users', uid), {
-          name: 'Sam Smith',
-          image: 'https://sample.com',
-        })
-      );
-    });
-
-    it('update: 更新できない', async () => {});
-  });
-
-  describe('認証済み + uidとドキュメントIDが異なるとき', () => {
-    it('get: 所得できない', async () => {
+    it('「認証済み」 + 「ログインユーザのuidとドキュメントIDが異なる」とき、所得できない', async () => {
       const { clientDB } = getDB();
       await assertFails(getDoc(doc(clientDB, 'users', otherUid)));
     });
+  });
 
-    it('create: 作成できない', async () => {
+  describe('create', () => {
+    const sampleUser = { name: 'Takeuchi Shuto', image: 'https://sample.com' };
+
+    it('「認証済み」 + 「ログインユーザのuidとドキュメントIDが同じ」とき、作成できる', async () => {
       const { clientDB } = getDB();
-      await assertFails(
-        setDoc(doc(clientDB, 'users', otherUid), {
-          name: 'Sam Smith',
-          image: 'https://sample.com',
-        })
-      );
+      await assertSucceeds(setDoc(doc(clientDB, 'users', uid), sampleUser));
     });
 
-    it('update: 更新できない', async () => {});
+    it('「未認証」のとき、作成できない', async () => {
+      const { guestClientDB } = getDB();
+      await assertFails(setDoc(doc(guestClientDB, 'users', uid), sampleUser));
+    });
+
+    it('「認証済み」 + 「ログインユーザのuidとドキュメントIDが異なる」とき、作成できない', async () => {
+      const { clientDB } = getDB();
+      await assertFails(setDoc(doc(clientDB, 'users', otherUid), sampleUser));
+    });
+  });
+
+  describe('update', () => {
+    const sampleUser = { name: 'Takeuchi Shuto', image: 'https://sample.com' };
+    beforeEach(async () => {
+      await testEnv.withSecurityRulesDisabled(async (context) => {
+        const noRuleDB = context.firestore();
+        await setDoc(doc(noRuleDB, 'users', uid), sampleUser);
+      });
+    });
+
+    it('「認証済み」 + 「ログインユーザのuidとドキュメントIDが同じ」とき、更新できる', async () => {
+      const { clientDB } = getDB();
+      await assertSucceeds(updateDoc(doc(clientDB, 'users', uid), { name: 'changeName' }));
+    });
+
+    it('「未認証」のとき、更新できない', async () => {
+      const { guestClientDB } = getDB();
+      await assertFails(updateDoc(doc(guestClientDB, 'users', uid), { name: 'changeName' }));
+    });
+
+    it('「認証済み」 + 「ログインユーザのuidとドキュメントIDが異なる」とき、更新できない', async () => {
+      const { clientDB } = getDB();
+      await assertFails(updateDoc(doc(clientDB, 'users', otherUid), { name: 'changeName' }));
+    });
   });
 });
 
