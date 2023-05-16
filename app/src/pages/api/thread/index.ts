@@ -1,8 +1,7 @@
-import { collection, doc, getDoc, getDocs, getFirestore, query, where } from 'firebase/firestore';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ThreadGateway } from '@/backend/infrastructure/threadGateway';
 import { verifyAndAuthForFirestore } from '@/backend/utils/verifyAndAuthForFirestore';
-import { ResPostThread } from '@/bff/types/thread';
+import { ResGetThread, ResPostThread } from '@/bff/types/thread';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -11,42 +10,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.status(400).json({ success: false, message: '無効なリクエストです' });
     }
     const user = await verifyAndAuthForFirestore(idToken as string);
-    console.log(user.uid);
+    const threadGateway = new ThreadGateway();
 
     switch (req.method) {
       case 'GET':
-        // threadの全てを返すようにする
-        // => [{threadId: 'threadId', name: 'threadName'}, ...}]
-
-        // userがusers/uidに該当するthreadを全て取得する
-
-        const userDocRef = doc(getFirestore(), 'users', user.uid);
-
-        const q = query(collection(getFirestore(), 'threads'), where('name', '==', 'new thread'));
-
-        const threadDocSnapshot = await getDocs(q);
-        threadDocSnapshot.forEach((doc) => {
-          console.log(doc.id, ' => ', doc.data());
+        const threadRecords = await threadGateway.getAll(user.uid);
+        const result = threadRecords.map((threadRecord) => {
+          return { threadId: threadRecord.threadId, name: threadRecord.name };
         });
 
-        res.status(200).json({ success: true, message: 'GETリクエストが成功しました' });
+        const resGetBody: ResGetThread = {
+          body: result,
+        };
+        res.status(200).json(resGetBody);
         break;
-
       case 'POST':
-        // スレッドのドキュメント作成する
-        // create
-        const threadGateway = new ThreadGateway();
         const threadRecord = await threadGateway.create(user.uid, 'new thread');
 
-        // スレッドのドキュメントIDを返す
-        const resBody: ResPostThread = {
+        const resPostBody: ResPostThread = {
           body: {
             threadId: threadRecord.threadId,
             name: threadRecord.name,
           },
         };
-
-        res.status(200).json(resBody);
+        res.status(200).json(resPostBody);
         break;
 
       default:
