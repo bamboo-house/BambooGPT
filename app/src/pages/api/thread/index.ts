@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, getFirestore } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, getFirestore, query, where } from 'firebase/firestore';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ThreadGateway } from '@/backend/infrastructure/threadGateway';
 import { verifyAndAuthForFirestore } from '@/backend/utils/verifyAndAuthForFirestore';
@@ -15,10 +15,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     switch (req.method) {
       case 'GET':
-        const collection1 = collection(getFirestore(), 'threads');
-        const threadDocSnapshot = await getDoc(doc(collection1, '9apVCtuea8PVkgnpOAP2'));
-        console.log('threadDocSnapshot', threadDocSnapshot.data());
+        // threadの全てを返すようにする
+        // => [{threadId: 'threadId', name: 'threadName'}, ...}]
 
+        // userがusers/uidに該当するthreadを全て取得する
+
+        const userDocRef = doc(getFirestore(), 'users', user.uid);
+
+        const q = query(collection(getFirestore(), 'threads'), where('name', '==', 'new thread'));
+
+        const threadDocSnapshot = await getDocs(q);
+        threadDocSnapshot.forEach((doc) => {
+          console.log(doc.id, ' => ', doc.data());
+        });
+
+        res.status(200).json({ success: true, message: 'GETリクエストが成功しました' });
         break;
 
       case 'POST':
@@ -42,7 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(400).json({ error: { message: '無効なリクエストです' } });
     }
   } catch (e) {
-    console.error('Error(500): ', e.message);
-    res.status(500).json({ error: { message: e.message } });
+    console.error('Error(500): ', e);
+    res.status(500).json({ error: { message: e } });
   }
 }

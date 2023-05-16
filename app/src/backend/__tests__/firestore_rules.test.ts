@@ -8,7 +8,7 @@ import {
 import { collection, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { v4 } from 'uuid';
 
-const projectID = v4();
+const projectID = 'bamboogpt';
 let testEnv: RulesTestEnvironment;
 const uid = v4();
 const otherUid = v4();
@@ -145,7 +145,7 @@ describe('threadsコレクション', () => {
       const threadDocRef = doc(collection(clientDB, 'threads'));
       await assertSucceeds(
         setDoc(threadDocRef, {
-          user: userDocRef.path,
+          user: userDocRef,
           name: 'new Thread',
         })
       );
@@ -157,7 +157,7 @@ describe('threadsコレクション', () => {
       const threadDocRef = doc(collection(clientDB, 'threads'));
       await assertFails(
         setDoc(threadDocRef, {
-          user: userDocRef.path,
+          user: userDocRef,
           name: 'new Thread',
         })
       );

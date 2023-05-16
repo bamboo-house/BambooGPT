@@ -39,7 +39,7 @@ export class ThreadGateway {
     console.log(userDocRef.path);
     try {
       await setDoc(threadDocRef, {
-        user: userDocRef.path,
+        user: userDocRef,
         name: name,
         deletedAt: null,
         updatedAt: updatedAt,
