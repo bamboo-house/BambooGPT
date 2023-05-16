@@ -130,8 +130,13 @@ describe('threadsコレクション', () => {
         const sampleUser = { name: 'Takeuchi Shuto', image: 'https://sample.com' };
         // usersコレクションにユーザーを作成する必要がある
         await setDoc(doc(noRuleDB, 'users', uid), sampleUser);
+        await setDoc(doc(noRuleDB, 'users', otherUid), sampleUser);
         await setDoc(doc(noRuleDB, 'threads', 'sampleThreadId'), {
-          user: doc(noRuleDB, 'users', uid).path,
+          user: doc(noRuleDB, 'users', uid),
+          name: 'new Thread',
+        });
+        await setDoc(doc(noRuleDB, 'threads', 'sampleThreadId2'), {
+          user: doc(noRuleDB, 'users', otherUid),
           name: 'new Thread',
         });
       });
@@ -140,6 +145,11 @@ describe('threadsコレクション', () => {
     it('「認証済み」+「オーナーとログインユーザーが同じ」とき、取得できる', async () => {
       const { clientDB } = getDB();
       await assertSucceeds(getDoc(doc(clientDB, 'threads', 'sampleThreadId')));
+    });
+
+    it('「認証済み」+「オーナーとログインユーザーが異なる」とき、取得できない', async () => {
+      const { clientDB } = getDB();
+      await assertFails(getDoc(doc(clientDB, 'threads', 'sampleThreadId2')));
     });
   });
 

@@ -19,3 +19,13 @@ export type ResPostThread = {
     message: string;
   };
 };
+
+export type ResGetThreadThreadId = {
+  body?: {
+    threadId: string;
+    name: string;
+  };
+  error?: {
+    message: string;
+  };
+};
