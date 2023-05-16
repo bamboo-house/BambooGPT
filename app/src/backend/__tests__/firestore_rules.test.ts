@@ -5,7 +5,16 @@ import {
   assertSucceeds,
   initializeTestEnvironment,
 } from '@firebase/rules-unit-testing';
-import { collection, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from 'firebase/firestore';
 import { v4 } from 'uuid';
 
 const projectID = 'bamboogpt';
@@ -135,7 +144,24 @@ describe('threadsコレクション', () => {
   });
 
   describe('list', () => {
-    // 認証済み + オーナーがログインユーザーであること
+    beforeEach(async () => {
+      await testEnv.withSecurityRulesDisabled(async (context) => {
+        const noRuleDB = context.firestore();
+        const sampleUser = { name: 'Takeuchi Shuto', image: 'https://sample.com' };
+        // usersコレクションにユーザーを作成する必要がある
+        await setDoc(doc(noRuleDB, 'users', uid), sampleUser);
+        await setDoc(doc(noRuleDB, 'threads', 'sampleThreadId'), {
+          user: doc(noRuleDB, 'users', uid).path,
+          name: 'new Thread',
+        });
+      });
+    });
+
+    it('「認証済み」+「ユーザー作成済み」 ', async () => {
+      const { clientDB } = getDB();
+      const q = query(collection(clientDB, 'threads'));
+      await assertSucceeds(getDocs(q));
+    });
   });
 
   describe('create', () => {
