@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { OpenaiService } from '@/backend/application/openaiService';
+import { verifyAndAuthForFirestore } from '@/backend/utils/verifyAndAuthForFirestore';
 
 type ChatResponseBody = {
   text?: string;
@@ -18,6 +19,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
     case 'POST':
       console.log('======================');
+      // headersの取得
+      const idToken = req.headers.authorization?.split('Bearer ')[1];
+      if (!idToken) {
+        res.status(400).json({ error: { message: '無効なリクエストです' } });
+      }
+      const user = await verifyAndAuthForFirestore(idToken as string);
+
       const message = req.body.message || '';
       if (message.trim().length === 0) {
         res.status(400).json({

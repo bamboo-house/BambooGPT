@@ -1,3 +1,4 @@
+import { getAuth } from 'firebase/auth';
 import React, { useState } from 'react';
 
 type FormProps = {
@@ -9,10 +10,17 @@ export const Form = (props: FormProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const openaiChats = async () => {
+    const user = getAuth().currentUser;
+    if (!user) {
+      return;
+    }
+    const idToken = await user.getIdToken();
+
     const response = await fetch('/api/openai/chats', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${idToken}`,
       },
       body: JSON.stringify({ message: message }),
     });
@@ -76,6 +84,20 @@ export const Form = (props: FormProps) => {
       <label htmlFor="message" className="mb-2 block text-sm font-medium text-gray-900">
         Enter message
       </label>
+      <textarea
+        id="message"
+        rows={4}
+        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+        placeholder="Write your thoughts here..."
+        onChange={(e) => setMessage(e.target.value)}
+      ></textarea>
+      <textarea
+        id="message"
+        rows={4}
+        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+        placeholder="Write your thoughts here..."
+        onChange={(e) => setMessage(e.target.value)}
+      ></textarea>
       <textarea
         id="message"
         rows={4}

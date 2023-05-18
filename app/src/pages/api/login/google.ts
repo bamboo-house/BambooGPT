@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // headersの取得
     const idToken = req.headers.authorization?.split('Bearer ')[1];
     if (!idToken) {
-      res.status(400).json({ success: false, message: '無効なリクエストです' });
+      res.status(400).json({ error: { message: '無効なリクエストです' } });
     }
     await verifyAndAuthForFirestore(idToken as string);
 
