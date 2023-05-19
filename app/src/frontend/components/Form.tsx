@@ -1,5 +1,7 @@
 import { getAuth } from 'firebase/auth';
 import React, { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { chatMessageState, chatOptionState } from '../globalStates/atoms/chatAtom';
 
 type FormProps = {
   onChangeResult: (str: string) => void;
@@ -7,13 +9,15 @@ type FormProps = {
 
 export const Form = (props: FormProps) => {
   // Todo: 下記のstateをatomにする
+  const [chatOption, setChatOption] = useRecoilState(chatOptionState);
+  const [chatMessage, setChatMessage] = useRecoilState(chatMessageState);
   const [message, setMessage] = useState('');
 
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('A name was submitted: ', message);
+    // console.log('A name was submitted: ', message);
     setIsLoading(true);
 
     try {
@@ -91,21 +95,16 @@ export const Form = (props: FormProps) => {
         rows={4}
         className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
         placeholder="Write your thoughts here..."
-        onChange={(e) => setMessage(e.target.value)}
-      ></textarea>
-      <textarea
-        id="message"
-        rows={4}
-        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-        placeholder="Write your thoughts here..."
-        onChange={(e) => setMessage(e.target.value)}
-      ></textarea>
-      <textarea
-        id="message"
-        rows={4}
-        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-        placeholder="Write your thoughts here..."
-        onChange={(e) => setMessage(e.target.value)}
+        onChange={(e) => {
+          console.log('chatMessage', chatMessage);
+          setChatMessage((prevChatMessage: any) => [
+            ...prevChatMessage,
+            { role: 'user', content: e.target.value },
+          ]);
+
+          setMessage(e.target.value);
+          console.log('chatMessage', chatMessage);
+        }}
       ></textarea>
 
       <button className="rounded bg-amber-300 py-2 px-4 font-bold hover:bg-amber-400" type="submit">
