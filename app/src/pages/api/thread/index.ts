@@ -7,7 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const idToken = req.headers.authorization?.split('Bearer ')[1];
     if (!idToken) {
-      res.status(400).json({ success: false, message: '無効なリクエストです' });
+      res.status(400).json({ error: { message: '無効なリクエストです' } });
     }
     const user = await verifyAndAuthForFirestore(idToken as string);
     const threadGateway = new ThreadGateway();

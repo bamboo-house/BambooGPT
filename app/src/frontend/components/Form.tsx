@@ -6,8 +6,25 @@ type FormProps = {
 };
 
 export const Form = (props: FormProps) => {
+  // Todo: 下記のstateをatomにする
   const [message, setMessage] = useState('');
+
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log('A name was submitted: ', message);
+    setIsLoading(true);
+
+    try {
+      await openaiChats();
+    } catch (error) {
+      console.error(error.name + ': ' + error.message);
+      alert(error.message);
+    }
+
+    setIsLoading(false);
+  };
 
   const openaiChats = async () => {
     const user = getAuth().currentUser;
@@ -62,21 +79,6 @@ export const Form = (props: FormProps) => {
         console.error(error);
       }
     }
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log('A name was submitted: ', message);
-    setIsLoading(true);
-
-    try {
-      await openaiChats();
-    } catch (error) {
-      console.error(error.name + ': ' + error.message);
-      alert(error.message);
-    }
-
-    setIsLoading(false);
   };
 
   return (

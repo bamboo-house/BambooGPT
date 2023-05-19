@@ -1,12 +1,12 @@
 import { getAuth } from '@firebase/auth';
 import Head from 'next/head';
 import React, { useState } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { ResPostThread } from '@/bff/types/thread';
 import { Firebase } from '@/frontend/components/Firebase';
 import { Form } from '@/frontend/components/Form';
 import { currentUserState } from '@/frontend/globalStates/atoms/currentUserAtom';
-import { Thread, threadListState } from '@/frontend/globalStates/atoms/threadAtom';
+import { threadListState } from '@/frontend/globalStates/atoms/threadAtom';
 import { useCurrentUserSetter } from '@/frontend/utils/firebaseAuth';
 import styles from '@/styles/Home.module.css';
 
@@ -23,6 +23,8 @@ export default function Home() {
     setResult((prevResult) => prevResult + text);
   };
 
+  // Todo: これは後々削除する
+  // ======================================================================================
   const sample = async () => {
     console.log('threadList', threadList);
   };
@@ -90,6 +92,7 @@ export default function Home() {
 
     setThreadList((prevThreadList: any) => [...prevThreadList, resBody.body]);
   };
+  // ======================================================================================
 
   return (
     <>
