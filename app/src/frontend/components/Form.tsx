@@ -1,7 +1,7 @@
 import { getAuth } from 'firebase/auth';
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { chatMessageState, chatOptionState } from '../globalStates/atoms/chatAtom';
+import { chatMessageListState, chatOptionState } from '../globalStates/atoms/chatAtom';
 
 type FormProps = {
   onChangeResult: (str: string) => void;
@@ -10,7 +10,7 @@ type FormProps = {
 export const Form = (props: FormProps) => {
   // Todo: 下記のstateをatomにする
   const [chatOption, setChatOption] = useRecoilState(chatOptionState);
-  const [chatMessage, setChatMessage] = useRecoilState(chatMessageState);
+  const [chatMessageList, setChatMessageList] = useRecoilState(chatMessageListState);
   const [message, setMessage] = useState('');
 
   const [isLoading, setIsLoading] = useState(false);
@@ -96,14 +96,14 @@ export const Form = (props: FormProps) => {
         className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
         placeholder="Write your thoughts here..."
         onChange={(e) => {
-          console.log('chatMessage', chatMessage);
-          setChatMessage((prevChatMessage: any) => [
-            ...prevChatMessage,
+          console.log('chatMessageList', chatMessageList);
+          setChatMessageList((prevChatMessageList: any) => [
+            ...prevChatMessageList,
             { role: 'user', content: e.target.value },
           ]);
 
           setMessage(e.target.value);
-          console.log('chatMessage', chatMessage);
+          console.log('chatMessageList', chatMessageList);
         }}
       ></textarea>
 

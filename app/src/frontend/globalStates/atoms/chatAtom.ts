@@ -25,8 +25,8 @@ export const chatOptionState = atom<ChatOption>({
   default: { model: 'text-ada-001' },
 });
 
-export const chatMessageState = atom<ChatMessage[]>({
-  key: 'chatMessageState',
+export const chatMessageListState = atom<ChatMessage[]>({
+  key: 'chatMessageListState',
   default: [
     { role: 'system', content: '' },
     { role: 'user', content: '' },
