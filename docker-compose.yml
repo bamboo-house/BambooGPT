@@ -28,5 +28,5 @@ services:
       - 8080:8080 # Firebase Firestore emulator
       - 9005:9005 # firebase loginする時に必要
     working_dir: /opt/firebase
-    command: firebase emulators:start --import=./dump --export-on-exit
+    command: firebase emulators:start --import=./dump
     tty: true

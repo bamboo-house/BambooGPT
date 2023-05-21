@@ -37,6 +37,30 @@ export const Form = (props: FormProps) => {
     }
     const idToken = await user.getIdToken();
 
+    const chatMessageList = [
+      { role: 'system', content: '' },
+      { role: 'user', content: 'say test' },
+    ];
+
+    const content = {
+      userId: 'iiii',
+      threadId: 'tttt',
+      content: {
+        model: 'davinci',
+        messages: chatMessageList,
+        temperature: 0.9,
+        top_p: 150,
+        n: 1,
+        stream: false,
+        stop: null,
+        max_tokens: 150,
+        presence_penalty: 0.6,
+        frequency_penalty: 0.0,
+        logit_bias: null,
+        user: null,
+      },
+    };
+
     const response = await fetch('/api/openai/chats', {
       method: 'POST',
       headers: {
