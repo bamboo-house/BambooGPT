@@ -43,12 +43,12 @@ export const Form = (props: FormProps) => {
     ];
 
     const content = {
-      userId: 'iiii',
-      threadId: 'tttt',
+      userId: user.uid,
+      threadId: 'Dy1NIIjL8EuSQ8tvyJUT',
       content: {
-        model: 'davinci',
+        model: 'text-ada-001',
         messages: chatMessageList,
-        temperature: 0.9,
+        temperature: 0.3,
         top_p: 150,
         n: 1,
         stream: false,
@@ -67,7 +67,7 @@ export const Form = (props: FormProps) => {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${idToken}`,
       },
-      body: JSON.stringify({ message: message }),
+      body: JSON.stringify(content),
     });
 
     if (!response.body) {
@@ -87,7 +87,6 @@ export const Form = (props: FormProps) => {
       if (done) {
         break;
       }
-
       try {
         const dataString = decoder.decode(value);
         let text;

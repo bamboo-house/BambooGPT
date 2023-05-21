@@ -78,12 +78,15 @@ paths:
             schema:
               type: object
               properties:
+                userId:
+                  type: string
                 threadId:
                   type: string
-                  example: "ASCcQXazh6rqxUdGdUNc"
-                chat:
+                content:
                   type: object
                   properties:
+                    model:
+                      type: string
                     message:
                       type: array
                       items:
@@ -93,8 +96,38 @@ paths:
                             type: string
                           content:
                             type: string
+                    temperature:
+                      type: number
+                    top_p:
+                      type: number
+                    n:
+                      type: number
+                    stream:
+                      type: boolean
+                    stop:
+                      type: string
+                    max_tokens:
+                      type: number
+                    presence_penalty:
+                      type: number
+                    frequency_penalty:
+                      type: number
+                    logit_bias:
+                      type: object
+                    user:
+                      type: string
+                  required:
+                    - model
+                    - message
+              required:
+                - userId
+                - threadId
             example:
-              value:
+              userId: "ASCcQXazh6rqxUdGdUNc"
+              threadId: "ASCcQXazh6rqxUdGdUNc"
+              content:
+                model:
+                  value: "text-davinci-002-render-sha"
                 message:
                   - role: system
                     content: "You are a helpful assistant."
@@ -104,6 +137,17 @@ paths:
                     content: "The Los Angeles Dodgers won the World Series in 2020."
                   - role: user
                     content: "Where was it played?"
+                temperature: 1
+                top_p: 1
+                n: 1
+                stream: false
+                stop: null
+                max_tokens: inf
+                presence_penalty: 0
+                frequency_penalty: 0
+                logit_bias:
+                  value: null
+                user: null
       responses:
         200:
           description: OK
