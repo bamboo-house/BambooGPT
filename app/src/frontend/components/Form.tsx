@@ -47,7 +47,7 @@ export const Form = (props: FormProps) => {
       threadId: 'Dy1NIIjL8EuSQ8tvyJUT',
       content: {
         model: 'text-ada-001',
-        messages: chatMessageList,
+        messages: 'Say this is a test',
         temperature: 1,
         top_p: 1,
         n: 1,

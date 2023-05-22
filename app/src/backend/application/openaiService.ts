@@ -109,7 +109,20 @@ export class OpenaiService {
   async createCompletion(
     model: string,
     prompt: string,
-    temperature: number,
+    suffix: string | null = null,
+    max_tokens: number = 16,
+    temperature: number = 1,
+    top_p: number = 1,
+    n: number = 1,
+    stream: boolean = false,
+    logprobs: number | null = null,
+    echo: boolean = false,
+    stop: string | string[] | null = null,
+    presence_penalty: number = 0,
+    frequency_penalty: number = 0,
+    best_of: number = 1,
+    logit_bias: { [key: string]: number } | null = null,
+    user: string | null = null,
     resWrite: (text: string) => void,
     resEnd: () => void
   ): Promise<void> {
@@ -117,22 +130,16 @@ export class OpenaiService {
       {
         model,
         prompt: prompt,
-        max_tokens: 7,
-        stream: true,
-        temperature,
-        top_p: 1,
-        n: 1,
-        logprobs: null,
       },
       { responseType: 'stream' }
     );
 
-    const stream = response.data;
+    const streamRes = response.data;
 
     let result = '';
     console.log('================= START =================');
 
-    stream.on('data', (chunk: any) => {
+    streamRes.on('data', (chunk: any) => {
       let str: string = chunk.toString();
 
       // [DONE] は最後の行なので無視
@@ -170,14 +177,14 @@ export class OpenaiService {
       });
     });
 
-    stream.on('end', () => {
+    streamRes.on('end', () => {
       console.log('recieved message:', result);
       console.log('================= END =================');
       // this._promptGateway.create('shuto', result);
       resEnd();
     });
 
-    stream.on('error', (error: any) => {
+    streamRes.on('error', (error: any) => {
       console.error(error);
     });
   }
