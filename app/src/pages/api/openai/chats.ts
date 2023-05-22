@@ -28,50 +28,43 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const body = req.body;
         console.log('req.body: ', req.body);
         const { userId, threadId, content } = body;
-        const { model, prompt } = content;
+        const { model, messages } = content;
 
-        if (prompt === '') {
-          res.status(400).json({
-            error: {
-              message: 'Please enter a valid message',
-            },
-          });
-        }
-        console.log('prompt', prompt);
-        try {
-          const openaiService = new OpenaiService();
-          // TODO: テスト的にCompletionを利用している
-          openaiService.createCompletion(
-            model,
-            prompt,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            true,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            (text: string) => {
-              res.write(JSON.stringify({ text: text }));
-            },
-            () => {
-              res.end();
-            }
-          );
-        } catch (e) {
-          res.status(500).json({
-            error: {
-              message: e.message,
-            },
-          });
-        }
+        // if (prompt === '') {
+        //   res.status(400).json({
+        //     error: {
+        //       message: 'Please enter a valid message',
+        //     },
+        //   });
+        // }
+        console.log('messages', messages);
+        const openaiService = new OpenaiService();
+        // TODO: テスト的にCompletionを利用している
+        // openaiService.createCompletion({
+        //   model: model,
+        //   prompt: prompt,
+        //   stream: true,
+        //   resWrite: (text: string) => {
+        //     res.write(JSON.stringify({ text: text }));
+        //   },
+        //   resEnd: () => {
+        //     res.end();
+        //   },
+        // });
+
+        openaiService.createChatCompletion({
+          model: model,
+          messages: messages,
+          stream: true,
+          max_tokens: 16,
+          resWrite: (text: string) => {
+            res.write(JSON.stringify({ text: text }));
+          },
+          resEnd: () => {
+            res.end();
+          },
+        });
+
         break;
 
       case 'PATCH':

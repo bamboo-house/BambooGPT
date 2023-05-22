@@ -38,16 +38,16 @@ export const Form = (props: FormProps) => {
     const idToken = await user.getIdToken();
 
     const chatMessageList = [
-      { role: 'system', content: '' },
-      { role: 'user', content: 'say test' },
+      { role: 'system', content: 'You are a helpful assistant.' },
+      { role: 'user', content: message },
     ];
 
     const content = {
       userId: user.uid,
       threadId: 'Dy1NIIjL8EuSQ8tvyJUT',
       content: {
-        model: 'text-ada-001',
-        messages: 'Say this is a test',
+        model: 'gpt-3.5-turbo',
+        messages: chatMessageList,
         temperature: 1,
         top_p: 1,
         n: 1,
