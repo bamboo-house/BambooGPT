@@ -57,7 +57,7 @@ export default function Home() {
     const idToken = await user.getIdToken();
     // console.log('idToken', idToken);
 
-    const response = await fetch(`/api/thread/${threadList[0].threadId}`, {
+    const response = await fetch(`/api/threads/${threadList[0].threadId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ export default function Home() {
     const idToken = await user.getIdToken();
     // console.log('idToken', idToken);
 
-    const response = await fetch('/api/thread', {
+    const response = await fetch('/api/threads', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
