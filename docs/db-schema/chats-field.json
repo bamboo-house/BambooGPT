@@ -1,7 +1,8 @@
 {
+  "chatId": "string",
   "user": "reference",
   "thread": "reference",
-  "content": {
+  "chatContent": {
     "model": "string",
     "message": [
       { "role": "system", "content": "You are a helpful assistant." },

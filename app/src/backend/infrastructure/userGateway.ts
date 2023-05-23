@@ -1,4 +1,11 @@
-import { getFirestore, collection, doc, setDoc, getDoc } from '@firebase/firestore';
+import {
+  getFirestore,
+  collection,
+  doc,
+  setDoc,
+  getDoc,
+  serverTimestamp,
+} from '@firebase/firestore';
 import { UserRecord } from './userRecord';
 import type { GoogleUserInfo } from '@/bff/types/firestore/usersCollection';
 
@@ -17,8 +24,8 @@ export class UserGateway {
     googleUserInfo: GoogleUserInfo
   ): Promise<UserRecord> {
     const userDocRef = doc(this._collection, uid);
-    const updatedAt = new Date().toISOString();
-    const createdAt = new Date().toISOString();
+    const updatedAt = serverTimestamp();
+    const createdAt = serverTimestamp();
     try {
       await setDoc(userDocRef, {
         name: name,
@@ -30,6 +37,7 @@ export class UserGateway {
         googleUserInfo: googleUserInfo,
       });
     } catch (error) {
+      console.error(error);
       throw new Error(`ユーザー作成ができませんでした：${error}`);
     }
     return new UserRecord(name, description, image, null, updatedAt, createdAt, googleUserInfo);
@@ -46,6 +54,7 @@ export class UserGateway {
         return undefined;
       }
     } catch (error) {
+      console.error(error);
       throw new Error(`ユーザーを取得できませんでした：${error}`);
     }
 

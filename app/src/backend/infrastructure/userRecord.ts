@@ -1,3 +1,4 @@
+import { FieldValue, Timestamp } from 'firebase/firestore';
 import { GoogleUserInfo } from '@/bff/types/firestore/usersCollection';
 
 export class UserRecord {
@@ -5,9 +6,9 @@ export class UserRecord {
     private _name: string | null,
     private _description: string | null,
     private _image: string | null,
-    private _deletedAt: string | null,
-    private _updatedAt: string,
-    private _createdAt: string,
+    private _deletedAt: Timestamp | FieldValue | null,
+    private _updatedAt: Timestamp | FieldValue,
+    private _createdAt: Timestamp | FieldValue,
     private _googleUserInfo: GoogleUserInfo | null
   ) {}
 

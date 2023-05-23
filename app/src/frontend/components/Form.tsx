@@ -71,6 +71,7 @@ export const Form = (props: FormProps) => {
     });
 
     if (!response.body) {
+      console.error('Network response was not ok');
       throw new Error('Network response was not ok');
     }
 

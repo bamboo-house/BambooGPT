@@ -1,3 +1,5 @@
+import { DocumentReference, FieldValue, Timestamp } from '@firebase/firestore';
+
 type ChatMessage = {
   role: 'system' | 'user' | 'assistant';
   content: string;
@@ -21,11 +23,12 @@ export type ChatContent = {
 
 export class ChatRecord {
   constructor(
-    private _user: string,
-    private _thread: string,
+    private _chatId: string,
+    private _user: DocumentReference,
+    private _thread: DocumentReference,
     private _chatContent: ChatContent,
-    private _destroy: boolean,
-    private _updatedAt: string,
-    private _createdAt: string
+    private _deletedAt: Timestamp | FieldValue | null,
+    private _updatedAt: Timestamp | FieldValue,
+    private _createdAt: Timestamp | FieldValue
   ) {}
 }

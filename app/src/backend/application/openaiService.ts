@@ -1,6 +1,5 @@
 import { Configuration, OpenAIApi } from 'openai';
 import { ChatContent } from '../infrastructure/chatRecord';
-import { PromptGateway } from '@/backend/infrastructure/promptGateway';
 
 type CreateChatCompletionType = ChatContent & {
   resWrite: (text: string) => void;
@@ -31,16 +30,15 @@ type CreateCompletionType = {
 export class OpenaiService {
   private _configuration: Configuration;
   private _openai: OpenAIApi;
-  private _promptGateway: PromptGateway;
 
   constructor() {
     this._configuration = new Configuration({
       apiKey: process.env.OPENAI_API_KEY,
     });
     this._openai = new OpenAIApi(this._configuration);
-    this._promptGateway = new PromptGateway();
 
     if (!this._configuration.apiKey) {
+      console.error('OpenAI API key not configured');
       throw new Error('OpenAI API key not configured');
     }
   }
@@ -133,7 +131,6 @@ export class OpenaiService {
       streamRes.on('end', () => {
         console.log(result);
         console.log('================= END =================');
-        // this._promptGateway.create('shuto', result);
         resEnd();
         resolve(result);
       });
@@ -224,7 +221,6 @@ export class OpenaiService {
     streamRes.on('end', () => {
       console.log('recieved message:', result);
       console.log('================= END =================');
-      // this._promptGateway.create('shuto', result);
       resEnd();
     });
 

@@ -13,6 +13,7 @@ export class ThreadGateway {
     const userDocRef = doc(getFirestore(), 'users', uid);
     // TODO: Gatewayではエラーを投げたくない。application層かdomain層でエラーを投げるようにする。
     if (!userDocRef) {
+      console.error('threadGateway.ts：ユーザーが存在しません');
       throw new Error('threadGateway.ts：ユーザーが存在しません');
     }
 
@@ -34,6 +35,7 @@ export class ThreadGateway {
           console.error('エラーですよー', error);
         });
     } catch (error) {
+      console.error(error);
       throw new Error(`スレッド作成ができませんでした：${error}`);
     }
 
@@ -69,6 +71,7 @@ export class ThreadGateway {
     const userDocRef = doc(getFirestore(), 'users', uid);
     // TODO: Gatewayではエラーを投げたくない。application層かdomain層でエラーを投げるようにする。
     if (!userDocRef) {
+      console.error('threadGateway.ts：ユーザーが存在しません');
       throw new Error('threadGateway.ts：ユーザーが存在しません');
     }
 
@@ -89,6 +92,7 @@ export class ThreadGateway {
         );
       });
     } catch (error) {
+      console.error(error);
       throw new Error(`Threadを取得できませんでした: ${error}`);
     }
     return threadRecords;
