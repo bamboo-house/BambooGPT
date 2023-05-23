@@ -24,6 +24,7 @@
     "logit_bias": "{ [key: string]: number } | null",
     "user": "string | null"
   },
-  "updatedAt": "string",
-  "createdAt": "string"
+  "deletedAt": "serverTimestamp",
+  "updatedAt": "serverTimestamp",
+  "createdAt": "serverTimestamp"
 }
