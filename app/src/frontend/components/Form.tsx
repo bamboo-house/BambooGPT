@@ -51,7 +51,7 @@ export const Form = (props: FormProps) => {
         temperature: 1,
         top_p: 1,
         n: 1,
-        stream: false,
+        stream: true,
         stop: null,
         max_tokens: null,
         presence_penalty: 0,

@@ -69,7 +69,7 @@ export class OpenaiService {
   // Chat
   // チャット会話が与えられた場合、モデルはチャット完了応答を返す。
   // ======================================
-  async createChatCompletion({
+  createChatCompletion({
     model,
     messages,
     temperature,
@@ -84,77 +84,84 @@ export class OpenaiService {
     user,
     resWrite,
     resEnd,
-  }: CreateChatCompletionType): Promise<void> {
-    const response: any = await this._openai.createChatCompletion(
-      {
-        model,
-        messages: messages,
-        temperature,
-        top_p,
-        n,
-        stream,
-        stop,
-        max_tokens,
-        presence_penalty,
-        frequency_penalty,
-        logit_bias,
-        user,
-      },
-      { responseType: 'stream' }
-    );
+  }: CreateChatCompletionType): Promise<string> {
+    return new Promise(async (resolve, reject) => {
+      const response: any = await this._openai.createChatCompletion(
+        {
+          model,
+          messages: messages,
+          temperature,
+          top_p,
+          n,
+          stream,
+          stop,
+          max_tokens,
+          presence_penalty,
+          frequency_penalty,
+          logit_bias,
+          user,
+        },
+        { responseType: 'stream' }
+      );
 
-    const streamRes = response.data;
+      const streamRes = response.data;
 
-    let result = '';
-    console.log('================= createChatCompletion START =================');
+      let result = '';
+      console.log('================= createChatCompletion START =================');
 
-    streamRes.on('data', (chunk: any) => {
-      let str: string = chunk.toString();
+      streamRes.on('data', (chunk: any) => {
+        let str: string = chunk.toString();
 
-      // [DONE] は最後の行なので無視
-      if (str.indexOf('[DONE]') > 0) {
-        return;
-      }
-
-      // nullは無視;
-      if (str.indexOf('delta":{}') > 0) {
-        return;
-      }
-
-      // ※APIからの応答をクライアントに返す。後で説明。
-      const lines: Array<string> = str.split('\n');
-      lines.forEach((line) => {
-        if (line.startsWith('data: ')) {
-          line = line.substring('data: '.length);
-        }
-
-        // 空行は無視
-        if (line.trim() == '') {
+        // [DONE] は最後の行なので無視
+        if (str.indexOf('[DONE]') > 0) {
           return;
         }
 
-        // JSONにparse
-        const data = JSON.parse(line);
-        if (data.choices[0].delta.content === null || data.choices[0].delta.content === undefined) {
+        // nullは無視;
+        if (str.indexOf('delta":{}') > 0) {
           return;
         }
-        const text = data.choices[0].delta.content;
-        result += text;
 
-        // フロントに返却
-        resWrite(text);
+        // ※APIからの応答をクライアントに返す。後で説明。
+        const lines: Array<string> = str.split('\n');
+        lines.forEach((line) => {
+          if (line.startsWith('data: ')) {
+            line = line.substring('data: '.length);
+          }
+
+          // 空行は無視
+          if (line.trim() == '') {
+            return;
+          }
+
+          // JSONにparse
+          const data = JSON.parse(line);
+          if (
+            data.choices[0].delta.content === null ||
+            data.choices[0].delta.content === undefined
+          ) {
+            return;
+          }
+          const text = data.choices[0].delta.content;
+          result += text;
+
+          // フロントに返却
+          resWrite(text);
+        });
       });
-    });
 
-    streamRes.on('end', () => {
-      console.log(result);
-      console.log('================= END =================');
-      // this._promptGateway.create('shuto', result);
-      resEnd();
-    });
+      streamRes.on('end', () => {
+        console.log(result);
+        console.log('================= END =================');
+        // this._promptGateway.create('shuto', result);
+        resEnd();
+        resolve(result);
+      });
 
-    streamRes.on('error', (error: any) => {
-      console.error(error);
+      streamRes.on('error', (error: any) => {
+        console.error(error);
+        reject(error);
+      });
     });
   }
 

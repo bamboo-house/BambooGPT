@@ -21,6 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         // headersの取得
         const idToken = req.headers.authorization?.split('Bearer ')[1];
         if (!idToken) {
+          console.error('idToken is null');
           res.status(400).json({ error: { message: '無効なリクエストです' } });
         }
         const userAuth = await verifyAndAuthForFirestore(idToken as string);
@@ -30,13 +31,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         const { userId, threadId, content } = body;
         const { model, messages } = content;
 
-        // if (prompt === '') {
-        //   res.status(400).json({
-        //     error: {
-        //       message: 'Please enter a valid message',
-        //     },
-        //   });
-        // }
+        if (messages[messages.length - 1].content === '') {
+          res.status(400).json({
+            error: {
+              message: 'Please enter a valid message',
+            },
+          });
+        }
         console.log('messages', messages);
         const openaiService = new OpenaiService();
         // TODO: テスト的にCompletionを利用している
@@ -52,7 +53,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         //   },
         // });
 
-        openaiService.createChatCompletion({
+        // Todo：引数にコールバック関数を渡さずに、pipeで結果を取得するなどして責務で分離すべき
+        const result = await openaiService.createChatCompletion({
           model: model,
           messages: messages,
           stream: true,
@@ -64,9 +66,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             res.end();
           },
         });
+        // このresultをfirestoreに保存する
+
+        console.log('result: ', result);
+        messages.push({ role: 'assistant', content: result });
 
         break;
-
       case 'PATCH':
         res.status(200).json({ text: 'PATCHリクエスト' });
         break;
