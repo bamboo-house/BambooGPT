@@ -1,28 +1,8 @@
-import {
-  Configuration,
-  OpenAIApi,
-  ChatCompletionRequestMessage,
-  CreateChatCompletionRequestStop,
-} from 'openai';
+import { Configuration, OpenAIApi } from 'openai';
+import { ChatContent } from '../infrastructure/chatRecord';
 import { PromptGateway } from '@/backend/infrastructure/promptGateway';
 
-type CreateChatCompletionType = {
-  model: string;
-  messages: {
-    role: 'system' | 'user' | 'assistant';
-    content: string;
-    name?: string;
-  }[];
-  temperature?: number;
-  top_p?: number;
-  n?: number;
-  stream?: boolean;
-  stop?: CreateChatCompletionRequestStop;
-  max_tokens?: number | undefined;
-  presence_penalty?: number;
-  frequency_penalty?: number;
-  logit_bias?: { [key: string]: number } | null;
-  user?: string | undefined;
+type CreateChatCompletionType = ChatContent & {
   resWrite: (text: string) => void;
   resEnd: () => void;
 };

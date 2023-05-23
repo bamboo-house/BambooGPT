@@ -40,18 +40,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         }
         console.log('messages', messages);
         const openaiService = new OpenaiService();
-        // TODO: テスト的にCompletionを利用している
-        // openaiService.createCompletion({
-        //   model: model,
-        //   prompt: prompt,
-        //   stream: true,
-        //   resWrite: (text: string) => {
-        //     res.write(JSON.stringify({ text: text }));
-        //   },
-        //   resEnd: () => {
-        //     res.end();
-        //   },
-        // });
 
         // Todo：引数にコールバック関数を渡さずに、pipeで結果を取得するなどして責務で分離すべき
         const result = await openaiService.createChatCompletion({

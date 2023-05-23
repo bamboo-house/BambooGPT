@@ -4,19 +4,19 @@ type ChatMessage = {
   name?: string;
 };
 
-type ChatContent = {
+export type ChatContent = {
   model: string;
-  message: ChatMessage[];
+  messages: ChatMessage[];
   temperature?: number;
   top_p?: number;
   n?: number;
   stream?: boolean;
   stop?: string | string[];
-  max_tokens?: number;
+  max_tokens?: number | undefined;
   presence_penalty?: number;
   frequency_penalty?: number;
-  logit_bias?: { [key: string]: number };
-  user?: string;
+  logit_bias?: { [key: string]: number } | null;
+  user?: string | undefined;
 };
 
 export class ChatRecord {
