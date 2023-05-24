@@ -1,8 +1,8 @@
 import { getAuth } from 'firebase/auth';
+import { ChatCompletionRequestMessage } from 'openai';
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { chatMessageListState, chatOptionState } from '../globalStates/atoms/chatAtom';
-import { ChatMessage } from '@/backend/infrastructure/chatRecord';
 import { ReqPostOpenaiChat } from '@/bff/types/openai/chats';
 
 type FormProps = {
@@ -39,7 +39,7 @@ export const Form = (props: FormProps) => {
     }
     const idToken = await user.getIdToken();
 
-    const chatMessageList: ChatMessage[] = [
+    const chatMessageList: ChatCompletionRequestMessage[] = [
       { role: 'system', content: 'You are a helpful assistant.' },
       { role: 'user', content: message },
     ];
@@ -50,15 +50,15 @@ export const Form = (props: FormProps) => {
       chatContent: {
         model: 'gpt-3.5-turbo',
         messages: chatMessageList,
-        temperature: 1,
-        top_p: 1,
-        n: 1,
+        temperature: undefined,
+        top_p: undefined,
+        n: undefined,
         stream: true,
         stop: undefined,
         max_tokens: undefined,
-        presence_penalty: 0,
-        frequency_penalty: 0,
-        logit_bias: null,
+        presence_penalty: undefined,
+        frequency_penalty: undefined,
+        logit_bias: undefined,
         user: undefined,
       },
     };

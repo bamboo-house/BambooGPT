@@ -1,33 +1,11 @@
-import { Configuration, OpenAIApi } from 'openai';
-import { ChatContent } from '@/backend/infrastructure/chatRecord';
+import { Configuration, CreateChatCompletionRequest, OpenAIApi } from 'openai';
 
-type CreateChatCompletionType = ChatContent & {
+type CreateChatCompletionType = CreateChatCompletionRequest & {
   resWrite: (text: string) => void;
   resEnd: () => void;
 };
 
-type CreateCompletionType = {
-  model: string;
-  prompt: string;
-  suffix?: string | null;
-  max_tokens?: number;
-  temperature?: number;
-  top_p?: number;
-  n?: number;
-  stream?: boolean;
-  logprobs?: number | null;
-  echo?: boolean;
-  stop?: string | string[] | null;
-  presence_penalty?: number;
-  frequency_penalty?: number;
-  best_of?: number;
-  logit_bias?: { [key: string]: number } | null;
-  user?: string | null;
-  resWrite: (text: string) => void;
-  resEnd: () => void;
-};
-
-export class OpenaiService {
+export class OpenaiFeature {
   private _configuration: Configuration;
   private _openai: OpenAIApi;
 
@@ -147,85 +125,85 @@ export class OpenaiService {
   // プロンプトが与えられると、モデルは1つまたは複数の予測された完了を返し、
   // 各位置での代替トークンの確率も返すことができる
   // ======================================
-  async createCompletion({
-    model = 'text-ada-001',
-    prompt,
-    suffix = null,
-    max_tokens = 16,
-    temperature = 1,
-    top_p = 1,
-    n = 1,
-    stream = false,
-    logprobs = null,
-    echo = false,
-    stop = null,
-    presence_penalty = 0,
-    frequency_penalty = 0,
-    best_of = 1,
-    logit_bias = null,
-    user = null,
-    resWrite,
-    resEnd,
-  }: CreateCompletionType): Promise<void> {
-    const response: any = await this._openai.createCompletion(
-      {
-        model,
-        prompt: prompt,
-      },
-      { responseType: 'stream' }
-    );
+  // async createCompletion({
+  //   model = 'text-ada-001',
+  //   prompt,
+  //   suffix = null,
+  //   max_tokens = 16,
+  //   temperature = 1,
+  //   top_p = 1,
+  //   n = 1,
+  //   stream = false,
+  //   logprobs = null,
+  //   echo = false,
+  //   stop = null,
+  //   presence_penalty = 0,
+  //   frequency_penalty = 0,
+  //   best_of = 1,
+  //   logit_bias = null,
+  //   user = null,
+  //   resWrite,
+  //   resEnd,
+  // }: CreateCompletionType): Promise<void> {
+  //   const response: any = await this._openai.createCompletion(
+  //     {
+  //       model,
+  //       prompt: prompt,
+  //     },
+  //     { responseType: 'stream' }
+  //   );
 
-    const streamRes = response.data;
+  //   const streamRes = response.data;
 
-    let result = '';
-    console.log('================= createCompletion START =================');
+  //   let result = '';
+  //   console.log('================= createCompletion START =================');
 
-    streamRes.on('data', (chunk: any) => {
-      let str: string = chunk.toString();
+  //   streamRes.on('data', (chunk: any) => {
+  //     let str: string = chunk.toString();
 
-      // [DONE] は最後の行なので無視
-      if (str.indexOf('[DONE]') > 0) {
-        return;
-      }
+  //     // [DONE] は最後の行なので無視
+  //     if (str.indexOf('[DONE]') > 0) {
+  //       return;
+  //     }
 
-      // nullは無視;
-      if (str.indexOf('delta":{}') > 0) {
-        return;
-      }
+  //     // nullは無視;
+  //     if (str.indexOf('delta":{}') > 0) {
+  //       return;
+  //     }
 
-      // ※APIからの応答をクライアントに返す。後で説明。
-      const lines: Array<string> = str.split('\n');
-      lines.forEach((line) => {
-        if (line.startsWith('data: ')) {
-          line = line.substring('data: '.length);
-        }
+  //     // ※APIからの応答をクライアントに返す。後で説明。
+  //     const lines: Array<string> = str.split('\n');
+  //     lines.forEach((line) => {
+  //       if (line.startsWith('data: ')) {
+  //         line = line.substring('data: '.length);
+  //       }
 
-        // 空行は無視
-        if (line.trim() == '') {
-          return;
-        }
+  //       // 空行は無視
+  //       if (line.trim() == '') {
+  //         return;
+  //       }
 
-        // JSONにparse
-        const data = JSON.parse(line);
-        if (data.choices[0].text === null || data.choices[0].text === undefined) {
-          return;
-        }
-        const text = data.choices[0].text;
-        result += text;
+  //       // JSONにparse
+  //       const data = JSON.parse(line);
+  //       if (data.choices[0].text === null || data.choices[0].text === undefined) {
+  //         return;
+  //       }
+  //       const text = data.choices[0].text;
+  //       result += text;
 
-        // フロントに返却
-        resWrite(text);
-      });
-    });
+  //       // フロントに返却
+  //       resWrite(text);
+  //     });
+  //   });
 
-    streamRes.on('end', () => {
-      console.log('recieved message:', result);
-      console.log('================= END =================');
-      resEnd();
-    });
+  //   streamRes.on('end', () => {
+  //     console.log('recieved message:', result);
+  //     console.log('================= END =================');
+  //     resEnd();
+  //   });
 
-    streamRes.on('error', (error: any) => {
-      console.error(error);
-    });
-  }
+  //   streamRes.on('error', (error: any) => {
+  //     console.error(error);
+  //   });
+  // }
 }

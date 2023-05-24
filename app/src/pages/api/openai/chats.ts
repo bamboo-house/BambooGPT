@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { OpenaiChatsService } from '@/backend/application/openaiChatsService';
 import { verifyAndAuthForFirestore } from '@/backend/utils/verifyAndAuthForFirestore';
+import { ReqPostOpenaiChat } from '@/bff/types/openai/chats';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -17,7 +18,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await verifyAndAuthForFirestore(idToken as string);
 
     // リクエストボディの取得・検証
-    const reqBody = req.body;
+    const reqBody: ReqPostOpenaiChat = req.body;
+    const { uid, threadId, chatContent } = reqBody;
     if (reqBody.chatContent.messages[reqBody.chatContent.messages.length - 1].content === '') {
       res.status(400).json({
         error: {
@@ -36,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.end();
     };
     const openaiChatsService = new OpenaiChatsService();
-    openaiChatsService.run(reqBody, resWrite, resEnd);
+    openaiChatsService.run(uid, threadId, chatContent, resWrite, resEnd);
   } catch (e) {
     console.error('Error(500): ', e);
     res.status(500).json({ error: { message: e } });
