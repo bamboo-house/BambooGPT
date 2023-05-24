@@ -5,11 +5,13 @@ import { ResGetThread, ResPostThread } from '@/bff/types/thread';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
+    // headersの取得・認証
     const idToken = req.headers.authorization?.split('Bearer ')[1];
     if (!idToken) {
       res.status(400).json({ error: { message: '無効なリクエストです' } });
     }
     const user = await verifyAndAuthForFirestore(idToken as string);
+
     const threadGateway = new ThreadGateway();
 
     switch (req.method) {
