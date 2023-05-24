@@ -28,8 +28,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
         const body = req.body;
         console.log('req.body: ', req.body);
-        const { userId, threadId, content } = body;
-        const { model, messages } = content;
+        const { uid, threadId, chatContent } = body;
+        const {
+          model,
+          messages,
+          temperature,
+          top_p,
+          n,
+          stream,
+          stop,
+          max_tokens,
+          presence_penalty,
+          frequency_penalty,
+          logit_bias,
+          user,
+        } = chatContent;
 
         if (messages[messages.length - 1].content === '') {
           res.status(400).json({
@@ -58,6 +71,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
         console.log('result: ', result);
         messages.push({ role: 'assistant', content: result });
+        console.log(messages);
 
         break;
       case 'PATCH':

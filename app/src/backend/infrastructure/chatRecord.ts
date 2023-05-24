@@ -1,6 +1,6 @@
 import { DocumentReference, FieldValue, Timestamp } from '@firebase/firestore';
 
-type ChatMessage = {
+export type ChatMessage = {
   role: 'system' | 'user' | 'assistant';
   content: string;
   name?: string;

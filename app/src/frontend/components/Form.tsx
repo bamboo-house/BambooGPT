@@ -2,6 +2,8 @@ import { getAuth } from 'firebase/auth';
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { chatMessageListState, chatOptionState } from '../globalStates/atoms/chatAtom';
+import { ChatMessage } from '@/backend/infrastructure/chatRecord';
+import { ReqPostOpenaiChat } from '@/bff/types/openai/chats';
 
 type FormProps = {
   onChangeResult: (str: string) => void;
@@ -37,27 +39,27 @@ export const Form = (props: FormProps) => {
     }
     const idToken = await user.getIdToken();
 
-    const chatMessageList = [
+    const chatMessageList: ChatMessage[] = [
       { role: 'system', content: 'You are a helpful assistant.' },
       { role: 'user', content: message },
     ];
 
-    const content = {
-      userId: user.uid,
+    const reqBody: ReqPostOpenaiChat = {
+      uid: user.uid,
       threadId: 'Dy1NIIjL8EuSQ8tvyJUT',
-      content: {
+      chatContent: {
         model: 'gpt-3.5-turbo',
         messages: chatMessageList,
         temperature: 1,
         top_p: 1,
         n: 1,
         stream: true,
-        stop: null,
-        max_tokens: null,
+        stop: undefined,
+        max_tokens: undefined,
         presence_penalty: 0,
         frequency_penalty: 0,
         logit_bias: null,
-        user: null,
+        user: undefined,
       },
     };
 
@@ -67,7 +69,7 @@ export const Form = (props: FormProps) => {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${idToken}`,
       },
-      body: JSON.stringify(content),
+      body: JSON.stringify(reqBody),
     });
 
     if (!response.body) {

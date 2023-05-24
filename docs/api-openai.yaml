@@ -78,7 +78,7 @@ paths:
             schema:
               type: object
               properties:
-                userId:
+                uid:
                   type: string
                 threadId:
                   type: string
@@ -120,10 +120,10 @@ paths:
                     - model
                     - message
               required:
-                - userId
+                - uid
                 - threadId
             example:
-              userId: "ASCcQXazh6rqxUdGdUNc"
+              uid: "ASCcQXazh6rqxUdGdUNc"
               threadId: "ASCcQXazh6rqxUdGdUNc"
               content:
                 model:
