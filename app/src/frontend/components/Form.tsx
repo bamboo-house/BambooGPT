@@ -46,7 +46,7 @@ export const Form = (props: FormProps) => {
 
     const reqBody: ReqPostOpenaiChat = {
       uid: user.uid,
-      threadId: 'Dy1NIIjL8EuSQ8tvyJUT',
+      threadId: 'QlunF5Ke2kXNF6Sq0agP',
       chatContent: {
         model: 'gpt-3.5-turbo',
         messages: chatMessageList,
