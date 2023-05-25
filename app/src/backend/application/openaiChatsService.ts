@@ -53,5 +53,7 @@ export class OpenaiChatsService {
     console.log('result: ', result);
     messages.push({ role: 'assistant', content: result });
     console.log('messagesだよ', messages);
+    console.log('chatContent', chatContent);
+    await this._chatsGateway.create(uid, threadId, chatContent);
   }
 }

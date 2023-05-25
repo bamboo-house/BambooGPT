@@ -1,10 +1,21 @@
-import { DocumentData, getFirestore } from 'firebase-admin/firestore';
-import { initializeFirebaseForBE } from '../utils/initializeFirebaseForBE';
+import { DocumentData, collection, doc, getFirestore } from 'firebase/firestore';
+import { CreateChatCompletionRequest } from 'openai';
+import { ChatRecord } from './chatRecord';
 
 export class ChatGateway {
-  private _collection: FirebaseFirestore.CollectionReference<DocumentData>;
+  private _collection: ReturnType<typeof collection>;
   constructor() {
-    initializeFirebaseForBE();
-    this._collection = getFirestore().collection('chats');
+    this._collection = collection(getFirestore(), 'threads');
+  }
+
+  async create(
+    uid: string,
+    threadId: string,
+    chatContent: CreateChatCompletionRequest
+  ): Promise<ChatRecord> {
+    const userDocRef = doc(getFirestore(), 'users', uid);
+    const threadDocRef = doc(getFirestore(), 'threads', threadId);
+
+    return new ChatRecord();
   }
 }
