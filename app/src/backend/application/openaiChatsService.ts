@@ -49,6 +49,7 @@ export class OpenaiChatsService {
       resWrite: resWrite,
       resEnd: resEnd,
     });
+    chatContent.messages.push({ role: 'assistant', content: result });
     const chatRecord = await this._chatsGateway.create(uid, threadId, chatContent);
     console.log('chatRecord', chatRecord);
   }
