@@ -22,7 +22,18 @@ paths:
       responses:
         200:
           description: OK
-  /api/openai/threads:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: "Takeuchi Shuto"
+                  image:
+                    type: string
+                    example: "https://lh3.googleusercontent.com/a/AGNmyxaSTIc2VT5hJCZhFLcFzucXrhLdwvCCCFvaLZPk=s96-c"
+  /api/threads:
     post:
       summary: Create a new thread
       responses:
@@ -35,10 +46,29 @@ paths:
                 properties:
                   threadId:
                     type: string
-                    example: "ASCcQXazh6rqxUdGdUNc"
-                  deleted:
-                    type: boolean
-                    example: false
+                    example: "K230V3vZkEgDd9bL78zh"
+                  name:
+                    type: string
+                    example: "My First Thread"
+    get:
+      summary: Get all threads owned by you
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    threadId:
+                      type: string
+                      example: "K230V3vZkEgDd9bL78zh"
+                    name:
+                      type: string
+                      example: "My First Thread"
+
   /api/openai/chats:
     post:
       summary: Create a new chat
@@ -48,12 +78,15 @@ paths:
             schema:
               type: object
               properties:
+                uid:
+                  type: string
                 threadId:
                   type: string
-                  example: "ASCcQXazh6rqxUdGdUNc"
-                chat:
+                content:
                   type: object
                   properties:
+                    model:
+                      type: string
                     message:
                       type: array
                       items:
@@ -63,18 +96,58 @@ paths:
                             type: string
                           content:
                             type: string
-            examples:
-              example1:
-                value:
-                  message:
-                    - role: system
-                      content: "You are a helpful assistant."
-                    - role: user
-                      content: "Who won the world series in 2020?"
-                    - role: assistant
-                      content: "The Los Angeles Dodgers won the World Series in 2020."
-                    - role: user
-                      content: "Where was it played?"
+                    temperature:
+                      type: number
+                    top_p:
+                      type: number
+                    n:
+                      type: number
+                    stream:
+                      type: boolean
+                    stop:
+                      type: string
+                    max_tokens:
+                      type: number
+                    presence_penalty:
+                      type: number
+                    frequency_penalty:
+                      type: number
+                    logit_bias:
+                      type: object
+                    user:
+                      type: string
+                  required:
+                    - model
+                    - message
+              required:
+                - uid
+                - threadId
+            example:
+              uid: "ASCcQXazh6rqxUdGdUNc"
+              threadId: "ASCcQXazh6rqxUdGdUNc"
+              content:
+                model:
+                  value: "text-davinci-002-render-sha"
+                message:
+                  - role: system
+                    content: "You are a helpful assistant."
+                  - role: user
+                    content: "Who won the world series in 2020?"
+                  - role: assistant
+                    content: "The Los Angeles Dodgers won the World Series in 2020."
+                  - role: user
+                    content: "Where was it played?"
+                temperature: 1
+                top_p: 1
+                n: 1
+                stream: false
+                stop: null
+                max_tokens: inf
+                presence_penalty: 0
+                frequency_penalty: 0
+                logit_bias:
+                  value: null
+                user: null
       responses:
         200:
           description: OK
@@ -85,9 +158,8 @@ paths:
                 properties:
                   message:
                     type: string
-              examples:
-                example1:
-                  value: '{"text":"You are a helpful assistant."}\n{"text":"The Los Angeles Dodgers won the World Series in 2020."}\n{"text":"Where was it played?"}\n'
+              example:
+                value: '{"text":"You are a helpful assistant."}\n{"text":"The Los Angeles Dodgers won the World Series in 2020."}\n{"text":"Where was it played?"}\n'
               encoding:
                 message:
                   style: deepObject

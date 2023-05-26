@@ -1,61 +1,46 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { OpenaiService } from '@/backend/openai/application/openaiService';
+import { OpenaiChatsService } from '@/backend/application/openaiChatsService';
+import { verifyAndAuthForFirestore } from '@/backend/utils/verifyAndAuthForFirestore';
+import { ReqPostOpenaiChat } from '@/bff/types/openai/chats';
 
-type ChatResponseBody = {
-  text?: string;
-  error?: {
-    message: string;
-  };
-};
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    if (req.method !== 'POST') {
+      res.status(400).json({ error: { message: '無効なリクエストです' } });
+    }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<ChatResponseBody>) {
-  const { method } = req;
-  console.log('method: ', method);
-  switch (method) {
-    case 'GET':
-      res.status(200).json({ text: 'GETリクエスト' });
-      break;
-    
-    case 'POST':
-      console.log('======================');
-      const message = req.body.message || '';
-      if (message.trim().length === 0) {
-        res.status(400).json({
-          error: {
-            message: 'Please enter a valid message',
-          },
-        });
-      }
-      console.log('messages: ', message);
-      try {
-        const openaiService = new OpenaiService();
-        // TODO: テスト的にCompletionを利用している
-        openaiService.createCompletion(
-          'text-ada-001',
-          message,
-          0.3,
-          (text: string) => {
-            res.write(JSON.stringify({ text: text }));
-          },
-          () => {
-            res.end();
-          }
-        );
-      } catch (e) {
-        res.status(500).json({
-          error: {
-            message: e.message,
-          },
-        });
-      }
-      break;
-    
-    case 'PATCH':
-      res.status(200).json({ text: 'PATCHリクエスト' });
-      break;
-    
-    default:
-      res.status(200).json({ text: 'GET/POST/PATCHでもないリクエストです。' });
-      break;
+    // headersの取得・認証
+    const idToken = req.headers.authorization?.split('Bearer ')[1];
+    if (!idToken) {
+      console.error('idToken is null');
+      res.status(400).json({ error: { message: '無効なリクエストです' } });
+    }
+    await verifyAndAuthForFirestore(idToken as string);
+
+    // リクエストボディの取得・検証
+    const reqBody: ReqPostOpenaiChat = req.body;
+    const { uid, threadId, chatContent } = reqBody;
+    if (reqBody.chatContent.messages[reqBody.chatContent.messages.length - 1].content === '') {
+      res.status(400).json({
+        error: {
+          message: 'Please enter a valid message',
+        },
+      });
+    }
+    console.log('messages', reqBody.chatContent.messages);
+
+    // メイン処理
+    // resはできるだけプレゼンテーション層で管理する
+    const resWrite = (text: string) => {
+      res.write(JSON.stringify({ text: text }));
+    };
+    const resEnd = () => {
+      res.end();
+    };
+    const openaiChatsService = new OpenaiChatsService();
+    openaiChatsService.run(uid, threadId, chatContent, resWrite, resEnd);
+  } catch (e) {
+    console.error('Error(500): ', e);
+    res.status(500).json({ error: { message: e } });
   }
 }

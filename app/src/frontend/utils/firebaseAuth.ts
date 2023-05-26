@@ -7,7 +7,7 @@ import {
 } from 'firebase/auth';
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { currentUserState } from '../globalStates/atoms/currentUserState';
+import { currentUserState } from '../globalStates/atoms/currentUserAtom';
 import { GoogleUserInfo } from '@/bff/types/firestore/usersCollection';
 import { ReqLoginGoogle, ResLoginGoogle } from '@/bff/types/login';
 
@@ -43,10 +43,10 @@ export const useFirebaseAuth = () => {
       const result: any = await signInWithPopup(auth, provider);
       // ログイン成功時にサーバーサイドのAPIにIDトークンを送信
       const idToken = await result.user.getIdToken(true);
+      console.log('ログインに成功です', idToken);
 
       const metadata: any = result.user.metadata;
       const googleUserInfo: GoogleUserInfo = {
-        idToken: idToken,
         displayName: result.user.displayName,
         email: result.user.email,
         phoneNumber: result.user.phoneNumber,
@@ -65,13 +65,14 @@ export const useFirebaseAuth = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${idToken}`,
         },
         body: JSON.stringify(reqBody),
       });
 
       // ログイン成功の処理
       const resBody: ResLoginGoogle = await response.json();
-      console.log(reqBody);
+      console.log('resBody', resBody);
 
       // console.log(result.user);
       if (resBody.body) {

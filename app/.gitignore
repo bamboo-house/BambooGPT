@@ -37,4 +37,11 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# firebase
 firebase-test-serviceAccount.json
+firebase.json
+firestore-debug.log
+firestore.rules
+dump/
+ui-debug.log
+firebase-debug.log

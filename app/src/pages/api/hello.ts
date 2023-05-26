@@ -1,30 +1,39 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { getAuth } from 'firebase-admin/auth';
-import { getFirestore } from 'firebase-admin/firestore';
+
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  Firestore,
+  DocumentReference,
+  collection,
+  setDoc,
+} from '@firebase/firestore';
+import { connectAuthEmulator, getAuth, signInWithCustomToken } from 'firebase/auth';
+import * as admin from 'firebase-admin';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { initializeFirebase } from '@/backend/openai/infrastructure/initializeFirebase';
+import { initializeFirebaseForBE } from '@/backend/utils/initializeFirebaseForBE';
+import { verifyAndAuthForFirestore } from '@/backend/utils/verifyAndAuthForFirestore';
 
 // クライアントサイドからのGoogleログイン処理
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  initializeFirebase();
-  console.log('=====================================');
-  console.log(req.body);
+  console.log('process.env', process.env.NODE_ENV);
   if (req.method === 'POST') {
     // クライアントサイドから送信されたIDトークンを取得
-    const { idToken } = req.body;
+    const idToken = req.headers.authorization?.split('Bearer ')[1];
+    if (!idToken) {
+      res.status(400).json({ success: false, message: '無効なリクエストです' });
+    }
+
+    const user = await verifyAndAuthForFirestore(idToken as string);
 
     try {
-      // IDトークンを検証して認証情報を取得
-      const decodedToken = await getAuth().verifyIdToken(idToken);
-      const { uid, email } = decodedToken;
-      console.log('uid:', uid);
-      console.log('email:', email);
+      const threadCol = collection(getFirestore(), 'threads');
+      const threadDoc = doc(threadCol, 'testtest');
+      await setDoc(threadDoc, {
+        user: 'unko',
+      });
 
-      // Firestoreへの操作を行う（例: ドキュメントの作成）
-      const firestore = getFirestore();
-      await firestore.collection('users').doc(uid).set({ email });
-
-      // レスポンスを返す
       res.status(200).json({ success: true, message: 'Firestore操作が完了しました' });
     } catch (error) {
       console.error(error);

@@ -1,7 +1,0 @@
-{
-  "user": "reference",
-  "name": "string",
-  "destory": "boolean",
-  "updatedAt": "string",
-  "createdAt": "string"
-}
