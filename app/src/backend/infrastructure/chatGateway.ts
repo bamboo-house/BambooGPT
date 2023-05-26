@@ -1,6 +1,17 @@
-import { collection, doc, getFirestore, serverTimestamp, setDoc } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  query,
+  serverTimestamp,
+  setDoc,
+  where,
+} from 'firebase/firestore';
 import { CreateChatCompletionRequest } from 'openai';
 import { ChatRecord } from './chatRecord';
+import { ThreadRecord } from './threadRecord';
 
 export class ChatGateway {
   private _collection: ReturnType<typeof collection>;
@@ -61,5 +72,64 @@ export class ChatGateway {
       updatedAt,
       createdAt
     );
+  }
+
+  async get(chatId: string): Promise<ChatRecord | undefined> {
+    let chat;
+    try {
+      const chatDocSnapshot = await getDoc(doc(this._collection, chatId));
+      if (chatDocSnapshot.exists() && chatDocSnapshot.data() !== undefined) {
+        chat = chatDocSnapshot.data();
+        if (!chat) return undefined;
+      } else {
+        return undefined;
+      }
+    } catch (error) {
+      console.error(error);
+      throw new Error(`chatドキュメントを取得できませんでした：${error}`);
+    }
+
+    return new ChatRecord(
+      chatId,
+      chat.user,
+      chat.thread,
+      chat.chatContent,
+      chat.deletedAt,
+      chat.updatedAt,
+      chat.createdAt
+    );
+  }
+
+  async getAll(uid: string): Promise<ChatRecord[]> {
+    const userDocRef = doc(getFirestore(), 'users', uid);
+    // TODO: Gatewayではエラーを投げたくない。application層かdomain層でエラーを投げるようにする。
+    if (!userDocRef) {
+      console.error('chatGateway.ts：ユーザーが存在しません');
+      throw new Error('chatGateway.ts：ユーザーが存在しません');
+    }
+
+    const q = query(this._collection, where('user', '==', userDocRef));
+    let chatRecords: ChatRecord[] = [];
+    try {
+      const threadDocSnapshot = await getDocs(q);
+      threadDocSnapshot.forEach((doc) => {
+        const chat = doc.data();
+        chatRecords.push(
+          new ChatRecord(
+            doc.id,
+            chat.user,
+            chat.thread,
+            chat.chatContent,
+            chat.deletedAt,
+            chat.updatedAt,
+            chat.createdAt
+          )
+        );
+      });
+    } catch (error) {
+      console.error(error);
+      throw new Error(`chatドキュメントを取得できませんでした: ${error}`);
+    }
+    return chatRecords;
   }
 }
