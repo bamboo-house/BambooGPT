@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="VdgsyUHHD2g-uRMNJ1eA" name="Page-1">
-        <mxGraphModel dx="723" dy="1784" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="1024" dy="1692" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -276,7 +276,7 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="301" value="ここはゴミ箱の表示と一緒。threadsList的な" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" parent="1" vertex="1">
-                    <mxGeometry x="430" y="-320" width="150" height="150" as="geometry"/>
+                    <mxGeometry x="410" y="-320" width="150" height="150" as="geometry"/>
                 </mxCell>
                 <mxCell id="302" value="" style="endArrow=none;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.443;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="287" target="301" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
