@@ -12,9 +12,6 @@ import styles from '@/styles/Home.module.css';
 
 export default function Home() {
   const [result, setResult] = useState('');
-  const [threadList, setThreadList] = useRecoilState(threadListState);
-
-  const currentUser = useRecoilValue(currentUserState);
 
   // ユーザーを指定
   useCurrentUserSetter();
@@ -22,77 +19,6 @@ export default function Home() {
   const handleAccumulatingResult = (text: string) => {
     setResult((prevResult) => prevResult + text);
   };
-
-  // Todo: これは後々削除する
-  // ======================================================================================
-  const sample = async () => {
-    console.log('threadList', threadList);
-  };
-  const hello = async () => {
-    // idTokenを取得するが、これは後々クッキーで管理すべき
-
-    const user = getAuth().currentUser;
-    if (!user) {
-      return;
-    }
-    const idToken = await user.getIdToken();
-
-    const response = await fetch('/api/hello', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${idToken}`,
-      },
-    });
-
-    const resBody: ResPostThread = await response.json();
-    console.log('resBody of createThread:', resBody);
-  };
-
-  const getThread = async () => {
-    const user = getAuth().currentUser;
-    if (!user) {
-      return;
-    }
-    const idToken = await user.getIdToken();
-    // console.log('idToken', idToken);
-
-    const response = await fetch(`/api/threads/${threadList[0].threadId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${idToken}`,
-      },
-    });
-
-    const resBody: ResPostThread = await response.json();
-    console.log('resBody of getThread:', resBody);
-  };
-
-  const createThread = async () => {
-    // idTokenを取得するが、これは後々クッキーで管理すべき
-
-    const user = getAuth().currentUser;
-    if (!user) {
-      return;
-    }
-    const idToken = await user.getIdToken();
-    // console.log('idToken', idToken);
-
-    const response = await fetch('/api/threads', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${idToken}`,
-      },
-    });
-
-    const resBody: ResPostThread = await response.json();
-    console.log('resBody of createThread:', resBody);
-
-    setThreadList((prevThreadList: any) => [...prevThreadList, resBody.body]);
-  };
-  // ======================================================================================
 
   return (
     <>
@@ -109,21 +35,27 @@ export default function Home() {
 
       <button
         className="rounded bg-red-500 py-2 px-4 font-bold text-white hover:bg-red-700"
-        onClick={createThread}
+        onClick={() => {
+          console.log('test');
+        }}
       >
         thread作る
       </button>
 
       <button
         className="rounded bg-red-500 py-2 px-4 font-bold text-white hover:bg-red-700"
-        onClick={getThread}
+        onClick={() => {
+          console.log('test');
+        }}
       >
         thread取得する
       </button>
 
       <button
         className="rounded bg-green-500 py-2 px-4 font-bold text-white hover:bg-red-700"
-        onClick={sample}
+        onClick={() => {
+          console.log('test');
+        }}
       >
         sample
       </button>

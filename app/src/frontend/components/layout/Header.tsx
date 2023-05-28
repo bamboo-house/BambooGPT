@@ -1,7 +1,7 @@
 export const Header = () => {
   return (
     <header>
-      <nav className="border-gray-200 bg-white px-4 py-2.5 dark:bg-gray-800 lg:px-6">
+      <nav className="border-gray-200 bg-white px-4 py-2.5 dark:bg-[#202123] lg:px-6">
         <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between">
           <div className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
             BambooGPT
