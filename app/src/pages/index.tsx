@@ -6,14 +6,8 @@ import { useCurrentUserSetter } from '@/frontend/utils/firebaseAuth';
 import styles from '@/styles/Home.module.css';
 
 export default function Home() {
-  const [result, setResult] = useState('');
-
-  // ユーザーを指定
+  // ユーザーをセットする
   useCurrentUserSetter();
-
-  const handleAccumulatingResult = (text: string) => {
-    setResult((prevResult) => prevResult + text);
-  };
 
   return (
     <>
