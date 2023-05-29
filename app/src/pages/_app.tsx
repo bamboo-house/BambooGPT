@@ -12,9 +12,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <RecoilRoot>
       <ThemeProvider attribute="class" defaultTheme="dark">
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        {/* <Layout> */}
+        <Component {...pageProps} />
+        {/* </Layout> */}
       </ThemeProvider>
     </RecoilRoot>
   );
