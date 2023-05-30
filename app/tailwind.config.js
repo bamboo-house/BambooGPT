@@ -8,9 +8,15 @@ module.exports = {
     // Or if using `src` directory:
     './src/**/*.{js,ts,jsx,tsx}',
   ],
+  darkMode: 'class',
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        // 追加してeslintの警告が出る場合は.eslintrc.jsonで除外する
+        'gpt-gray': '#343540',
+        'gpt-dark': '#202123',
+      },
+    },
   },
   plugins: [],
-  darkMode: 'class',
 };

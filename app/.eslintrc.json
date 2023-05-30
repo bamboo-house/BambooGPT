@@ -9,12 +9,20 @@
   "ignorePatterns": ["*.config.js"],
   "rules": {
     "import/order": [
-      "error",
+      "warn",
       {
         "alphabetize": {
           "order": "asc"
         }
       }
-    ]
-  }
+    ],
+    "tailwindcss/no-custom-classname": [
+      1,
+      {
+        "whitelist": ["bg-gpt\\-(dark|gray)", "border-gpt\\-(dark|gray)"]
+      }
+    ],
+    "tailwindcss/classnames-order": "off"
+  },
+  "plugins": ["tailwindcss"]
 }

@@ -133,7 +133,7 @@ export const Form = (props: FormProps) => {
         }}
       ></textarea>
 
-      <button className="rounded bg-amber-300 py-2 px-4 font-bold hover:bg-amber-400" type="submit">
+      <button className="rounded bg-amber-300 px-4 py-2 font-bold hover:bg-amber-400" type="submit">
         <span>Submit</span>
       </button>
       <div>{isLoading ? <div>Loading...</div> : <div>Content loaded</div>}</div>
