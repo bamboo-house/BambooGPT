@@ -19,9 +19,10 @@
     "tailwindcss/no-custom-classname": [
       1,
       {
-        "whitelist": ["bg-gpt\\-(dark|gray)", "border-gpt\\-(dark|gray)"]
+        "whitelist": ["(bg-|border-|'')gpt\\-(dark|gray)"]
       }
     ],
+    // カスタムクラスを作ると、prettierと競合するので無効にする（prettierで自動整形されるのでOK）
     "tailwindcss/classnames-order": "off"
   },
   "plugins": ["tailwindcss"]
