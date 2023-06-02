@@ -118,5 +118,17 @@ export const Top = () => {
   //     </div>
   //   </div>
   // );
-  return <></>;
+  return (
+    <>
+      <div className="grid h-screen grid-cols-[256px_minmax(420px,_1fr)_256px] grid-rows-[36px_1fr] md:grid-cols-[minmax(420px,_1fr)_256px]">
+        {/* <div className="row-span-2 bg-orange-200 ">1</div>
+        <div className="col-span-2 bg-red-200">2</div> */}
+
+        <div className="row-span-2 bg-orange-200 md:col-span-2 md:row-auto">1</div>
+        <div className="col-span-2 bg-red-200 md:hidden">2</div>
+        <div className="bg-green-200">3</div>
+        <div className="bg-blue-200">4</div>
+      </div>
+    </>
+  );
 };

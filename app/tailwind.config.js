@@ -17,6 +17,11 @@ module.exports = {
         'gpt-dark': '#202123',
       },
     },
+    screens: {
+      sm: { max: '560px' },
+      md: { max: '768px' },
+      tb: { max: '960px' },
+    },
   },
   plugins: [],
 };
