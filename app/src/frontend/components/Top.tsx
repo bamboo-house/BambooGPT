@@ -4,7 +4,7 @@ export const Top = () => {
   const [showRightSidebar, setShowRightSidebar] = useState(false);
 
   const sample = () => {
-    const rightSidebar = document.querySelector('#content');
+    const rightSidebar = document.querySelector('#right-sidebar');
     //既存のクラスを取得
     let c = rightSidebar?.getAttribute('class');
     console.log(c);
@@ -12,12 +12,32 @@ export const Top = () => {
     if (showRightSidebar) {
       rightSidebar?.setAttribute(
         'class',
-        'h-32 w-32 bg-red-300 scale-x-100 transition-transform duration-300 ease-in-out'
+        'fixed right-0 top-10 h-full w-64 border border-gpt-dark border-l-zinc-500 bg-gpt-gray translate-x-full transition-transform duration-300 ease-in-out'
       );
     } else {
       rightSidebar?.setAttribute(
         'class',
-        'h-32 w-32 bg-red-300 scale-x-50 transition-transform duration-300 ease-in-out'
+        'fixed right-0 top-10 h-full w-64 border border-gpt-dark border-l-zinc-500 bg-gpt-gray  transition-transform duration-300 ease-in-out'
+      );
+    }
+    setShowRightSidebar(!showRightSidebar);
+  };
+
+  const sample1 = () => {
+    const rightSidebar = document.querySelector('#right-sidebar');
+    //既存のクラスを取得
+    let c = rightSidebar?.getAttribute('class');
+    console.log(c);
+
+    if (showRightSidebar) {
+      rightSidebar?.setAttribute(
+        'class',
+        'fixed right-0 top-10 h-full w-64 border border-gpt-dark border-l-zinc-500 bg-gpt-gray translate-x-full transition-transform duration-300 ease-in-out'
+      );
+    } else {
+      rightSidebar?.setAttribute(
+        'class',
+        'fixed right-0 top-10 h-full w-64 border border-gpt-dark border-l-zinc-500 bg-gpt-gray  transition-transform duration-300 ease-in-out'
       );
     }
     setShowRightSidebar(!showRightSidebar);
@@ -28,10 +48,10 @@ export const Top = () => {
     <div className="top-main flex h-full w-full overflow-y-auto overflow-x-hidden">
       {/* スマホの時,ヘッダーのボタンを押すと、w-64にすればサイドバーが開ける */}
 
-      <div className="h-full w-64 flex-none md:w-0">
-        <div className="fixed left-0 top-0 h-full">
+      <div className="top-leftbar relative h-full w-64 flex-none md:w-0">
+        <div className="fixed left-0 top-0 h-full w-[inherit] bg-gpt-dark ">
           {/* 下記、LeftSidebarコンポーネントにできる */}
-          <div className="top-leftbar h-full w-64 bg-gpt-dark">LeftSidebar</div>
+          <div className="">LeftSidebar</div>
         </div>
       </div>
 
@@ -43,7 +63,7 @@ export const Top = () => {
             <button
               className=""
               onClick={() => {
-                sample();
+                sample1();
               }}
             >
               ボタン
@@ -51,10 +71,10 @@ export const Top = () => {
           </div>
         </div>
 
-        <div className="top-content mt-10 flex ">
+        <div className="top-content mt-10 flex">
           {/* 下記、ChatLogコンポーネントにできる */}
-          <div>
-            <div className="top-chatlog flex flex-wrap">
+          <div className="top-chatlog">
+            <div className="flex flex-wrap">
               <div id="content" className="h-32 w-32 bg-red-300">
                 ===============================海運業ffffffff
               </div>
@@ -73,9 +93,6 @@ export const Top = () => {
               <div className="h-32 w-32 bg-red-300">海運業</div>
               <div className="h-32 w-32 bg-red-300">海運業</div>
               <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">
-                =======ゾウせんし==そらりん=海運業ffffffff海運業ffffffff 海運業ffffffff
-              </div>
               <div className="h-32 w-32 bg-red-300">海運業</div>
               <div className="h-32 w-32 bg-red-300">海運業</div>
               <div className="h-32 w-32 bg-red-300">海運業</div>
@@ -83,27 +100,9 @@ export const Top = () => {
               <div className="h-32 w-32 bg-red-300">海運業</div>
               <div className="h-32 w-32 bg-red-300">海運業</div>
               <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">
-                =======ゾウせんし==そらりん=海運業ffffffff海運業ffffffff 海運業ffffffff
-              </div>
               <div className="h-32 w-32 bg-red-300">海運業</div>
               <div className="h-32 w-32 bg-red-300">海運業</div>
               <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">
-                =======ゾウせんし==そらりん=海運業ffffffff海運業ffffffff 海運業ffffffff
-              </div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">
-                =======ゾウせんし==そらりん=海運業ffffffff海運業ffffffff 海運業ffffffff
-              </div>
               <div className="h-32 w-32 bg-red-300">海運業</div>
               <div className="h-32 w-32 bg-red-300">海運業</div>
               <div className="h-32 w-32 bg-red-300">海運業</div>
@@ -115,15 +114,12 @@ export const Top = () => {
           {/* <div className="fixed bottom-0 h-44 w-full bg-gpt-dark">メッセージフォーム</div> */}
 
           {/* 下記、RigtSidebarコンポーネントにできる  */}
-          <div
+          {/* <div
             id="right-sidebar"
-            className={`fixed right-0 top-10 h-full w-64 border border-gpt-dark border-l-zinc-500 bg-gpt-gray ${
-              showRightSidebar
-                ? 'transition-transform duration-300 ease-in-out'
-                : 'translate-x-full transition-transform duration-300 ease-in-out'
-            }`}
-          >
-            <div>RightSidebar</div>
+            className={`fixed right-0 top-10 h-full w-64 border border-gpt-dark border-l-zinc-500 bg-gpt-gray ${'translate-x-full transition-transform duration-300 ease-in-out'}`}
+          > */}
+          <div className="w-64 flex-none bg-blue-500">
+            <div className="fixed">RightSidebar</div>
           </div>
         </div>
       </div>
