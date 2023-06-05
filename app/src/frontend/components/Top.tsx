@@ -22,10 +22,10 @@ export const Top = () => {
 
   // TODO: レイアウトコンポーネント、ロジックコンポーネント、ブロックコンポーネントに分ける
   return (
-    <div className="top-main flex h-full w-full overflow-y-auto overflow-x-hidden">
+    <div className="top-main flex h-full w-full">
       {/* スマホの時,ヘッダーのボタンを押すと、w-64にすればサイドバーが開ける */}
 
-      <div className="top-leftbar relative h-full w-64 flex-none md:w-0">
+      <div className="top-leftsidebar relative h-full w-64 flex-none md:w-0">
         <div className="fixed left-0 top-0 h-full w-[inherit] bg-gpt-dark ">
           {/* 下記、LeftSidebarコンポーネントにできる */}
           <div className="">LeftSidebar</div>
@@ -34,7 +34,7 @@ export const Top = () => {
 
       <div className="top-body relative">
         {/* 下記、TopBarコンポーネントにできる */}
-        <div className="top-topbar fixed top-0 z-10 h-10 w-full border border-gpt-dark border-b-zinc-500 bg-gpt-gray ">
+        <div className="top-topbar fixed top-0 h-10 w-full border border-gpt-dark border-b-zinc-500 bg-gpt-gray ">
           <div className="flex w-full items-center">
             <div>oo</div>
             <button
@@ -48,49 +48,71 @@ export const Top = () => {
           </div>
         </div>
 
-        <div className="top-content mt-10 flex">
-          {/* 下記、ChatLogコンポーネントにできる */}
-          <div className="top-chatlog">
-            <div className="flex flex-wrap">
-              <div id="content" className="h-32 w-32 bg-red-300">
-                ===============================海運業ffffffff
+        <div className="top-content mt-10 flex h-full">
+          <div className="flex h-screen flex-col">
+            {/* 下記、ChatLogコンポーネントにできる */}
+            <div className="top-chatlog flex-1 overflow-y-auto overflow-x-hidden">
+              <div className="flex flex-wrap">
+                <div id="content" className="h-32 w-32 bg-red-300">
+                  ===============================海運業ffffffff
+                </div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div id="content" className="h-32 w-32 bg-red-300">
+                  ===============================海運業ffffffff
+                </div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div id="content" className="h-32 w-32 bg-red-300">
+                  ===============================海運業ffffffff
+                </div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-32 w-32 bg-red-300">海運業</div>
               </div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
-              <div className="h-32 w-32 bg-red-300">海運業</div>
             </div>
-            {/* <div className="fixed bottom-0 h-44 w-full bg-gpt-dark">メッセージフォーム</div> */}
+
+            <div className="top-message-form h-40 bg-red-200">
+              メッセージフォームメッセージフォーム メッセージフォーム メッセージフォーム
+              メッセージフォーム メッセージフォーム メッセージフォーム メッセージフォーム
+            </div>
           </div>
 
           {/* 下記、RigtSidebarコンポーネントにできる  */}
-          <div id="right-sidebar" className="w-0 flex-none">
+          <div id="right-sidebar" className="top-rightsidebar w-0 flex-none">
             <div className="fixed h-full w-[inherit] bg-blue-500">RightSidebar</div>
           </div>
         </div>
