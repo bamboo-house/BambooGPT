@@ -26,17 +26,17 @@ export const Top = () => {
       {/* スマホの時,ヘッダーのボタンを押すと、w-64にすればサイドバーが開ける */}
 
       <div className="top-leftsidebar relative h-full w-64 flex-none md:w-0">
-        <div className="fixed left-0 top-0 h-full w-[inherit] bg-gpt-dark ">
+        <div className="fixed left-0 top-0 h-full w-[inherit] bg-gpt-dark md:hidden">
           {/* 下記、LeftSidebarコンポーネントにできる */}
           <div className="">LeftSidebar</div>
         </div>
       </div>
 
-      <div className="top-body relative flex flex-col">
+      <div className="top-body flex flex-col">
         {/* 下記、TopBarコンポーネントにできる */}
-        <div className="top-topbar h-10 w-[inherit] border border-gpt-dark border-b-zinc-500 bg-gpt-gray ">
+        <div className="top-topbar h-10 border border-gpt-dark border-b-zinc-500 bg-gpt-gray ">
           <div className="flex h-full w-full items-center">
-            <div className="w-4 flex-none bg-red-600">oo</div>
+            <div className="w-10 flex-none bg-red-600">oo</div>
             <div className="grow bg-orange-400">oo</div>
 
             <div className="w-24 flex-none bg-blue-400">
