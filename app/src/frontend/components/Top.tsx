@@ -1,7 +1,19 @@
 import { MouseEventHandler, useState } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
 
+type Inputs = {
+  example: string;
+  exampleRequired: string;
+};
 export const Top = () => {
   const [showRightSidebar, setShowRightSidebar] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<Inputs>();
+  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
 
   const sample1 = () => {
     const rightSidebar = document.querySelector('#right-sidebar');
@@ -32,10 +44,10 @@ export const Top = () => {
         </div>
       </div>
 
-      <div className="top-body flex flex-col">
+      <div className="top-body flex flex-auto flex-col">
         {/* 下記、TopBarコンポーネントにできる */}
         <div className="top-topbar h-10 border border-gpt-dark border-b-zinc-500 bg-gpt-gray ">
-          <div className="flex h-full w-full items-center">
+          <div className="flex h-full">
             <div className="w-10 flex-none bg-red-600">oo</div>
             <div className="grow bg-orange-400">oo</div>
 
@@ -52,68 +64,43 @@ export const Top = () => {
           </div>
         </div>
 
-        <div className="top-content flex h-full">
-          <div className="flex h-screen flex-col">
+        <div className="top-chat flex h-full flex-1">
+          <div className="top-content flex h-screen flex-auto flex-col">
             {/* 下記、ChatLogコンポーネントにできる */}
             {/* 2023/06/05 良いかわからないが「flex: 1;」で、スクロールとメッセージフォームの固定を実現する。 
-                この方法でしか、メッセージフォームのwidthをRightSidebarによって変化させることができなかった。 */}
+                  この方法でしか、メッセージフォームのwidthをRightSidebarによって変化させることができなかった。 */}
             <div className="top-chatlog flex-1 overflow-y-auto overflow-x-hidden">
               <div className="flex flex-wrap">
-                <div id="content" className="h-32 w-32 bg-red-300">
-                  ===============================海運業ffffffff
-                </div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div id="content" className="h-32 w-32 bg-red-300">
-                  ===============================海運業ffffffff
-                </div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div id="content" className="h-32 w-32 bg-red-300">
-                  ===============================海運業ffffffff
-                </div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
-                <div className="h-32 w-32 bg-red-300">海運業</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
               </div>
             </div>
+            <div className="top-message-form h-40">
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <input defaultValue="test" {...register('example')} />
 
-            <div className="top-message-form h-40 bg-red-200">
-              メッセージフォームメッセージフォーム メッセージフォーム メッセージフォーム
-              メッセージフォーム メッセージフォーム メッセージフォーム メッセージフォーム
+                <input {...register('exampleRequired', { required: true })} />
+                {errors.exampleRequired && <span>This field is required</span>}
+
+                <input type="submit" />
+              </form>
             </div>
           </div>
 
