@@ -1,38 +1,10 @@
-import { MouseEventHandler, useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useState } from 'react';
+import { ChatMessageForm } from './ChatMessageForm';
+import { RightSidebar } from './RightSidebar';
 
-type Inputs = {
-  example: string;
-  exampleRequired: string;
-  example2: string;
-  exampleRequired2: string;
-};
 export const Top = () => {
+  // Todo: 下記のstateをatomにする
   const [showRightSidebar, setShowRightSidebar] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
-
-  const sample1 = () => {
-    const rightSidebar = document.querySelector('#right-sidebar');
-    //既存のクラスを取得
-    let c = rightSidebar?.getAttribute('class');
-    console.log(c);
-
-    if (showRightSidebar) {
-      rightSidebar?.setAttribute('class', 'w-0 transition-all duration-300 ease-in-out');
-    } else {
-      rightSidebar?.setAttribute(
-        'class',
-        'w-64 flex-none transition-alltransition-all duration-300 ease-in-out'
-      );
-    }
-    setShowRightSidebar(!showRightSidebar);
-  };
 
   // TODO: レイアウトコンポーネント、ロジックコンポーネント、ブロックコンポーネントに分ける
   return (
@@ -57,7 +29,7 @@ export const Top = () => {
               <button
                 className=""
                 onClick={() => {
-                  sample1();
+                  setShowRightSidebar(!showRightSidebar);
                 }}
               >
                 ボタン
@@ -76,32 +48,11 @@ export const Top = () => {
                 <div className="h-60 w-40">ffege</div>
               </div>
             </div>
-            <div className="top-message-form h-40">
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <input defaultValue="test" {...register('example')} />
 
-                <input {...register('exampleRequired', { required: true })} />
-                {errors.exampleRequired && <span>This field is required</span>}
-
-                <input type="submit" />
-              </form>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <input defaultValue="test" {...register('example2')} />
-
-                <input {...register('exampleRequired2', { required: true })} />
-                {errors.exampleRequired && <span>This field is required</span>}
-
-                <input type="submit" />
-              </form>
-
-              {errors.exampleRequired && <span>This field is required</span>}
-            </div>
+            <ChatMessageForm />
           </div>
 
-          {/* 下記、RigtSidebarコンポーネントにできる  */}
-          <div id="right-sidebar" className="top-rightsidebar w-0 flex-none">
-            <div className="fixed h-full w-[inherit] bg-blue-500">RightSidebar</div>
-          </div>
+          <RightSidebar showRightSidebar={showRightSidebar} />
         </div>
       </div>
     </div>
