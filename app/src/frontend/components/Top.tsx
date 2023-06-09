@@ -4,6 +4,8 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 type Inputs = {
   example: string;
   exampleRequired: string;
+  example2: string;
+  exampleRequired2: string;
 };
 export const Top = () => {
   const [showRightSidebar, setShowRightSidebar] = useState(false);
@@ -72,24 +74,6 @@ export const Top = () => {
             <div className="top-chatlog flex-1 overflow-y-auto overflow-x-hidden">
               <div className="flex flex-wrap">
                 <div className="h-60 w-40">ffege</div>
-                <div className="h-60 w-40">ffege</div>
-                <div className="h-60 w-40">ffege</div>
-                <div className="h-60 w-40">ffege</div>
-                <div className="h-60 w-40">ffege</div>
-                <div className="h-60 w-40">ffege</div>
-                <div className="h-60 w-40">ffege</div>
-                <div className="h-60 w-40">ffege</div>
-                <div className="h-60 w-40">ffege</div>
-                <div className="h-60 w-40">ffege</div>
-                <div className="h-60 w-40">ffege</div>
-                <div className="h-60 w-40">ffege</div>
-                <div className="h-60 w-40">ffege</div>
-                <div className="h-60 w-40">ffege</div>
-                <div className="h-60 w-40">ffege</div>
-                <div className="h-60 w-40">ffege</div>
-                <div className="h-60 w-40">ffege</div>
-                <div className="h-60 w-40">ffege</div>
-                <div className="h-60 w-40">ffege</div>
               </div>
             </div>
             <div className="top-message-form h-40">
@@ -101,6 +85,16 @@ export const Top = () => {
 
                 <input type="submit" />
               </form>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <input defaultValue="test" {...register('example2')} />
+
+                <input {...register('exampleRequired2', { required: true })} />
+                {errors.exampleRequired && <span>This field is required</span>}
+
+                <input type="submit" />
+              </form>
+
+              {errors.exampleRequired && <span>This field is required</span>}
             </div>
           </div>
 
