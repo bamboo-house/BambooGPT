@@ -46,6 +46,24 @@ export const Top = () => {
             <div className="top-chatlog flex-1 overflow-y-auto overflow-x-hidden">
               <div className="flex flex-wrap">
                 <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40">ffege</div>
               </div>
             </div>
 
