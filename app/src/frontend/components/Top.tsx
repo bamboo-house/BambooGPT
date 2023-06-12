@@ -39,7 +39,7 @@ export const Top = () => {
         </div>
 
         <div className="top-chat flex h-full flex-1">
-          <div className="top-content flex h-screen flex-auto flex-col">
+          <div className="top-content relative flex h-screen flex-auto flex-col">
             {/* 下記、ChatLogコンポーネントにできる */}
             {/* 2023/06/05 良いかわからないが「flex: 1;」で、スクロールとメッセージフォームの固定を実現する。 
                   この方法でしか、メッセージフォームのwidthをRightSidebarによって変化させることができなかった。 */}
@@ -63,7 +63,13 @@ export const Top = () => {
                 <div className="h-60 w-40">ffege</div>
                 <div className="h-60 w-40">ffege</div>
                 <div className="h-60 w-40">ffege</div>
-                <div className="h-60 w-40">ffege</div>
+                <div className="h-60 w-40 bg-orange-500">ffege</div>
+                <div className="h-60 w-40 bg-orange-500">ffege</div>
+                <div className="h-60 w-40 bg-orange-500">ffege</div>
+                <div className="h-60 w-40 bg-orange-500">ffege</div>
+                <div className="h-60 w-40 bg-orange-500">ffege</div>
+                <div className="h-60 w-40 bg-orange-500">ffege</div>
+                <div className="h-60 w-40 bg-orange-500">ffege</div>
               </div>
             </div>
 

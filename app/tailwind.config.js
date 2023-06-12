@@ -10,12 +10,15 @@ module.exports = {
   ],
   darkMode: 'class',
   theme: {
+    // 追加してeslintの警告が出る場合は.eslintrc.jsonで除外する
     extend: {
       colors: {
-        // 追加してeslintの警告が出る場合は.eslintrc.jsonで除外する
         'gpt-dark': '#202123',
-        'gpt-gray': '#343540',
+        'gpt-gray': '#353740',
         'gpt-gray2': '#40414E',
+      },
+      backgroundImage: {
+        'gpt-linear-gradient': 'linear-gradient(180deg,rgba(53,55,64,0),#353740 58.85%)',
       },
     },
     screens: {
