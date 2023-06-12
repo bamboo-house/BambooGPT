@@ -1,14 +1,22 @@
+import { useState } from 'react';
+
 export const ChatMessageForm = () => {
+  const [isReceiving, setIsReceiving] = useState(false);
+
   const handleTextareaKeydown = (e: any) => {
-    // もし、cmd + Enter なら、送信する
+    // もし、cmd + Enter なら送信する
     if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
       console.log('key down cmd + Enter');
-      handleSubmit();
+      if (isReceiving) {
+        handleSubmit(e);
+      }
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: any) => {
     console.log('submit');
+    setIsReceiving(true);
+    // POST /api/openai/chatsにリクエストを送る
   };
 
   const resizeTextarea = () => {
@@ -49,7 +57,10 @@ export const ChatMessageForm = () => {
           type="button"
           style={{ backgroundColor: 'rgb(25, 195, 125)' }}
           className="absolute bottom-3 right-4 rounded-md p-1"
-          onClick={handleSubmit}
+          onClick={(e) => {
+            handleSubmit(e);
+          }}
+          disabled={isReceiving}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
