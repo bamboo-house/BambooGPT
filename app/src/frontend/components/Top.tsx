@@ -61,15 +61,6 @@ export const Top = () => {
                 <div className="h-60 w-40">ffege</div>
                 <div className="h-60 w-40">ffege</div>
                 <div className="h-60 w-40">ffege</div>
-                <div className="h-60 w-40">ffege</div>
-                <div className="h-60 w-40">ffege</div>
-                <div className="h-60 w-40 bg-orange-500">ffege</div>
-                <div className="h-60 w-40 bg-orange-500">ffege</div>
-                <div className="h-60 w-40 bg-orange-500">ffege</div>
-                <div className="h-60 w-40 bg-orange-500">ffege</div>
-                <div className="h-60 w-40 bg-orange-500">ffege</div>
-                <div className="h-60 w-40 bg-orange-500">ffege</div>
-                <div className="h-60 w-40 bg-orange-500">ffege</div>
               </div>
             </div>
 
