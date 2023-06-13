@@ -2,33 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
-.input-range-slider {
-  @apply appearance-none;
-  &::-webkit-slider-runnable-track {
+@layer utilities {
+  /* インプットスライダーのcss */
+  .input-range-slider {
+    @apply appearance-none;
+  }
+  .input-range-slider::-webkit-slider-runnable-track {
     @apply h-[4px] w-full rounded-full bg-gray-300;
   }
-  &::-webkit-slider-thumb {
+  .input-range-slider::-webkit-slider-thumb {
     @apply mt-[-3px] h-[10px] w-[10px] cursor-grab appearance-none rounded-full bg-gray-300 ring ring-gray-500;
   }
-  &::-webkit-slider-thumb:active {
+  .input-range-slider::-webkit-slider-thumb:active {
     @apply cursor-grabbing shadow-xl shadow-black ring ring-gray-400;
   }
-  &::-moz-range-track {
-    @apply h-[5px] w-full rounded-full bg-gray-300;
+  .input-range-slider::-moz-range-track {
+    @apply h-[4px] w-full rounded-full bg-gray-300;
   }
-  &::-moz-range-thumb {
-    @apply mt-[-4px] h-3 w-3 cursor-grab appearance-none rounded-full bg-gray-300 ring ring-gray-500;
+  .input-range-slider::-moz-range-thumb {
+    @apply mt-[-3px] h-[10px] w-[10px] cursor-grab appearance-none rounded-full bg-gray-300 ring ring-gray-500;
   }
-  &::-moz-range-thumb:active {
+  .input-range-slider::-moz-range-thumb:active {
     @apply cursor-grabbing shadow-xl shadow-black ring ring-gray-400;
   }
-  &::-ms-track {
-    @apply h-[5px] w-full rounded-full bg-gray-300;
+  .input-range-slider::-ms-track {
+    @apply h-[4px] w-full rounded-full bg-gray-300;
   }
-  &::-ms-track:active {
+  .input-range-slider::-ms-thumb {
+    @apply mt-[-3px] h-[10px] w-[10px] cursor-grab appearance-none rounded-full bg-gray-300 ring ring-gray-500;
+  }
+  .input-range-slider::-ms-thumb:active {
     @apply cursor-grabbing shadow-xl shadow-black ring ring-gray-400;
-  }
-  &::-ms-thumb {
-    @apply mt-[-4px] h-3 w-3 cursor-grab appearance-none rounded-full bg-gray-300 ring ring-gray-500;
   }
 }

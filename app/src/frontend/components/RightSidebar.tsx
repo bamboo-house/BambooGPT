@@ -23,7 +23,7 @@ export const RightSidebar = ({ showRightSidebar }: { showRightSidebar: boolean }
             min={0.0}
             defaultValue={1}
             step={0.01}
-            className="input-range-slider w-full"
+            className="input-range-slider w-full bg-transparent"
           />
           <input
             id="default-range"
