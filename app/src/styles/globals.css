@@ -5,7 +5,7 @@
 @layer utilities {
   /* インプットスライダーのcss */
   .input-range-slider {
-    @apply appearance-none;
+    @apply w-full appearance-none bg-transparent;
   }
   .input-range-slider::-webkit-slider-runnable-track {
     @apply h-[4px] w-full rounded-full bg-gray-300;

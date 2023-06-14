@@ -1,6 +1,7 @@
-import { useEffect } from 'react';
+import { useState } from 'react';
 
 export const RightSidebar = ({ showRightSidebar }: { showRightSidebar: boolean }) => {
+  const [num, setNum] = useState(1);
   const showClass = showRightSidebar
     ? 'w-64 flex-none transition-alltransition-all duration-300 ease-in-out'
     : 'w-0 transition-all duration-300 ease-in-out';
@@ -16,23 +17,27 @@ export const RightSidebar = ({ showRightSidebar }: { showRightSidebar: boolean }
             Default range
           </label>
 
+          <p>{num}</p>
           <input
-            id="default-range"
-            type="range"
-            max={2.0}
-            min={0.0}
-            defaultValue={1}
-            step={0.01}
-            className="input-range-slider w-full bg-transparent"
+            className="w-full"
+            value={num}
+            onInput={(e: any) => {
+              setNum(e.target.value);
+            }}
           />
+
           <input
             id="default-range"
             type="range"
             max={2.0}
             min={0.0}
-            defaultValue={1}
+            defaultValue={num}
+            value={num}
             step={0.01}
-            className="input-range-slider w-full"
+            className="input-range-slider"
+            onInput={(e: any) => {
+              setNum(e.target.value);
+            }}
           />
         </div>
       </div>
