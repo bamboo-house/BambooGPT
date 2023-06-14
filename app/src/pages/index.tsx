@@ -1,6 +1,5 @@
 import Head from 'next/head';
-import React, { useState } from 'react';
-import { Firebase } from '@/frontend/components/Firebase';
+import React from 'react';
 import { Top } from '@/frontend/components/Top';
 import { useCurrentUserSetter } from '@/frontend/utils/firebaseAuth';
 import styles from '@/styles/Home.module.css';

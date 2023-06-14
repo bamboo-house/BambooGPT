@@ -1,10 +1,18 @@
-import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { chatOptionState } from '../globalStates/atoms/chatAtom';
 
 export const RightSidebar = ({ showRightSidebar }: { showRightSidebar: boolean }) => {
-  const [num, setNum] = useState(1);
+  const [chatOption, setChatOption] = useRecoilState(chatOptionState);
   const showClass = showRightSidebar
     ? 'w-64 flex-none transition-alltransition-all duration-300 ease-in-out'
     : 'w-0 transition-all duration-300 ease-in-out';
+
+  const handleChange = (e: any) => {
+    e.preventDefault();
+    const value = Number(e.target.value);
+    // recoil公式ドキュメントのstata更新は、prevStateを使ってない
+    setChatOption({ ...chatOption, temperature: value });
+  };
 
   return (
     <div className={showClass}>
@@ -17,27 +25,18 @@ export const RightSidebar = ({ showRightSidebar }: { showRightSidebar: boolean }
             Default range
           </label>
 
-          <p>{num}</p>
-          <input
-            className="w-full"
-            value={num}
-            onInput={(e: any) => {
-              setNum(e.target.value);
-            }}
-          />
+          <p>{chatOption.temperature}</p>
+          <input className="w-full" value={chatOption.temperature} onInput={handleChange} />
 
           <input
             id="default-range"
             type="range"
             max={2.0}
             min={0.0}
-            defaultValue={num}
-            value={num}
+            value={chatOption.temperature}
             step={0.01}
             className="input-range-slider"
-            onInput={(e: any) => {
-              setNum(e.target.value);
-            }}
+            onInput={handleChange}
           />
         </div>
       </div>
