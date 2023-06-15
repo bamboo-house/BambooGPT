@@ -12,7 +12,6 @@ export default function App({ Component, pageProps }: AppProps) {
   const DebugObserver = () => {
     const snapshot: any = useRecoilSnapshot();
     useEffect(() => {
-      console.debug('The following atoms were modified:');
       for (const node of snapshot.getNodes_UNSTABLE({ isModified: true })) {
         console.debug(node.key, snapshot.getLoadable(node));
       }
