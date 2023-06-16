@@ -11,57 +11,52 @@ export const RightSidebar = ({ showRightSidebar }: { showRightSidebar: boolean }
     ? 'w-64 flex-none transition-alltransition-all duration-300 ease-in-out'
     : 'w-0 transition-all duration-300 ease-in-out';
 
-  // バリデーション：handleChangeTextでやるか、type=textで条件分岐でやるか
-  const handleChangeText = (e: any) => {
+  const handleChangeRange = (e: any) => {
     e.preventDefault();
-    const { name, value } = e.target;
+    let { name, value }: { name: string; value: string } = e.target;
+
+    // バリデーション
+    value = rangeInputValidation(name, value);
+
     // recoil公式ドキュメントのstata更新は、prevStateを使ってないのでここも同じようにしてみる
     // chatOptionForDisplayはtextを保存して、小数点も表示できるようにする
     setChatOptionForDisplay({ ...chatOptionForDisplay, [name]: value });
     setChatOption({ ...chatOption, [name]: Number(value) });
   };
 
-  const handleChange = (e: any) => {
-    e.preventDefault();
-    let { type, name, value } = e.target;
-    console.log(e.target);
+  const handleChangeCreatableSelect = (e: any) => {
+    const values = e.map((element: any) => element.value);
+    setChatOption({ ...chatOption, stop: values });
+  };
 
-    // temperatureなら、0から2まで
-    // top_pなら、0から1まで
-    // stop
-    // presence_penaltyなら、0から2まで
-    // frequency_penaltyなら、0から2まで
-
+  const rangeInputValidation = (name: string, value: string): string => {
+    let result = Number(value);
     // バリデーション
     switch (name) {
       case 'temperature':
       case 'presence_penalty':
       case 'frequency_penalty':
-        if (isNaN(Number(value))) {
-          value = 1;
-        } else if (value < 0) {
-          value = 0;
-        } else if (value > 2) {
-          value = 2;
+        if (isNaN(result)) {
+          result = 1;
+        } else if (result < 0) {
+          result = 0;
+        } else if (result > 2) {
+          result = 2;
         }
         break;
       case 'top_p':
-        if (isNaN(Number(value))) {
-          value = 1;
-        } else if (value < 0) {
-          value = 0;
-        } else if (value > 1) {
-          value = 1;
+        if (isNaN(result)) {
+          result = 1;
+        } else if (result < 0) {
+          result = 0;
+        } else if (result > 1) {
+          result = 1;
         }
         break;
       default:
         break;
     }
-
-    // recoil公式ドキュメントのstata更新は、prevStateを使ってないのでここも同じようにしてみる
-    // chatOptionForDisplayはtextを保存して、小数点も表示できるようにする
-    setChatOptionForDisplay({ ...chatOptionForDisplay, [name]: value });
-    setChatOption({ ...chatOption, [name]: Number(value) });
+    return result.toString();
   };
 
   return (
@@ -76,7 +71,7 @@ export const RightSidebar = ({ showRightSidebar }: { showRightSidebar: boolean }
                 className="w-10 bg-transparent pr-1 text-right"
                 name="temperature"
                 value={chatOptionForDisplay.temperature}
-                onInput={handleChange}
+                onInput={handleChangeRange}
               />
             </div>
 
@@ -88,7 +83,7 @@ export const RightSidebar = ({ showRightSidebar }: { showRightSidebar: boolean }
               value={chatOption.temperature}
               step={0.01}
               className="input-range-slider"
-              onInput={handleChange}
+              onInput={handleChangeRange}
             />
           </div>
 
@@ -100,7 +95,7 @@ export const RightSidebar = ({ showRightSidebar }: { showRightSidebar: boolean }
                 className="w-10 bg-transparent pr-1 text-right"
                 name="top_p"
                 value={chatOptionForDisplay.top_p}
-                onInput={handleChange}
+                onInput={handleChangeRange}
               />
             </div>
 
@@ -112,15 +107,16 @@ export const RightSidebar = ({ showRightSidebar }: { showRightSidebar: boolean }
               value={chatOption.top_p}
               step={0.01}
               className="input-range-slider"
-              onInput={handleChange}
+              onInput={handleChangeRange}
             />
           </div>
 
           <div className="mb-12 mt-4">
             <div className=" items-center">
-              <span className="flex-auto">Top_p</span>
+              <span className="flex-auto">Stop sequences</span>
             </div>
             <CreatableSelect
+              name="stop"
               isMulti
               instanceId="selectbox"
               theme={(theme) => ({
@@ -134,7 +130,6 @@ export const RightSidebar = ({ showRightSidebar }: { showRightSidebar: boolean }
                 control: (baseStyles, state) => ({
                   ...baseStyles,
                   backgroundColor: 'transparent',
-                  // borderColor: state.isFocused ? 'rgb(156 163 175)' : 'gray',
                 }),
                 input: (baseStyles, state) => ({
                   ...baseStyles,
@@ -163,6 +158,7 @@ export const RightSidebar = ({ showRightSidebar }: { showRightSidebar: boolean }
               className="bg-gpt-gray2"
               noOptionsMessage={() => 'Enter a sequence'}
               placeholder=""
+              onChange={handleChangeCreatableSelect}
             />
           </div>
 
@@ -174,7 +170,7 @@ export const RightSidebar = ({ showRightSidebar }: { showRightSidebar: boolean }
                 className="w-10 bg-transparent pr-1 text-right"
                 name="frequency_penalty"
                 value={chatOptionForDisplay.frequency_penalty}
-                onInput={handleChange}
+                onInput={handleChangeRange}
               />
             </div>
 
@@ -186,7 +182,7 @@ export const RightSidebar = ({ showRightSidebar }: { showRightSidebar: boolean }
               value={chatOption.frequency_penalty}
               step={0.01}
               className="input-range-slider"
-              onInput={handleChange}
+              onInput={handleChangeRange}
             />
           </div>
 
@@ -198,7 +194,7 @@ export const RightSidebar = ({ showRightSidebar }: { showRightSidebar: boolean }
                 className="w-10 bg-transparent pr-1 text-right"
                 name="presence_penalty"
                 value={chatOptionForDisplay.presence_penalty}
-                onInput={handleChange}
+                onInput={handleChangeRange}
               />
             </div>
 
@@ -210,7 +206,7 @@ export const RightSidebar = ({ showRightSidebar }: { showRightSidebar: boolean }
               value={chatOption.presence_penalty}
               step={0.01}
               className="input-range-slider"
-              onInput={handleChange}
+              onInput={handleChangeRange}
             />
           </div>
         </div>
