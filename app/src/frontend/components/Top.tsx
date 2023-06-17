@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { isOpenedRightSidebarState } from '../globalStates/atoms/isOpenedRightSidebarAtom';
 import { ChatMessageForm } from './ChatMessageForm';
 import { RightSidebar } from './RightSidebar';
 
 export const Top = () => {
   // Todo: 下記のstateをatomにする
-  const [showRightSidebar, setShowRightSidebar] = useState(false);
+  const [isOpenedRightSidebar, setIsOpenedRightSidebar] = useRecoilState(isOpenedRightSidebarState);
 
   // TODO: レイアウトコンポーネント、ロジックコンポーネント、ブロックコンポーネントに分ける
   return (
@@ -29,7 +30,7 @@ export const Top = () => {
               <button
                 className=""
                 onClick={() => {
-                  setShowRightSidebar(!showRightSidebar);
+                  setIsOpenedRightSidebar(!isOpenedRightSidebar);
                 }}
               >
                 ボタン
@@ -67,7 +68,7 @@ export const Top = () => {
             <ChatMessageForm />
           </div>
 
-          <RightSidebar showRightSidebar={showRightSidebar} />
+          <RightSidebar />
         </div>
       </div>
     </div>

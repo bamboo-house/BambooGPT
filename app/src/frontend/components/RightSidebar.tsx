@@ -2,12 +2,14 @@ import { useState } from 'react';
 import CreatableSelect from 'react-select/creatable';
 import { useRecoilState } from 'recoil';
 import { chatOptionState } from '../globalStates/atoms/chatAtom';
+import { isOpenedRightSidebarState } from '../globalStates/atoms/isOpenedRightSidebarAtom';
 
-export const RightSidebar = ({ showRightSidebar }: { showRightSidebar: boolean }) => {
+export const RightSidebar = () => {
   const [chatOption, setChatOption] = useRecoilState(chatOptionState);
   const [chatOptionForDisplay, setChatOptionForDisplay] = useState(chatOption);
+  const [isOpenedRightSidebar, setIsOpenedRightSidebar] = useRecoilState(isOpenedRightSidebarState);
 
-  const showClass = showRightSidebar
+  const showClass = isOpenedRightSidebar
     ? 'w-64 flex-none transition-alltransition-all duration-300 ease-in-out'
     : 'w-0 transition-all duration-300 ease-in-out';
 
@@ -31,7 +33,6 @@ export const RightSidebar = ({ showRightSidebar }: { showRightSidebar: boolean }
 
   const rangeInputValidation = (name: string, value: string): string => {
     let result = Number(value);
-    // バリデーション
     switch (name) {
       case 'temperature':
       case 'presence_penalty':
