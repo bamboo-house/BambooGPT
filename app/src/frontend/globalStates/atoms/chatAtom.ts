@@ -8,8 +8,8 @@ type ChatOption = {
   stream: boolean;
   stop: string | string[] | null;
   max_tokens?: number;
-  presence_penalty?: number;
-  frequency_penalty?: number;
+  presence_penalty: number;
+  frequency_penalty: number;
   logit_bias: { [key: string]: number } | null;
   user?: string;
 };

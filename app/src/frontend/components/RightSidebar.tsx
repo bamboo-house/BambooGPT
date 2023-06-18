@@ -3,6 +3,8 @@ import CreatableSelect from 'react-select/creatable';
 import { useRecoilState } from 'recoil';
 import { chatOptionState } from '../globalStates/atoms/chatAtom';
 import { isOpenedRightSidebarState } from '../globalStates/atoms/isOpenedRightSidebarAtom';
+import { CreatableSelectWrapper } from './CreatableSelectWrapper';
+import { RangeInput } from './RangeInput';
 
 export const RightSidebar = () => {
   const [chatOption, setChatOption] = useRecoilState(chatOptionState);
@@ -15,7 +17,7 @@ export const RightSidebar = () => {
 
   const handleChangeRange = (e: any) => {
     e.preventDefault();
-    let { name, value }: { name: string; value: string } = e.target;
+    let { name, value }: { name: string; value: any } = e.target;
 
     // バリデーション
     value = rangeInputValidation(name, value);
@@ -32,12 +34,12 @@ export const RightSidebar = () => {
   };
 
   const rangeInputValidation = (name: string, value: string): string => {
-    let result = Number(value);
+    let result: any = value;
     switch (name) {
       case 'temperature':
       case 'presence_penalty':
       case 'frequency_penalty':
-        if (isNaN(result)) {
+        if (isNaN(Number(value))) {
           result = 1;
         } else if (result < 0) {
           result = 0;
@@ -46,7 +48,7 @@ export const RightSidebar = () => {
         }
         break;
       case 'top_p':
-        if (isNaN(result)) {
+        if (isNaN(Number(value))) {
           result = 1;
         } else if (result < 0) {
           result = 0;
@@ -55,7 +57,7 @@ export const RightSidebar = () => {
         }
         break;
       default:
-        break;
+        return result;
     }
     return result.toString();
   };
@@ -64,152 +66,56 @@ export const RightSidebar = () => {
     <div className={showClass}>
       <div className="fixed h-full w-[inherit] border border-gpt-dark border-l-zinc-500">
         <div className="mx-8">
-          <div className="mb-12 mt-4">
-            <div className="flex items-center">
-              <span className="flex-auto">Temprature</span>
-              <input
-                type="text"
-                className="w-10 bg-transparent pr-1 text-right"
-                name="temperature"
-                value={chatOptionForDisplay.temperature}
-                onInput={handleChangeRange}
-              />
-            </div>
+          <RangeInput
+            label="Temperature"
+            name="temperature"
+            displayValue={chatOptionForDisplay.temperature}
+            rangeValue={chatOption.temperature}
+            min={0.0}
+            max={2.0}
+            step={0.01}
+            onInput={handleChangeRange}
+          />
 
-            <input
-              type="range"
-              name="temperature"
-              max={2.0}
-              min={0.0}
-              value={chatOption.temperature}
-              step={0.01}
-              className="input-range-slider"
-              onInput={handleChangeRange}
-            />
-          </div>
+          <RangeInput
+            label="Top P"
+            name="top_p"
+            displayValue={chatOptionForDisplay.top_p}
+            rangeValue={chatOption.top_p}
+            min={0.0}
+            max={1}
+            step={0.01}
+            onInput={handleChangeRange}
+          />
 
-          <div className="mb-12 mt-4">
-            <div className="flex items-center">
-              <span className="flex-auto">Top_p</span>
-              <input
-                type="text"
-                className="w-10 bg-transparent pr-1 text-right"
-                name="top_p"
-                value={chatOptionForDisplay.top_p}
-                onInput={handleChangeRange}
-              />
-            </div>
+          <CreatableSelectWrapper
+            label="Stop Sequence"
+            name="stop"
+            optionsMessage="Enter a sequence"
+            onChange={handleChangeCreatableSelect}
+          />
 
-            <input
-              type="range"
-              name="top_p"
-              max={1.0}
-              min={0.0}
-              value={chatOption.top_p}
-              step={0.01}
-              className="input-range-slider"
-              onInput={handleChangeRange}
-            />
-          </div>
+          <RangeInput
+            label="Frequency Penalty"
+            name="frequency_penalty"
+            displayValue={chatOptionForDisplay.frequency_penalty}
+            rangeValue={chatOption.frequency_penalty}
+            min={0.0}
+            max={2.0}
+            step={0.01}
+            onInput={handleChangeRange}
+          />
 
-          <div className="mb-12 mt-4">
-            <div className=" items-center">
-              <span className="flex-auto">Stop sequences</span>
-            </div>
-            <CreatableSelect
-              name="stop"
-              isMulti
-              instanceId="selectbox"
-              theme={(theme) => ({
-                ...theme,
-                colors: {
-                  ...theme.colors,
-                  primary: 'none',
-                },
-              })}
-              styles={{
-                control: (baseStyles, state) => ({
-                  ...baseStyles,
-                  backgroundColor: 'transparent',
-                }),
-                input: (baseStyles, state) => ({
-                  ...baseStyles,
-                  color: 'white',
-                }),
-                option: (baseStyles, state) => ({
-                  ...baseStyles,
-                  backgroundColor: 'transparent',
-                }),
-                menu: (baseStyles, state) => ({
-                  ...baseStyles,
-                  backgroundColor: 'transparent',
-                }),
-                multiValue: (baseStyles, state) => ({
-                  ...baseStyles,
-                  backgroundColor: '#666671',
-                }),
-                multiValueLabel: (baseStyles, state) => ({
-                  ...baseStyles,
-                  color: 'white',
-                }),
-                indicatorsContainer: (baseStyles, state) => ({
-                  display: 'none',
-                }),
-              }}
-              className="bg-gpt-gray2"
-              noOptionsMessage={() => 'Enter a sequence'}
-              placeholder=""
-              onChange={handleChangeCreatableSelect}
-            />
-          </div>
-
-          <div className="mb-12 mt-4">
-            <div className="flex items-center">
-              <span className="flex-auto">Frequency penalty</span>
-              <input
-                type="text"
-                className="w-10 bg-transparent pr-1 text-right"
-                name="frequency_penalty"
-                value={chatOptionForDisplay.frequency_penalty}
-                onInput={handleChangeRange}
-              />
-            </div>
-
-            <input
-              type="range"
-              name="frequency_penalty"
-              max={2.0}
-              min={0.0}
-              value={chatOption.frequency_penalty}
-              step={0.01}
-              className="input-range-slider"
-              onInput={handleChangeRange}
-            />
-          </div>
-
-          <div className="mb-12 mt-4">
-            <div className="flex items-center">
-              <span className="flex-auto">Presence penalty</span>
-              <input
-                type="text"
-                className="w-10 bg-transparent pr-1 text-right"
-                name="presence_penalty"
-                value={chatOptionForDisplay.presence_penalty}
-                onInput={handleChangeRange}
-              />
-            </div>
-
-            <input
-              type="range"
-              name="presence_penalty"
-              max={2.0}
-              min={0.0}
-              value={chatOption.presence_penalty}
-              step={0.01}
-              className="input-range-slider"
-              onInput={handleChangeRange}
-            />
-          </div>
+          <RangeInput
+            label="Presence Penalty"
+            name="presence_penalty"
+            displayValue={chatOptionForDisplay.presence_penalty}
+            rangeValue={chatOption.presence_penalty}
+            min={0.0}
+            max={2.0}
+            step={0.01}
+            onInput={handleChangeRange}
+          />
         </div>
       </div>
     </div>
