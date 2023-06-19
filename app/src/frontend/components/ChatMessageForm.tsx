@@ -40,7 +40,7 @@ export const ChatMessageForm = () => {
   };
 
   return (
-    <div className="top-message-form absolute inset-x-0 bottom-0 bg-gpt-linear-gradient pb-16">
+    <div className="absolute inset-x-0 bottom-0 bg-gpt-linear-gradient pb-16">
       <div className="relative mx-auto my-2 max-w-3xl rounded-xl py-3 pl-3 dark:bg-gpt-gray2 tb:mx-3">
         <textarea
           id="promptTextAreaId"

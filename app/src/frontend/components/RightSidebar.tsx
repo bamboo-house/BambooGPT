@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import CreatableSelect from 'react-select/creatable';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { chatOptionState } from '../globalStates/atoms/chatAtom';
 import { isOpenedRightSidebarState } from '../globalStates/atoms/isOpenedRightSidebarAtom';
 import { CreatableSelectWrapper } from './CreatableSelectWrapper';
@@ -9,7 +8,7 @@ import { RangeInput } from './RangeInput';
 export const RightSidebar = () => {
   const [chatOption, setChatOption] = useRecoilState(chatOptionState);
   const [chatOptionForDisplay, setChatOptionForDisplay] = useState(chatOption);
-  const [isOpenedRightSidebar, setIsOpenedRightSidebar] = useRecoilState(isOpenedRightSidebarState);
+  const isOpenedRightSidebar = useRecoilValue(isOpenedRightSidebarState);
 
   const showClass = isOpenedRightSidebar
     ? 'w-64 flex-none transition-alltransition-all duration-300 ease-in-out'

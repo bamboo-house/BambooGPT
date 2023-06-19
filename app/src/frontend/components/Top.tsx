@@ -2,10 +2,10 @@ import { useRecoilState } from 'recoil';
 import { isOpenedRightSidebarState } from '../globalStates/atoms/isOpenedRightSidebarAtom';
 import { ChatMessageForm } from './ChatMessageForm';
 import { RightSidebar } from './RightSidebar';
+import { TopBar } from './TopBar';
 
 export const Top = () => {
   // Todo: 下記のstateをatomにする
-  const [isOpenedRightSidebar, setIsOpenedRightSidebar] = useRecoilState(isOpenedRightSidebarState);
 
   // TODO: レイアウトコンポーネント、ロジックコンポーネント、ブロックコンポーネントに分ける
   return (
@@ -20,24 +20,7 @@ export const Top = () => {
       </div>
 
       <div className="top-body flex flex-auto flex-col">
-        {/* 下記、TopBarコンポーネントにできる */}
-        <div className="top-topbar h-10 border border-gpt-dark border-b-zinc-500 bg-gpt-gray ">
-          <div className="flex h-full">
-            <div className="w-10 flex-none bg-red-600">oo</div>
-            <div className="grow bg-orange-400">oo</div>
-
-            <div className="w-24 flex-none bg-blue-400">
-              <button
-                className=""
-                onClick={() => {
-                  setIsOpenedRightSidebar(!isOpenedRightSidebar);
-                }}
-              >
-                ボタン
-              </button>
-            </div>
-          </div>
-        </div>
+        <TopBar />
 
         <div className="top-chat flex h-full flex-1">
           <div className="top-content relative flex h-screen flex-auto flex-col">
