@@ -1,3 +1,5 @@
+/* eslint-disable tailwindcss/no-custom-classname */
+import { ChatLog } from './ChatLog';
 import { ChatMessageForm } from './ChatMessageForm';
 import { RightSidebar } from './RightSidebar';
 import { TopBar } from './TopBar';
@@ -19,50 +21,7 @@ export const Top = () => {
 
         <div className="top-chat flex h-full flex-1">
           <div className="top-content relative flex h-screen min-w-0 flex-auto flex-col">
-            {/* 下記、ChatLogコンポーネントにできる */}
-            {/* 2023/06/05 良いかわからないが「flex: 1;」で、スクロールとメッセージフォームの固定を実現する。 
-                  この方法でしか、メッセージフォームのwidthをRightSidebarによって変化させることができなかった。 */}
-            <div className="top-chatlog flex-1 overflow-y-auto overflow-x-hidden">
-              <div className="flex flex-col">
-                <div className="h-auto">
-                  ex: 1;」で、スクロールとメッセージフォームの固定を実現する。
-                  この方法でしか、メッセージフォームのwidthをRightSidebarによって変化させることができなかった。
-                  ex: 1;」で、スクロールとメッセージフォームの固定を実現する。
-                  この方法でしか、メッセージフォームのwidthをRightSidebarによって変化させることができなかった。
-                </div>
-                <div className="h-auto">
-                  ex: 1;」で、スクロールとメッセージフォームの固定を実現する。
-                  この方法でしか、メッセージフォームのwidthをRightSidebarによって変化させることができなかった。
-                  ex: 1;」で、スクロールとメッセージフォームの固定を実現する。
-                  この方法でしか、メッセージフォームのwidthをRightSidebarによって変化させることができなかった。
-                </div>
-                <div className="h-auto">
-                  ex: 1;」で、スクロールとメッセージフォームの固定を実現する。
-                  この方法でしか、メッセージフォームのwidthをRightSidebarによって変化させることができなかった。
-                  ex: 1;」で、スクロールとメッセージフォームの固定を実現する。
-                  この方法でしか、メッセージフォームのwidthをRightSidebarによって変化させることができなかった。
-                </div>
-                <div className="h-auto">
-                  ex: 1;」で、スクロールとメッセージフォームの固定を実現する。
-                  この方法でしか、メッセージフォームのwidthをRightSidebarによって変化させることができなかった。
-                  ex: 1;」で、スクロールとメッセージフォームの固定を実現する。
-                  この方法でしか、メッセージフォームのwidthをRightSidebarによって変化させることができなかった。
-                </div>
-                <div className="h-auto">
-                  ex: 1;」で、スクロールとメッセージフォームの固定を実現する。
-                  この方法でしか、メッセージフォームのwidthをRightSidebarによって変化させることができなかった。
-                  ex: 1;」で、スクロールとメッセージフォームの固定を実現する。
-                  この方法でしか、メッセージフォームのwidthをRightSidebarによって変化させることができなかった。
-                </div>
-                <div className="h-auto">
-                  ex: 1;」で、スクロールとメッセージフォームの固定を実現する。
-                  この方法でしか、メッセージフォームのwidthをRightSidebarによって変化させることができなかった。
-                  ex: 1;」で、スクロールとメッセージフォームの固定を実現する。
-                  この方法でしか、メッセージフォームのwidthをRightSidebarによって変化させることができなかった。
-                </div>
-              </div>
-            </div>
-
+            <ChatLog />
             <ChatMessageForm />
           </div>
 
