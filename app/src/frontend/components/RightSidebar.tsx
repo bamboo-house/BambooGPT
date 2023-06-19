@@ -63,7 +63,7 @@ export const RightSidebar = () => {
 
   return (
     <div className={showClass}>
-      <div className="fixed h-full w-[inherit] border border-gpt-dark border-l-zinc-500">
+      <div className="fixed h-full w-[inherit] border border-gpt-gray border-l-zinc-500">
         <div className="mx-8">
           <RangeInput
             label="Temperature"
