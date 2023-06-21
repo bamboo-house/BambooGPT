@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export const ChatLog = () => {
   const mockData = [
     { role: 'system', content: 'You are a helpful assistant' },
@@ -16,11 +18,41 @@ export const ChatLog = () => {
         この方法でしか、メッセージフォームのwidthをRightSidebarによって変化させることができなかった。 */}
       <div className="flex flex-col">
         {mockData.map((data, i) => {
-          return (
-            <div className="h-auto" key={i}>
-              {data.content}
-            </div>
-          );
+          if (data.role === 'user') {
+            return (
+              <div className="h-auto w-full" key={i}>
+                <div className="m-auto flex max-w-3xl gap-6 px-0 py-6">
+                  <div className="shrink-0">
+                    <Image
+                      src="/sample_icon.png"
+                      width={30}
+                      height={30}
+                      alt="Assistant"
+                      className="rounded-sm"
+                    />
+                  </div>
+                  <div className="w-[calc(100%-50px)] gap-3">{data.content}</div>
+                </div>
+              </div>
+            );
+          } else if (data.role === 'assistant') {
+            return (
+              <div className="h-auto w-full bg-[#444654]" key={i}>
+                <div className="m-auto flex max-w-3xl gap-6 px-0 py-6">
+                  <div className="shrink-0">
+                    <Image
+                      src="/bamboogpt_icon.png"
+                      width={30}
+                      height={30}
+                      alt="Assistant"
+                      className="rounded-sm"
+                    />
+                  </div>
+                  <div className="w-[calc(100%-50px)] gap-3">{data.content}</div>
+                </div>
+              </div>
+            );
+          }
         })}
       </div>
     </div>
