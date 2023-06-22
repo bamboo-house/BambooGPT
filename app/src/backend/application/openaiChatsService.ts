@@ -41,7 +41,7 @@ export class OpenaiChatsService {
       n: n,
       stream: true,
       stop: stop,
-      max_tokens: 16,
+      max_tokens: 250,
       presence_penalty: presence_penalty,
       frequency_penalty: frequency_penalty,
       logit_bias: logit_bias,
