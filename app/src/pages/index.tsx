@@ -5,9 +5,6 @@ import { useCurrentUserSetter } from '@/frontend/utils/firebaseAuth';
 import styles from '@/styles/Home.module.css';
 
 export default function Home() {
-  // ユーザーをセットする
-  useCurrentUserSetter();
-
   return (
     <>
       <Head>

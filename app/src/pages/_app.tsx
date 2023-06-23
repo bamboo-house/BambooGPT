@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app';
 import { ThemeProvider } from 'next-themes';
 import { useEffect } from 'react';
 import { RecoilRoot, useRecoilSnapshot } from 'recoil';
+import { AppWrapper } from './AppWrapper';
 import { initializeFirebaseForFE } from '@/frontend/utils/initializeFirebaseForFE';
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -24,7 +25,9 @@ export default function App({ Component, pageProps }: AppProps) {
     <RecoilRoot>
       <DebugObserver />
       <ThemeProvider attribute="class" defaultTheme="dark">
-        <Component {...pageProps} />
+        <AppWrapper>
+          <Component {...pageProps} />
+        </AppWrapper>
       </ThemeProvider>
     </RecoilRoot>
   );

@@ -24,7 +24,7 @@ export const useCurrentUserSetter = () => {
           image: user.photoURL,
         });
       } else {
-        console.log('なし');
+        console.log('not logged in');
       }
     });
     console.log('currentUser', auth.currentUser);

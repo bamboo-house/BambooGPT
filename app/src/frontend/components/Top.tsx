@@ -7,8 +7,6 @@ import { TopBar } from './TopBar';
 export const Top = () => {
   return (
     <div className="top-main flex h-full w-full">
-      {/* スマホの時,ヘッダーのボタンを押すと、w-64にすればサイドバーが開ける */}
-
       <div className="top-leftsidebar relative h-full w-64 flex-none md:w-0">
         <div className="fixed left-0 top-0 h-full w-[inherit] bg-gpt-dark md:hidden">
           {/* 下記、LeftSidebarコンポーネントにできる */}

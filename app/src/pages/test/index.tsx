@@ -7,7 +7,6 @@ import { Firebase } from '@/frontend/components/Firebase';
 import { Form } from '@/frontend/components/Form';
 import { currentUserState } from '@/frontend/globalStates/atoms/currentUserAtom';
 import { threadListState } from '@/frontend/globalStates/atoms/threadAtom';
-import { useCurrentUserSetter } from '@/frontend/utils/firebaseAuth';
 import styles from '@/styles/Home.module.css';
 
 export default function Home() {
@@ -15,9 +14,6 @@ export default function Home() {
   const [threadList, setThreadList] = useRecoilState(threadListState);
 
   const currentUser = useRecoilValue(currentUserState);
-
-  // ユーザーを指定
-  useCurrentUserSetter();
 
   const handleAccumulatingResult = (text: string) => {
     setResult((prevResult) => prevResult + text);
