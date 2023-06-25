@@ -5,6 +5,7 @@ import {
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { currentUserState } from '../globalStates/atoms/currentUserAtom';
@@ -14,6 +15,8 @@ import { ReqLoginGoogle, ResLoginGoogle } from '@/bff/types/login';
 export const useCurrentUserSetter = () => {
   const auth = getAuth();
   const setCurrentUser = useSetRecoilState(currentUserState);
+  const router = useRouter();
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -25,6 +28,9 @@ export const useCurrentUserSetter = () => {
         });
       } else {
         console.log('not logged in');
+        // ログインしていない場合はログイン画面に遷移する
+        // Todo:2023/6/23 AppWrapperで実行しているので全てのページでリダイレクトする仕様だが、ページによって処理を変える場合は、カスタムフックなどでカプセル化する
+        router.push('/login');
       }
     });
     console.log('currentUser', auth.currentUser);
@@ -43,7 +49,7 @@ export const useFirebaseAuth = () => {
       const result: any = await signInWithPopup(auth, provider);
       // ログイン成功時にサーバーサイドのAPIにIDトークンを送信
       const idToken = await result.user.getIdToken(true);
-      console.log('ログインに成功です', idToken);
+      console.log('ログインに成功しました', idToken);
 
       const metadata: any = result.user.metadata;
       const googleUserInfo: GoogleUserInfo = {

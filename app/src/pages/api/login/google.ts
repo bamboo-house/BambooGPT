@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { LoginService } from '@/backend/application/loginService';
-import { verifyAndAuthForFirestore } from '@/backend/utils/verifyAndAuthForFirestore';
+import { verifyAndAuthenticateUser } from '@/backend/utils/verifyAndAuthenticateUser';
 import { GoogleUserInfo } from '@/bff/types/firestore/usersCollection';
 import { ReqLoginGoogle, ResLoginGoogle } from '@/bff/types/login';
 
@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     if (!idToken) {
       res.status(400).json({ error: { message: '無効なリクエストです' } });
     }
-    await verifyAndAuthForFirestore(idToken as string);
+    await verifyAndAuthenticateUser(idToken as string);
 
     // リクエストボディの取得
     const reqBody: ReqLoginGoogle = req.body;

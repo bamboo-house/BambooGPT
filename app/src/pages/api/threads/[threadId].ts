@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ThreadGateway } from '@/backend/infrastructure/threadGateway';
-import { verifyAndAuthForFirestore } from '@/backend/utils/verifyAndAuthForFirestore';
+import { verifyAndAuthenticateUser } from '@/backend/utils/verifyAndAuthenticateUser';
 import { ResGetThreadThreadId } from '@/bff/types/thread';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!idToken) {
       res.status(400).json({ success: false, message: '無効なリクエストです' });
     }
-    await verifyAndAuthForFirestore(idToken as string);
+    await verifyAndAuthenticateUser(idToken as string);
 
     const threadGateway = new ThreadGateway();
 

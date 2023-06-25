@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="HApKqCr7kuF3GitoXTNH" name="Page-1">
-        <mxGraphModel dx="2091" dy="1516" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="1851" dy="862" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -8,7 +8,7 @@
                     <mxGeometry x="50" y="200" width="680" height="360" as="geometry"/>
                 </mxCell>
                 <mxCell id="6" value="ローカル" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="160" y="-30" width="120" height="60" as="geometry"/>
+                    <mxGeometry x="160" y="60" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="8" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" parent="1" source="6" target="32" edge="1">
                     <mxGeometry relative="1" as="geometry">
@@ -52,7 +52,7 @@
                         <mxPoint x="360" y="450" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="45" value="⑥ firestoreを操作" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="17">
+                <mxCell id="45" value="⑥ firestoreを操作" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="17" vertex="1" connectable="0">
                     <mxGeometry x="-0.0827" y="3" relative="1" as="geometry">
                         <mxPoint as="offset"/>
                     </mxGeometry>

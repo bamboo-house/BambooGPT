@@ -2,7 +2,7 @@ import { User, getAuth, signInWithCustomToken } from 'firebase/auth';
 import * as admin from 'firebase-admin';
 import { initializeFirebaseForBE } from './initializeFirebaseForBE';
 
-export const verifyAndAuthForFirestore = async (idToken: string): Promise<User> => {
+export const verifyAndAuthenticateUser = async (idToken: string): Promise<User> => {
   initializeFirebaseForBE();
 
   // クライアントサイドから送信されたJWTトークンを検証
