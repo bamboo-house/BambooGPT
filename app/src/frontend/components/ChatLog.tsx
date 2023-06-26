@@ -1,29 +1,41 @@
 import Image from 'next/image';
+import { useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+import { chatMessageListState } from '../globalStates/atoms/chatAtom';
 
 export const ChatLog = () => {
-  const mockData = [
-    { role: 'system', content: 'You are a helpful assistant' },
-    { role: 'user', content: 'こんにちは' },
-    { role: 'assistant', content: 'こんにちは' },
-    { role: 'user', content: 'jsでif文はどうかく？' },
-    {
-      role: 'assistant',
-      content:
-        'JavaScriptでif文を使用するには、以下のように書きます。\n\n```\nif (条件式) {\n  // 条件式が true の場合に実行する処理\n} else {\n  // 条件式が false の場合に実行する処理\n}\n```\n\n例えば、変数`x`が10未満である場合に`console.log("xは10未満です")`を実行し、10以上である場合に`console.log("xは10以上です")`を実行する場合、以下のように書けます。\n\n```\nlet x = 5;\n\nif (x < 10) {\n  console.log("xは10未満です");\n} else {\n  console.log("xは10以上です");\n}\n```\n\nまた、条件式を複数にする場合は、以下のように書きます。\n\n```\nif (条件式1) {\n  // 条件式1がtrueの場合に実行する処理\n} else if (条件式2) {\n  // 条件式1がfalseかつ条件式2がtrueの場合に実行する処理\n} else {\n  // 条件式1と条件式2がどちらもfalseの場合に実行する処理\n}\n```...',
-    },
-    { role: 'user', content: 'jsでif文はどうかく？' },
-    {
-      role: 'assistant',
-      content:
-        'Rubyでのif文の書き方は以下の通りです。\n\n```ruby\nif 条件式\n  # 条件式が真の時に実行される処理\nelse\n  # 条件式が偽の時に実行される処理\nend\n```\n\n例えば、変数`a`が10より大きければ「aは10より大きいです」と表示し、そうでなければ「aは10以下です」と表示するプログラムを作成する場合は以下のようになります。\n\n```ruby\na = 15\nif a > 10\n  puts "aは10より大きいです"\nelse\n  puts "aは10以下です"\nend\n```\n\n上記のコードを実行すると、`aは10より大きいです`という文字列が出力されます。',
-    },
-  ];
+  const [chatMessageList, setChatMessageList] = useRecoilState(chatMessageListState);
+
+  const mockData = () => {
+    setChatMessageList([
+      { role: 'system', content: 'You are a helpful assistant' },
+      { role: 'user', content: 'こんにちは' },
+      { role: 'assistant', content: 'こんにちは' },
+      { role: 'user', content: 'jsでif文はどうかく？' },
+      {
+        role: 'assistant',
+        content:
+          'JavaScriptでif文を使用するには、以下のように書きます。\n\n```\nif (条件式) {\n  // 条件式が true の場合に実行する処理\n} else {\n  // 条件式が false の場合に実行する処理\n}\n```\n\n例えば、変数`x`が10未満である場合に`console.log("xは10未満です")`を実行し、10以上である場合に`console.log("xは10以上です")`を実行する場合、以下のように書けます。\n\n```\nlet x = 5;\n\nif (x < 10) {\n  console.log("xは10未満です");\n} else {\n  console.log("xは10以上です");\n}\n```\n\nまた、条件式を複数にする場合は、以下のように書きます。\n\n```\nif (条件式1) {\n  // 条件式1がtrueの場合に実行する処理\n} else if (条件式2) {\n  // 条件式1がfalseかつ条件式2がtrueの場合に実行する処理\n} else {\n  // 条件式1と条件式2がどちらもfalseの場合に実行する処理\n}\n```...',
+      },
+      { role: 'user', content: 'jsでif文はどうかく？' },
+      {
+        role: 'assistant',
+        content:
+          'Rubyでのif文の書き方は以下の通りです。\n\n```ruby\nif 条件式\n  # 条件式が真の時に実行される処理\nelse\n  # 条件式が偽の時に実行される処理\nend\n```\n\n例えば、変数`a`が10より大きければ「aは10より大きいです」と表示し、そうでなければ「aは10以下です」と表示するプログラムを作成する場合は以下のようになります。\n\n```ruby\na = 15\nif a > 10\n  puts "aは10より大きいです"\nelse\n  puts "aは10以下です"\nend\n```\n\n上記のコードを実行すると、`aは10より大きいです`という文字列が出力されます。',
+      },
+    ]);
+  };
+
+  useEffect(() => {
+    mockData();
+  }, []);
+
   return (
     <div className="flex-1 overflow-y-auto overflow-x-hidden">
       {/* 2023/06/05 良いかわからないが「flex: 1;」で、スクロールとメッセージフォームの固定を実現する。 
         この方法でしか、メッセージフォームのwidthをRightSidebarによって変化させることができなかった。 */}
       <div className="flex flex-col">
-        {mockData.map((data, i) => {
+        {chatMessageList.map((data, i) => {
           if (data.role === 'user') {
             return (
               <div className="h-auto w-full" key={i}>
