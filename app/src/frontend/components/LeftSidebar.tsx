@@ -1,22 +1,19 @@
-import { getAuth } from '@firebase/auth';
-import Head from 'next/head';
-import React, { useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { getAuth } from 'firebase/auth';
+import { useRouter } from 'next/router';
+import { useRecoilState } from 'recoil';
+import { threadListState } from '../globalStates/atoms/threadAtom';
 import { ResPostThread } from '@/bff/types/thread';
-import { Firebase } from '@/frontend/components/Firebase';
-import { Form } from '@/frontend/components/Form';
-import { currentUserState } from '@/frontend/globalStates/atoms/currentUserAtom';
-import { threadListState } from '@/frontend/globalStates/atoms/threadAtom';
-import styles from '@/styles/Home.module.css';
+import { useFirebaseAuth } from '@/frontend/utils/firebaseAuth';
 
-export default function Home() {
-  const [result, setResult] = useState('');
+export const LeftSidebar = () => {
   const [threadList, setThreadList] = useRecoilState(threadListState);
 
-  const currentUser = useRecoilValue(currentUserState);
+  const { logout } = useFirebaseAuth();
+  const router = useRouter();
 
-  const handleAccumulatingResult = (text: string) => {
-    setResult((prevResult) => prevResult + text);
+  const handleChangeLogout = async () => {
+    await logout();
+    router.push('/login');
   };
 
   // Todo: これは後々削除する
@@ -71,40 +68,38 @@ export default function Home() {
   // ======================================================================================
 
   return (
-    <>
-      <Head>
-        <title>BambooGPT</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/bamboogpt-icon.png" />
-      </Head>
+    <div className="top-leftsidebar relative h-full w-64 flex-none md:w-0">
+      <div className="fixed left-0 top-0 h-full w-[inherit] bg-gpt-dark md:hidden">
+        {/* 下記、LeftSidebarコンポーネントにできる */}
+        <div className="">LeftSidebar</div>
+        <button
+          className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+          onClick={handleChangeLogout}
+        >
+          ログアウト
+        </button>
 
-      <div className="mx-10">
-        <Form onChangeResult={handleAccumulatingResult} />
-        <div style={{ whiteSpace: 'pre-line' }}>{result}</div>
+        <button
+          className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
+          onClick={createThread}
+        >
+          thread作る
+        </button>
+
+        <button
+          className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
+          onClick={getThread}
+        >
+          thread取得する
+        </button>
+
+        <button
+          className="rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-red-700"
+          onClick={showThreadList}
+        >
+          showThreadList
+        </button>
       </div>
-
-      <button
-        className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
-        onClick={createThread}
-      >
-        thread作る
-      </button>
-
-      <button
-        className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
-        onClick={getThread}
-      >
-        thread取得する
-      </button>
-
-      <button
-        className="rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-red-700"
-        onClick={showThreadList}
-      >
-        showThreadList
-      </button>
-
-      <Firebase />
-    </>
+    </div>
   );
-}
+};
