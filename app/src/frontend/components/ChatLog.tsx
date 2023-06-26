@@ -30,8 +30,22 @@ export const ChatLog = () => {
     mockData();
   }, []);
 
+  const updateState = () => {
+    // mapを使って深いコピーをして変更できるようにする（そもそも、オブジェクト配列のデータ構造が悪いかも）
+    let data = chatMessageList.map((item) => ({ ...item }));
+    data[2].content = '変更したぜ';
+    data.push({ role: 'assistant', content: 'こんにちは' });
+    setChatMessageList(data);
+  };
+
   return (
     <div className="flex-1 overflow-y-auto overflow-x-hidden">
+      <button
+        className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
+        onClick={updateState}
+      >
+        updateState
+      </button>
       {/* 2023/06/05 良いかわからないが「flex: 1;」で、スクロールとメッセージフォームの固定を実現する。 
         この方法でしか、メッセージフォームのwidthをRightSidebarによって変化させることができなかった。 */}
       <div className="flex flex-col">
