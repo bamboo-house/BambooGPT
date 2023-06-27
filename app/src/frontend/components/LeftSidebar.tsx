@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { threadListState } from '../globalStates/atoms/threadAtom';
 import { ResPostThread } from '@/bff/types/thread';
-import { useFirebaseAuth } from '@/frontend/utils/firebaseAuth';
+import { useFirebaseAuth } from '@/frontend/hooks/firebaseAuth';
 
 export const LeftSidebar = () => {
   const [threadList, setThreadList] = useRecoilState(threadListState);

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { useCurrentUserSetter } from '@/frontend/utils/firebaseAuth';
+import { useCurrentUserSetter } from '@/frontend/hooks/firebaseAuth';
 
 type Props = {
   children: ReactNode;

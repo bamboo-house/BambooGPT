@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useFirebaseAuth } from '@/frontend/utils/firebaseAuth';
+import { useFirebaseAuth } from '@/frontend/hooks/firebaseAuth';
 
 export default function Home() {
   const { loginWithGoogle } = useFirebaseAuth();

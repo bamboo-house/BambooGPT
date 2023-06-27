@@ -1,17 +1,21 @@
 import { getAuth } from '@firebase/auth';
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { ResPostThread } from '@/bff/types/thread';
 import { Firebase } from '@/frontend/components/Firebase';
 import { Form } from '@/frontend/components/Form';
 import { currentUserState } from '@/frontend/globalStates/atoms/currentUserAtom';
 import { threadListState } from '@/frontend/globalStates/atoms/threadAtom';
+import { useThread } from '@/frontend/hooks/useThread';
 import styles from '@/styles/Home.module.css';
 
 export default function Home() {
   const [result, setResult] = useState('');
   const [threadList, setThreadList] = useRecoilState(threadListState);
+  const data = useThread('CNlYBfCRbtqVp9gxFpCA');
+
+  useEffect(() => {}, []);
 
   const currentUser = useRecoilValue(currentUserState);
 
@@ -75,7 +79,7 @@ export default function Home() {
       <Head>
         <title>BambooGPT</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/bamboogpt-icon.png" />
+        <link rel="icon" href="/bamboogpt_icon.png" />
       </Head>
 
       <div className="mx-10">
