@@ -10,15 +10,32 @@ import useSWR from 'swr';
 //   return idToken;
 // };
 
-export const useThread = (threadId: string) => {
-  const { data, error, isLoading } = useSWR(`/api/threads/${threadId}`, fetcher);
-  console.log(data);
+export const useThread = (token: string) => {
+  const { data, error, isLoading } = useSWR<any, any>(['/api/threads', token], fetchWithToken);
+  console.log('useThread', data);
   return { data, error, isLoading };
 };
 
-const fetcher = (url: string, token: string) => {
-  // const headers = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
-  fetch(url).then((res) => {
+// export const useTest = () => {
+//   const { data, error, isLoading } = useSWR(
+//     'https://jsonplaceholder.typicode.com/todos/1',
+//     fetcher
+//   );
+
+//   return {
+//     data,
+//     isLoading,
+//     error,
+//   };
+// };
+
+const fetchWithToken = (url: string, token: string) =>
+  fetch(url, {
+    method: 'GET',
+    headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+  }).then((res) => {
+    console.log('かせせ', res);
     res.json();
   });
-};
+
+// const fetcher = (url: any) => fetch(url).then((res) => res.json());

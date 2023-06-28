@@ -5,6 +5,7 @@ import { ResGetThread, ResPostThread } from '@/bff/types/thread';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
+    console.log('アクセスきた');
     // headersの取得・認証
     const idToken = req.headers.authorization?.split('Bearer ')[1];
     if (!idToken) {
@@ -24,6 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const resGetBody: ResGetThread = {
           body: result,
         };
+        console.log('アクセスきた', resGetBody);
         res.status(200).json(resGetBody);
         break;
       case 'POST':

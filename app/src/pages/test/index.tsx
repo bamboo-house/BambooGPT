@@ -5,19 +5,14 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { ResPostThread } from '@/bff/types/thread';
 import { Firebase } from '@/frontend/components/Firebase';
 import { Form } from '@/frontend/components/Form';
+import { TestSWR } from '@/frontend/components/TestSWR';
 import { currentUserState } from '@/frontend/globalStates/atoms/currentUserAtom';
 import { threadListState } from '@/frontend/globalStates/atoms/threadAtom';
-import { useThread } from '@/frontend/hooks/useThread';
 import styles from '@/styles/Home.module.css';
 
 export default function Home() {
   const [result, setResult] = useState('');
   const [threadList, setThreadList] = useRecoilState(threadListState);
-  const data = useThread('CNlYBfCRbtqVp9gxFpCA');
-
-  useEffect(() => {}, []);
-
-  const currentUser = useRecoilValue(currentUserState);
 
   const handleAccumulatingResult = (text: string) => {
     setResult((prevResult) => prevResult + text);
@@ -37,7 +32,15 @@ export default function Home() {
     const idToken = await user.getIdToken();
     // console.log('idToken', idToken);
 
-    const response = await fetch(`/api/threads/${threadList[0].threadId}`, {
+    // const response = await fetch(`/api/threads/${threadList[0].threadId}`, {
+    //   method: 'GET',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     Authorization: `Bearer ${idToken}`,
+    //   },
+    // });
+
+    const response = await fetch('/api/threads', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -87,6 +90,7 @@ export default function Home() {
         <div style={{ whiteSpace: 'pre-line' }}>{result}</div>
       </div>
 
+      <TestSWR threadList={threadList} />
       <button
         className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
         onClick={createThread}

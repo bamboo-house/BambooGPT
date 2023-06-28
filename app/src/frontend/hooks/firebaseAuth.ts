@@ -18,13 +18,15 @@ export const useCurrentUserSetter = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         console.log('authchanged', user);
+        const idToken = await user.getIdToken();
         setCurrentUser({
           uid: user.uid,
           name: user.displayName,
           image: user.photoURL,
+          idToken: idToken,
         });
       } else {
         console.log('not logged in');
@@ -86,6 +88,7 @@ export const useFirebaseAuth = () => {
           uid: result.user.uid,
           name: resBody.body.name,
           image: resBody.body.image,
+          idToken: idToken,
         });
       }
     } catch (error) {
@@ -107,6 +110,7 @@ export const useFirebaseAuth = () => {
       uid: null,
       name: null,
       image: null,
+      idToken: '',
     });
   };
 
