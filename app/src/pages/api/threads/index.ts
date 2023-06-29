@@ -5,11 +5,10 @@ import { ResGetThread, ResPostThread } from '@/bff/types/thread';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    console.log('アクセスきた');
     // headersの取得・認証
     const idToken = req.headers.authorization?.split('Bearer ')[1];
     if (!idToken) {
-      res.status(400).json({ error: { message: '無効なリクエストです' } });
+      return res.status(400).json({ error: { message: 'idTokenで無効なリクエストです' } });
     }
     const user = await verifyAndAuthenticateUser(idToken as string);
 
@@ -25,7 +24,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const resGetBody: ResGetThread = {
           body: result,
         };
-        console.log('アクセスきた', resGetBody);
         res.status(200).json(resGetBody);
         break;
       case 'POST':
