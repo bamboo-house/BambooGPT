@@ -1,3 +1,4 @@
+/* eslint-disable tailwindcss/no-custom-classname */
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { ChatLog } from '@/frontend/components/ChatLog';
