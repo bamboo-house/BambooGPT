@@ -1,10 +1,17 @@
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { chatMessageListState } from '../globalStates/atoms/chatAtom';
+import { currentUserState } from '../globalStates/atoms/currentUserAtom';
+import { useThread } from '../hooks/useThread';
 
 export const ChatLog = () => {
   const [chatMessageList, setChatMessageList] = useRecoilState(chatMessageListState);
+  const currentUser = useRecoilValue(currentUserState);
+
+  const router = useRouter();
+  const { data, error, isLoading } = useThread('32Hh2gT0h6I9HwQRK6uG', currentUser.idToken);
 
   const mockData = () => {
     setChatMessageList([
@@ -27,6 +34,7 @@ export const ChatLog = () => {
   };
 
   useEffect(() => {
+    console.log('params', router.query);
     mockData();
   }, []);
 
@@ -38,6 +46,13 @@ export const ChatLog = () => {
     setChatMessageList(data);
   };
 
+  const threadData = () => {
+    if (data && data.body) {
+      console.log(data);
+      return <div>{data.body.threadId}</div>;
+    }
+  };
+
   return (
     <div className="flex-1 overflow-y-auto overflow-x-hidden">
       <button
@@ -46,6 +61,7 @@ export const ChatLog = () => {
       >
         updateState
       </button>
+      {threadData()}
       {/* 2023/06/05 良いかわからないが「flex: 1;」で、スクロールとメッセージフォームの固定を実現する。 
         この方法でしか、メッセージフォームのwidthをRightSidebarによって変化させることができなかった。 */}
       <div className="flex flex-col">

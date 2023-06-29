@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { ChatLog } from '@/frontend/components/ChatLog';
 import { ChatMessageForm } from '@/frontend/components/ChatMessageForm';
 import { LeftSidebar } from '@/frontend/components/LeftSidebar';
