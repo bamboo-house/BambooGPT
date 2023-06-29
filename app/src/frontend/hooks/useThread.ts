@@ -1,7 +1,6 @@
 import useSWR from 'swr';
 
 export const useThread = (threadId: string, token: string) => {
-  console.log('useThread: ', threadId, token);
   const fetchWithToken = async (url: string, token: string) => {
     const response = await fetch(url, {
       method: 'GET',

@@ -1,6 +1,6 @@
 export type ReqCreateThread = {};
 
-export type ResGetThread = {
+export type ResGetThreads = {
   body?: {
     threadId: string;
     name: string;
@@ -20,7 +20,7 @@ export type ResPostThread = {
   };
 };
 
-export type ResGetThreadThreadId = {
+export type ResGetThread = {
   body?: {
     threadId: string;
     name: string;

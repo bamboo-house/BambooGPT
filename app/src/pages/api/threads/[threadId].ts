@@ -1,14 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ThreadGateway } from '@/backend/infrastructure/threadGateway';
 import { verifyAndAuthenticateUser } from '@/backend/utils/verifyAndAuthenticateUser';
-import { ResGetThreadThreadId } from '@/bff/types/thread';
+import { ResGetThread } from '@/bff/types/thread';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     // headersの取得・認証
     const idToken = req.headers.authorization?.split('Bearer ')[1];
     if (!idToken) {
-      res.status(400).json({ success: false, message: '無効なリクエストです' });
+      return res.status(400).json({ success: false, message: '無効なリクエストです' });
     }
     await verifyAndAuthenticateUser(idToken as string);
 
@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           break;
         }
 
-        const resGetBody: ResGetThreadThreadId = {
+        const resGetBody: ResGetThread = {
           body: { threadId: threadRecord.threadId, name: threadRecord.name },
         };
         res.status(200).json(resGetBody);

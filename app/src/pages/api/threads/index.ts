@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ThreadGateway } from '@/backend/infrastructure/threadGateway';
 import { verifyAndAuthenticateUser } from '@/backend/utils/verifyAndAuthenticateUser';
-import { ResGetThread, ResPostThread } from '@/bff/types/thread';
+import { ResGetThreads, ResPostThread } from '@/bff/types/thread';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           return { threadId: threadRecord.threadId, name: threadRecord.name };
         });
 
-        const resGetBody: ResGetThread = {
+        const resGetBody: ResGetThreads = {
           body: result,
         };
         res.status(200).json(resGetBody);

@@ -11,7 +11,6 @@ import {
 } from 'firebase/firestore';
 import { CreateChatCompletionRequest } from 'openai';
 import { ChatRecord } from './chatRecord';
-import { ThreadRecord } from './threadRecord';
 
 export class ChatGateway {
   private _collection: ReturnType<typeof collection>;
