@@ -29,7 +29,7 @@ export class ThreadGateway {
         createdAt: createdAt,
       })
         .then((docRef) => {
-          console.error('Document has been added successfully', docRef);
+          console.log('Document has been added successfully', docRef);
         })
         .catch((error) => {
           console.error('エラーですよー', error);
