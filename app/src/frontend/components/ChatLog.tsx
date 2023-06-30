@@ -4,14 +4,16 @@ import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { chatMessageListState } from '../globalStates/atoms/chatAtom';
 import { currentUserState } from '../globalStates/atoms/currentUserAtom';
+import { useChat } from '../hooks/useChat';
 import { useThread } from '../hooks/useThread';
 
 export const ChatLog = () => {
   const [chatMessageList, setChatMessageList] = useRecoilState(chatMessageListState);
   const currentUser = useRecoilValue(currentUserState);
-
   const router = useRouter();
-  const { data, error, isLoading } = useThread('32Hh2gT0h6I9HwQRK6uG', currentUser.idToken);
+
+  // const { data, error, isLoading } = useThread('hD0Fo8qCHsQ6tg7VIVGM', currentUser.idToken);
+  const { data, error, isLoading } = useChat('5jKWCvjitwQUBGUtEvwy', currentUser.idToken);
 
   const mockData = () => {
     setChatMessageList([
@@ -34,7 +36,6 @@ export const ChatLog = () => {
   };
 
   useEffect(() => {
-    console.log('params', router.query);
     mockData();
   }, []);
 
@@ -49,7 +50,7 @@ export const ChatLog = () => {
   const threadData = () => {
     if (data && data.body) {
       console.log(data);
-      return <div>{data.body.threadId}</div>;
+      return <div>{data.body.chatId}</div>;
     }
   };
 
@@ -60,6 +61,12 @@ export const ChatLog = () => {
         onClick={updateState}
       >
         updateState
+      </button>
+      <button
+        className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
+        onClick={() => console.log(router.query)}
+      >
+        params
       </button>
       {threadData()}
       {/* 2023/06/05 良いかわからないが「flex: 1;」で、スクロールとメッセージフォームの固定を実現する。 
