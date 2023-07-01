@@ -1,16 +1,17 @@
 {
   "version": "0.2.0",
   "configurations": [
-    {
-      "name": "Next.js サーバサイド用のデバッガ設定",
-      "type": "node",
-      "request": "attach",
-      "skipFiles": ["<node_internals>/**"],
-      "address": "localhost",
-      "port": 9229,
-      "localRoot": "${workspaceFolder}/app",
-      "remoteRoot": "/usr/src/app"
-    },
+    // 2023/6/30 dockerでバックエンドのデバックができないのでコメントアウト
+    // {
+    //   "name": "Next.js サーバサイド用のデバッガ設定",
+    //   "type": "node",
+    //   "request": "attach",
+    //   "skipFiles": ["<node_internals>/**"],
+    //   "address": "localhost",
+    //   "port": 9229,
+    //   "localRoot": "${workspaceFolder}/app",
+    //   "remoteRoot": "/usr/src/app"
+    // },
     {
       "name": "Next.js クライアントサイド用のデバッガ設定",
       "type": "chrome",
