@@ -27,8 +27,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const resGetBody: ResGetChat = {
           body: {
             chatId: chatRecord.chatId,
-            user: chatRecord.user,
-            thread: chatRecord.thread,
+            uid: chatRecord.user.id,
+            threadId: chatRecord.thread.id,
             chatContent: chatRecord.chatContent,
           },
         };

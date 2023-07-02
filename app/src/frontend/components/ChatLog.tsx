@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { chatMessageListState } from '../globalStates/atoms/chatAtom';
 import { currentUserState } from '../globalStates/atoms/currentUserAtom';
@@ -12,6 +13,15 @@ export const ChatLog = () => {
   const { chatId } = router.query;
 
   const { data, error, isLoading } = useChat(chatId as string, currentUser.idToken);
+
+  useEffect(() => {
+    if (data && data.body) {
+      const messages = data.body.chatContent.messages;
+      console.log(messages);
+      setChatMessageList(messages);
+      console.log(data);
+    }
+  });
 
   return (
     <div className="flex-1 overflow-y-auto overflow-x-hidden">
