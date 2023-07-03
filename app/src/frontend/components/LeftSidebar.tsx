@@ -13,7 +13,6 @@ export const LeftSidebar = () => {
 
   const handleChangeLogout = async () => {
     await logout();
-    router.push('/login');
   };
 
   // Todo: これは後々削除する

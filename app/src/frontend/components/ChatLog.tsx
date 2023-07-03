@@ -12,20 +12,18 @@ export const ChatLog = () => {
   const router = useRouter();
   const { chatId } = router.query;
 
-  const { data, error, isLoading } = useChat(chatId as string, currentUser.idToken);
+  // Todo: フロントでデータ取得ではなく,getServerSidePropsでやるべきかも
+  const { data } = useChat(chatId as string, currentUser.idToken);
 
   useEffect(() => {
     if (data && data.body) {
       const messages = data.body.chatContent.messages;
-      console.log(messages);
       setChatMessageList(messages);
-      console.log(data);
     }
-  });
+  }, [data, setChatMessageList]);
 
   return (
     <div className="flex-1 overflow-y-auto overflow-x-hidden">
-      <div>{chatId}</div>
       {/* 2023/06/05 良いかわからないが「flex: 1;」で、スクロールとメッセージフォームの固定を実現する。 
         この方法でしか、メッセージフォームのwidthをRightSidebarによって変化させることができなかった。 */}
       <div className="flex flex-col">
