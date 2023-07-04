@@ -31,10 +31,19 @@ export const ChatMessageForm = () => {
     // promptをChatMessageListに追加する
     setChatMessageList(newChatMessageList);
     // POST /api/openai/chatsにリクエストを送る
-    await openaiChats(newChatMessageList, (text: string) => setResult((prev) => prev + text));
+    // await openaiChats(newChatMessageList, (res: string) => setResult((prev) => prev + res));
 
-    // レスポンスをmessageListに追加する
-    console.log(prompt);
+    await openaiChats(newChatMessageList, (res: string) =>
+      setChatMessageList((prev) => {
+        let lastEle = prev[prev.length - 1];
+        if (lastEle.role == 'assistant') {
+          return [...prev.slice(0, -1), { role: 'assistant', content: lastEle.content + res }];
+        }
+        return [...prev, { role: 'assistant', content: res }];
+      })
+    );
+
+    setIsReceiving(false);
   };
 
   const openaiChats = async (
