@@ -1,37 +1,31 @@
-import { getAuth } from 'firebase/auth';
 import { ChatCompletionRequestMessage } from 'openai';
-import { useRecoilValue } from 'recoil';
-import { currentUserState } from '../globalStates/atoms/currentUserAtom';
+import { ChatOption } from '../globalStates/atoms/chatAtom';
 import { ReqPostOpenaiChat } from '@/bff/types/openai/chats';
 
-export const useCreateChatCompletion = async (
+export const createChatCompletion = async (
+  uid: string,
+  threadId: string,
+  token: string,
   messages: ChatCompletionRequestMessage[],
+  chatOption: ChatOption,
   resText: (text: string) => void
 ) => {
-  const currentUser = useRecoilValue(currentUserState);
-  const idToken = currentUser.idToken;
-  const user = getAuth().currentUser;
-  if (!user) {
-    // Todo：エラー処理
-    return;
-  }
-
   const reqBody: ReqPostOpenaiChat = {
-    uid: user.uid,
-    threadId: 'QlunF5Ke2kXNF6Sq0agP',
+    uid: uid,
+    threadId: threadId,
     chatContent: {
-      model: 'gpt-3.5-turbo',
+      model: chatOption.model,
       messages: messages,
-      temperature: undefined,
-      top_p: undefined,
-      n: undefined,
-      stream: true,
-      stop: undefined,
-      max_tokens: undefined,
-      presence_penalty: undefined,
-      frequency_penalty: undefined,
-      logit_bias: undefined,
-      user: undefined,
+      temperature: chatOption.temperature,
+      top_p: chatOption.top_p,
+      n: chatOption.n,
+      stream: chatOption.stream,
+      stop: chatOption.stop,
+      max_tokens: chatOption.max_tokens,
+      presence_penalty: chatOption.presence_penalty,
+      frequency_penalty: chatOption.frequency_penalty,
+      logit_bias: chatOption.logit_bias,
+      user: chatOption.user,
     },
   };
 
@@ -39,7 +33,7 @@ export const useCreateChatCompletion = async (
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${idToken}`,
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(reqBody),
   });

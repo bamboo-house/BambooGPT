@@ -4,6 +4,7 @@ import {
   onAuthStateChanged,
   signInWithPopup,
   signOut,
+  UserCredential,
 } from 'firebase/auth';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -48,7 +49,7 @@ export const useFirebaseAuth = () => {
   const loginWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      const result: any = await signInWithPopup(auth, provider);
+      const result: UserCredential = await signInWithPopup(auth, provider);
       // ログイン成功時にサーバーサイドのAPIにIDトークンを送信
       const idToken = await result.user.getIdToken(true);
       console.log('ログインに成功しました', idToken);
@@ -82,7 +83,6 @@ export const useFirebaseAuth = () => {
       const resBody: ResLoginGoogle = await response.json();
       console.log('resBody', resBody);
 
-      // console.log(result.user);
       if (resBody.body) {
         setCurrentUser({
           uid: result.user.uid,
@@ -107,7 +107,7 @@ export const useFirebaseAuth = () => {
       });
 
     setCurrentUser({
-      uid: null,
+      uid: '',
       name: null,
       image: null,
       idToken: '',

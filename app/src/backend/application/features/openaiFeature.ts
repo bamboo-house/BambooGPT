@@ -44,18 +44,18 @@ export class OpenaiFeature {
     return new Promise(async (resolve, reject) => {
       const response: any = await this._openai.createChatCompletion(
         {
-          model,
+          model: model,
           messages: messages,
-          temperature,
-          top_p,
-          n,
-          stream,
-          stop,
-          max_tokens,
-          presence_penalty,
-          frequency_penalty,
-          logit_bias,
-          user,
+          temperature: temperature,
+          top_p: top_p,
+          n: n,
+          stream: stream,
+          stop: stop,
+          max_tokens: max_tokens,
+          presence_penalty: presence_penalty,
+          frequency_penalty: frequency_penalty,
+          logit_bias: logit_bias,
+          user: user,
         },
         { responseType: 'stream' }
       );

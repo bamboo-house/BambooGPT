@@ -1,11 +1,19 @@
 import { ChatCompletionRequestMessage } from 'openai';
 import { useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { chatMessageListState } from '../globalStates/atoms/chatAtom';
-import { useCreateChatCompletion } from '../hooks/useCreateChatCompletion';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import {
+  chatInfoState,
+  chatMessageListState,
+  chatOptionState,
+} from '../globalStates/atoms/chatAtom';
+import { currentUserState } from '../globalStates/atoms/currentUserAtom';
+import { createChatCompletion } from '../utils/createChatCompletion';
 
 export const ChatMessageForm = () => {
+  const chatInfo = useRecoilValue(chatInfoState);
   const [chatMessageList, setChatMessageList] = useRecoilState(chatMessageListState);
+  const chatOption = useRecoilValue(chatOptionState);
+  const currentUser = useRecoilValue(currentUserState);
   const [isReceiving, setIsReceiving] = useState(false);
   const [prompt, setPrompt] = useState('');
 
@@ -17,7 +25,6 @@ export const ChatMessageForm = () => {
   };
 
   const handleSubmit = async () => {
-    console.log('submit');
     setIsReceiving(true);
 
     const newChatMessageList: ChatCompletionRequestMessage[] = [
@@ -26,17 +33,22 @@ export const ChatMessageForm = () => {
     ];
     setChatMessageList(newChatMessageList);
 
-    // 2023/0704: streamなど複雑なレスポンスを受け取る関数をカスタムフックにするか関数にするかを検討したが、
-    // 関数にする場合も関数の中でhooksを使うなという警告が出てしまうので、よりわかりやすいカスタムフックにした。
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    await useCreateChatCompletion(newChatMessageList, (res: string) =>
-      setChatMessageList((prev) => {
-        let lastEle = prev[prev.length - 1];
-        if (lastEle.role == 'assistant') {
-          return [...prev.slice(0, -1), { role: 'assistant', content: lastEle.content + res }];
-        }
-        return [...prev, { role: 'assistant', content: res }];
-      })
+    // 2023/0704: ここでカスタムフックは実行できないので関数にする。
+    // また、関数にすると、関数内部でフックが使えないので、引数で渡す。
+    await createChatCompletion(
+      currentUser.uid,
+      chatInfo.threadId,
+      currentUser.idToken,
+      newChatMessageList,
+      chatOption,
+      (res: string) =>
+        setChatMessageList((prev) => {
+          let lastEle = prev[prev.length - 1];
+          if (lastEle.role == 'assistant') {
+            return [...prev.slice(0, -1), { role: 'assistant', content: lastEle.content + res }];
+          }
+          return [...prev, { role: 'assistant', content: res }];
+        })
     );
 
     setIsReceiving(false);

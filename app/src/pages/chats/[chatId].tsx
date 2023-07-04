@@ -2,13 +2,55 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { ChatLog } from '@/frontend/components/ChatLog';
 import { ChatMessageForm } from '@/frontend/components/ChatMessageForm';
 import { LeftSidebar } from '@/frontend/components/LeftSidebar';
 import { RightSidebar } from '@/frontend/components/RightSidebar';
 import { TopBar } from '@/frontend/components/TopBar';
+import {
+  chatInfoState,
+  chatMessageListState,
+  chatOptionState,
+} from '@/frontend/globalStates/atoms/chatAtom';
+import { currentUserState } from '@/frontend/globalStates/atoms/currentUserAtom';
+import { useChat } from '@/frontend/hooks/useChat';
 
 export default function Home() {
+  const setChatInfo = useSetRecoilState(chatInfoState);
+  const setChatMessageList = useSetRecoilState(chatMessageListState);
+  const setChatOption = useSetRecoilState(chatOptionState);
+  const currentUser = useRecoilValue(currentUserState);
+  const router = useRouter();
+  const { chatId } = router.query;
+
+  // Todo: フロントでデータ取得ではなく,getServerSidePropsでやるべきかも
+  const { data } = useChat(chatId as string, currentUser.idToken);
+
+  useEffect(() => {
+    // クエリによって得られたデータでchatAtom達のstateを更新する
+    if (data && data.body) {
+      const body = data.body;
+      const chatContent = body.chatContent;
+
+      setChatInfo({ uid: body.uid, threadId: body.threadId, chatId: body.chatId });
+      setChatMessageList(chatContent.messages);
+      // setChatOption({
+      //   model: chatContent.model,
+      //   temperature: chatContent.temperature,
+      //   top_p: chatContent.top_p,
+      //   n: chatContent.n,
+      //   stream: chatContent.stream,
+      //   stop: chatContent.stop,
+      //   max_tokens: chatContent.max_tokens,
+      //   presence_penalty: chatContent.presence_penalty,
+      //   frequency_penalty: chatContent.frequency_penalty,
+      //   logit_bias: chatContent.logit_bias,
+      //   user: chatContent.user,
+      // });
+    }
+  }, [data, setChatInfo, setChatMessageList, setChatOption]);
+
   return (
     <>
       <Head>

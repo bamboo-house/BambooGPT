@@ -1,26 +1,9 @@
 import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { chatMessageListState } from '../globalStates/atoms/chatAtom';
-import { currentUserState } from '../globalStates/atoms/currentUserAtom';
-import { useChat } from '../hooks/useChat';
 
 export const ChatLog = () => {
-  const [chatMessageList, setChatMessageList] = useRecoilState(chatMessageListState);
-  const currentUser = useRecoilValue(currentUserState);
-  const router = useRouter();
-  const { chatId } = router.query;
-
-  // Todo: フロントでデータ取得ではなく,getServerSidePropsでやるべきかも
-  const { data } = useChat(chatId as string, currentUser.idToken);
-
-  useEffect(() => {
-    if (data && data.body) {
-      const messages = data.body.chatContent.messages;
-      setChatMessageList(messages);
-    }
-  }, [data, setChatMessageList]);
+  const chatMessageList = useRecoilValue(chatMessageListState);
 
   return (
     <div className="flex-1 overflow-y-auto overflow-x-hidden">
