@@ -6,8 +6,9 @@ import { CreatableSelectWrapper } from './CreatableSelectWrapper';
 import { RangeInput } from './RangeInput';
 
 export const RightSidebar = () => {
-  const [chatOption, setChatOption] = useRecoilState(chatOptionState);
-  const [chatOptionForDisplay, setChatOptionForDisplay] = useState(chatOption);
+  const [chatOption, setChatOption] = useRecoilState<any>(chatOptionState);
+  // バー入力と数値入力の共存を実現させるために別のstateを定義する
+  const [chatOptionForDisplay, setChatOptionForDisplay] = useState<any>(chatOption);
   const isOpenedRightSidebar = useRecoilValue(isOpenedRightSidebarState);
 
   const showClass = isOpenedRightSidebar
