@@ -20,7 +20,7 @@ export const ChatLog = () => {
                       src="/sample_icon.png"
                       width={30}
                       height={30}
-                      alt="Assistant"
+                      alt="user"
                       className="rounded-sm"
                     />
                   </div>
@@ -37,7 +37,7 @@ export const ChatLog = () => {
                       src="/bamboogpt_icon.png"
                       width={30}
                       height={30}
-                      alt="Assistant"
+                      alt="assistant"
                       className="rounded-sm"
                     />
                   </div>
