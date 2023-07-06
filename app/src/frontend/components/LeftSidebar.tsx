@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { currentUserState } from '../globalStates/atoms/currentUserAtom';
@@ -17,10 +18,10 @@ export const LeftSidebar = () => {
   };
 
   return (
-    <div className="top-leftsidebar relative h-full w-52 flex-none md:w-0">
-      <div className="fixed left-0 top-0 h-full w-[inherit] bg-gpt-dark md:hidden">
+    <div className="top-leftsidebar relative h-full w-64 flex-none md:w-0">
+      <div className="fixed left-0 top-0 h-full w-[inherit] bg-gpt-dark text-sm md:hidden">
         {/* 下記、LeftSidebarコンポーネントにできる */}
-        <button className="w-full cursor-pointer border border-gpt-dark border-b-zinc-500 p-3 hover:bg-[#2A2B32]">
+        <button className="w-full cursor-pointer border border-gpt-dark border-b-zinc-500 p-3 hover:bg-gpt-gray">
           <div className="flex items-center">
             <Image
               src="/sample_icon.png"
@@ -29,7 +30,7 @@ export const LeftSidebar = () => {
               alt="user"
               className="rounded-sm"
             />
-            <div className="overflow-hidden text-ellipsis whitespace-nowrap break-all px-3 text-sm">
+            <div className="overflow-hidden text-ellipsis whitespace-nowrap break-all px-3">
               {currentUser?.name}
             </div>
           </div>
@@ -40,6 +41,30 @@ export const LeftSidebar = () => {
         >
           ログアウト
         </button>
+        <div className="h-4/5 flex-1 overflow-y-auto overflow-x-hidden border border-gpt-dark border-b-zinc-500">
+          <Link
+            href={'/chats/' + 'SzHDZ2SlktYi94yQZyxZ'}
+            className="mx-2 flex cursor-pointer items-center gap-3 rounded-md p-3 hover:bg-gpt-gray"
+          >
+            <svg
+              stroke="currentColor"
+              fill="none"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-4 w-4"
+              height="1em"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <div className="w-full overflow-hidden text-ellipsis whitespace-nowrap break-all">
+              うんこffaeugauegjioaejggeijaゲオgjおい
+            </div>
+          </Link>
+        </div>
       </div>
     </div>
   );

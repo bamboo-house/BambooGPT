@@ -32,7 +32,7 @@ export const ChatLog = () => {
             return (
               <div className="h-auto w-full bg-[#444654]" key={i}>
                 <div className="m-auto flex max-w-3xl gap-6 px-0 py-8">
-                  <div className="shrink-0">
+                  <div className="shrink-0 ">
                     <Image
                       src="/bamboogpt_icon.png"
                       width={30}
@@ -41,7 +41,10 @@ export const ChatLog = () => {
                       className="rounded-sm"
                     />
                   </div>
-                  <div className="w-[calc(100%-50px)] gap-3" style={{ whiteSpace: 'pre-line' }}>
+                  <div
+                    className="w-[calc(100%-50px)] gap-3 text-[#d1d5db]"
+                    style={{ whiteSpace: 'pre-line' }}
+                  >
                     {data.content}
                   </div>
                 </div>

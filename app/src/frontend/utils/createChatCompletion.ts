@@ -73,6 +73,7 @@ export const createChatCompletion = async (
       resText(text);
     } catch (error) {
       console.error(error);
+      throw new Error(error);
     }
   }
 };

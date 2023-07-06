@@ -42,81 +42,86 @@ export class OpenaiFeature {
     resEnd,
   }: CreateChatCompletionType): Promise<string> {
     return new Promise(async (resolve, reject) => {
-      const response: any = await this._openai.createChatCompletion(
-        {
-          model: model,
-          messages: messages,
-          temperature: temperature,
-          top_p: top_p,
-          n: n,
-          stream: stream,
-          stop: stop,
-          max_tokens: max_tokens,
-          presence_penalty: presence_penalty,
-          frequency_penalty: frequency_penalty,
-          logit_bias: logit_bias,
-          user: user,
-        },
-        { responseType: 'stream' }
-      );
+      try {
+        const response: any = await this._openai.createChatCompletion(
+          {
+            model: model,
+            messages: messages,
+            temperature: temperature,
+            top_p: top_p,
+            n: n,
+            stream: stream,
+            stop: stop,
+            max_tokens: max_tokens,
+            presence_penalty: presence_penalty,
+            frequency_penalty: frequency_penalty,
+            logit_bias: logit_bias,
+            user: user,
+          },
+          { responseType: 'stream' }
+        );
 
-      const streamRes = response.data;
+        const streamRes = response.data;
 
-      let result = '';
-      console.log('================= createChatCompletion START =================');
+        let result = '';
+        console.log('================= createChatCompletion START =================');
 
-      streamRes.on('data', (chunk: any) => {
-        let str: string = chunk.toString();
+        streamRes.on('data', (chunk: any) => {
+          let str: string = chunk.toString();
 
-        // [DONE] は最後の行なので無視
-        if (str.indexOf('[DONE]') > 0) {
-          return;
-        }
-
-        // nullは無視;
-        if (str.indexOf('delta":{}') > 0) {
-          return;
-        }
-
-        // ※APIからの応答をクライアントに返す。後で説明。
-        const lines: Array<string> = str.split('\n');
-        lines.forEach((line) => {
-          if (line.startsWith('data: ')) {
-            line = line.substring('data: '.length);
-          }
-
-          // 空行は無視
-          if (line.trim() == '') {
+          // [DONE] は最後の行なので無視
+          if (str.indexOf('[DONE]') > 0) {
             return;
           }
 
-          // JSONにparse
-          const data = JSON.parse(line);
-          if (
-            data.choices[0].delta.content === null ||
-            data.choices[0].delta.content === undefined
-          ) {
+          // nullは無視;
+          if (str.indexOf('delta":{}') > 0) {
             return;
           }
-          const text = data.choices[0].delta.content;
-          result += text;
 
-          // フロントに返却
-          resWrite(text);
+          // ※APIからの応答をクライアントに返す。後で説明。
+          const lines: Array<string> = str.split('\n');
+          lines.forEach((line) => {
+            if (line.startsWith('data: ')) {
+              line = line.substring('data: '.length);
+            }
+
+            // 空行は無視
+            if (line.trim() == '') {
+              return;
+            }
+
+            // JSONにparse
+            const data = JSON.parse(line);
+            if (
+              data.choices[0].delta.content === null ||
+              data.choices[0].delta.content === undefined
+            ) {
+              return;
+            }
+            const text = data.choices[0].delta.content;
+            result += text;
+
+            // フロントに返却
+            resWrite(text);
+          });
         });
-      });
 
-      streamRes.on('end', () => {
-        console.log(result);
-        console.log('================= END =================');
-        resEnd();
-        resolve(result);
-      });
+        streamRes.on('end', () => {
+          console.log(result);
+          console.log('================= END =================');
+          resEnd();
+          resolve(result);
+        });
 
-      streamRes.on('error', (error: any) => {
+        streamRes.on('error', (error: any) => {
+          console.error(error);
+          reject(error);
+        });
+      } catch (error) {
         console.error(error);
         reject(error);
-      });
+      }
     });
   }
 
