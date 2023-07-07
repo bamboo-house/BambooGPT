@@ -28,8 +28,9 @@ export default function Home() {
   const { data } = useChat(chatId as string, currentUser.idToken);
 
   useEffect(() => {
+    console.log(data);
     // クエリによって得られたデータでchatAtom達のstateを更新する
-    if (data && data.body) {
+    if (data && !data.error && data.body) {
       const body = data.body;
       const chatContent = body.chatContent;
 

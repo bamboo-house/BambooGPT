@@ -1,14 +1,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentUserState } from '../globalStates/atoms/currentUserAtom';
 import { threadListState } from '../globalStates/atoms/threadAtom';
 import { useFirebaseAuth } from '@/frontend/hooks/firebaseAuth';
 
 export const LeftSidebar = () => {
   const [threadList, setThreadList] = useRecoilState(threadListState);
-  const [currentUser, setCurrentUser] = useRecoilState(currentUserState);
+  const currentUser = useRecoilValue(currentUserState);
 
   const { logout } = useFirebaseAuth();
   const router = useRouter();

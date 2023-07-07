@@ -19,6 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'GET':
         const chatId = req.query.chatId as string;
         const chatRecord = await chatGateway.get(chatId);
+
         if (chatRecord === undefined) {
           res.status(400).json({ error: { message: 'chatが存在しません' } });
           break;
@@ -39,6 +40,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   } catch (e) {
     console.error('Error(500): ', e);
-    res.status(500).json({ error: { message: e } });
+    res.status(500).json({ error: { message: e.toString() } });
   }
 }
