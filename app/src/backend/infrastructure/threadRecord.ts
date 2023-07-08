@@ -3,6 +3,7 @@ import { DocumentReference, FieldValue, Timestamp } from '@firebase/firestore';
 export class ThreadRecord {
   constructor(
     private _threadId: string,
+    private _docRef: DocumentReference,
     private _user: DocumentReference,
     private _name: string,
     private _deletedAt: Timestamp | FieldValue | null,
@@ -12,6 +13,10 @@ export class ThreadRecord {
 
   get threadId(): string {
     return this._threadId;
+  }
+
+  get docRef(): DocumentReference {
+    return this._docRef;
   }
 
   get name(): string {

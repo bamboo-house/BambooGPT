@@ -4,11 +4,13 @@ import { useRouter } from 'next/router';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentUserState } from '../globalStates/atoms/currentUserAtom';
 import { threadListState } from '../globalStates/atoms/threadAtom';
+import { useThreadListWithLatestChat } from '../hooks/useThreadListWithLatestChat';
 import { useFirebaseAuth } from '@/frontend/hooks/firebaseAuth';
 
 export const LeftSidebar = () => {
   const [threadList, setThreadList] = useRecoilState(threadListState);
   const currentUser = useRecoilValue(currentUserState);
+  const { data } = useThreadListWithLatestChat(currentUser.idToken);
 
   const { logout } = useFirebaseAuth();
   const router = useRouter();

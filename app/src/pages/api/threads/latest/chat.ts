@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { ChatGateway } from '@/backend/infrastructure/chatGateway';
 import { ThreadGateway } from '@/backend/infrastructure/threadGateway';
 import { verifyAndAuthenticateUser } from '@/backend/utils/verifyAndAuthenticateUser';
+import { ChatRecord } from '@/backend/infrastructure/chatRecord';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -22,10 +23,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           return { threadId: threadRecord.threadId, name: threadRecord.name };
         });
 
+        console.log('リクエストきたー');
+
         // threadId[]からchatRecordsを取得する
-        const chatRecords = await chatGateway.getLatestChatByThreadId(
-          threads.map((thread) => thread.threadId)
-        );
+        threadRecords.forEach(async (threadRecord) => {
+          console.log(threadRecord.threadId);
+          let chatRecords = await chatGateway.getWithThread(threadRecord.docRef);
+        });
 
         const result = '';
 

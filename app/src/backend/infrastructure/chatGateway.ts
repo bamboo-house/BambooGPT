@@ -1,4 +1,5 @@
 import {
+  DocumentReference,
   collection,
   doc,
   getDoc,
@@ -97,6 +98,22 @@ export class ChatGateway {
       chat.updatedAt,
       chat.createdAt
     );
+  }
+
+  async getWithThread(threadDoc: DocumentReference): Promise<ChatRecord[]> {
+    const q = query(this._collection, where('thread', '==', threadDoc));
+    const chatDocSnapshot = await getDocs(q);
+    if (chatDocSnapshot.empty) {
+      return [];
+    }
+
+    chatDocSnapshot.forEach((doc) => {
+      console.log(doc.id, ' => ', doc.data());
+    });
+
+    let chatRecords: ChatRecord[] = [];
+
+    return chatRecords;
   }
 
   async getAll(uid: string): Promise<ChatRecord[]> {

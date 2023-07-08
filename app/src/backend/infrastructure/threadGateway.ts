@@ -1,5 +1,5 @@
 import { getFirestore, collection, doc, setDoc, serverTimestamp } from '@firebase/firestore';
-import { getDoc, getDocs, query, where } from 'firebase/firestore';
+import { DocumentReference, getDoc, getDocs, query, where } from 'firebase/firestore';
 import { ThreadRecord } from './threadRecord';
 
 export class ThreadGateway {
@@ -39,19 +39,28 @@ export class ThreadGateway {
       throw new Error(`スレッド作成ができませんでした：${error}`);
     }
 
-    return new ThreadRecord(threadDocRef.id, userDocRef, name, null, updatedAt, createdAt);
+    return new ThreadRecord(
+      threadDocRef.id,
+      threadDocRef,
+      userDocRef,
+      name,
+      null,
+      updatedAt,
+      createdAt
+    );
   }
 
   async get(threadId: string): Promise<ThreadRecord | undefined> {
     let thread;
+    let threadDoc;
     try {
       const threadDocSnapshot = await getDoc(doc(this._collection, threadId));
-      if (threadDocSnapshot.exists() && threadDocSnapshot.data() !== undefined) {
-        thread = threadDocSnapshot.data();
-        if (!thread) return undefined;
-      } else {
+      if (!threadDocSnapshot.exists() || threadDocSnapshot.data() === undefined) {
         return undefined;
       }
+      thread = threadDocSnapshot.data();
+      // QueryDocumentSnapshotからDocumentReferenceを取得する
+      threadDoc = threadDocSnapshot.ref;
     } catch (error) {
       console.error(error);
       throw new Error(`スレッドを取得できませんでした：${error}`);
@@ -59,6 +68,7 @@ export class ThreadGateway {
 
     return new ThreadRecord(
       threadId,
+      threadDoc,
       thread.user,
       thread.name,
       thread.deletedAt,
@@ -83,6 +93,7 @@ export class ThreadGateway {
         threadRecords.push(
           new ThreadRecord(
             doc.id,
+            doc.ref,
             userDocRef,
             doc.data().name,
             doc.data().deletedAt,
