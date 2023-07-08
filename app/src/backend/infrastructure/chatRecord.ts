@@ -27,4 +27,8 @@ export class ChatRecord {
   get chatContent(): CreateChatCompletionRequest {
     return this._chatContent;
   }
+
+  get updatedAt(): Timestamp | FieldValue {
+    return this._updatedAt;
+  }
 }

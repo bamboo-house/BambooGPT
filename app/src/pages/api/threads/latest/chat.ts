@@ -27,8 +27,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // threadId[]からchatRecordsを取得する
         threadRecords.forEach(async (threadRecord) => {
-          console.log(threadRecord.threadId);
+          // console.log(threadRecord.threadId);
+          console.log('threadId', threadRecord.threadId);
           let chatRecords = await chatGateway.getWithThread(threadRecord.docRef);
+          // chatRecords.forEach((chatRecord) => {
+          //   console.log(chatRecord.chatId, chatRecord.updatedAt);
+          // });
         });
 
         const result = '';

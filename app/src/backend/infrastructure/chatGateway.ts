@@ -5,6 +5,8 @@ import {
   getDoc,
   getDocs,
   getFirestore,
+  limit,
+  orderBy,
   query,
   serverTimestamp,
   setDoc,
@@ -101,15 +103,22 @@ export class ChatGateway {
   }
 
   async getWithThread(threadDoc: DocumentReference): Promise<ChatRecord[]> {
-    const q = query(this._collection, where('thread', '==', threadDoc));
+    const q = query(
+      this._collection,
+      where('thread', '==', threadDoc),
+      orderBy('updatedAt'),
+      limit(1)
+    );
     const chatDocSnapshot = await getDocs(q);
     if (chatDocSnapshot.empty) {
       return [];
     }
 
+    console.log('================================');
     chatDocSnapshot.forEach((doc) => {
-      console.log(doc.id, ' => ', doc.data());
+      console.log(doc.id, ' => ');
     });
+    console.log('================================');
 
     let chatRecords: ChatRecord[] = [];
 
