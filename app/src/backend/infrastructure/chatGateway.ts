@@ -102,7 +102,7 @@ export class ChatGateway {
     );
   }
 
-  async getWithThread(threadDoc: DocumentReference): Promise<ChatRecord[]> {
+  async getLatestChatIdByThread(threadDoc: DocumentReference): Promise<string> {
     const q = query(
       this._collection,
       where('thread', '==', threadDoc),
@@ -110,19 +110,14 @@ export class ChatGateway {
       limit(1)
     );
     const chatDocSnapshot = await getDocs(q);
-    if (chatDocSnapshot.empty) {
-      return [];
-    }
+    if (chatDocSnapshot.empty) return '';
 
-    console.log('================================');
+    let chatId: string = '';
     chatDocSnapshot.forEach((doc) => {
-      console.log(doc.id, ' => ');
+      if (doc.ref.id === undefined) return '';
+      chatId = doc.ref.id;
     });
-    console.log('================================');
-
-    let chatRecords: ChatRecord[] = [];
-
-    return chatRecords;
+    return chatId;
   }
 
   async getAll(uid: string): Promise<ChatRecord[]> {

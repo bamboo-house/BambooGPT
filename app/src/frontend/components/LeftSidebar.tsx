@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentUserState } from '../globalStates/atoms/currentUserAtom';
 import { threadListState } from '../globalStates/atoms/threadAtom';
@@ -18,6 +19,10 @@ export const LeftSidebar = () => {
   const handleChangeLogout = async () => {
     await logout();
   };
+
+  useEffect(() => {
+    console.log('data', data);
+  }, [data]);
 
   return (
     <div className="top-leftsidebar relative h-full w-64 flex-none md:w-0">

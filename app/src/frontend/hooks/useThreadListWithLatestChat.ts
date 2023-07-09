@@ -15,5 +15,6 @@ export const useThreadListWithLatestChat = (token: string) => {
   const { data, error, isLoading } = useSWR(['/api/threads/latest/chat', token], ([url, token]) =>
     fetchWithToken(url, token)
   );
+
   return { data, error, isLoading };
 };

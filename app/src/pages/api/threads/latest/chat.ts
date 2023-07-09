@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { ChatGateway } from '@/backend/infrastructure/chatGateway';
 import { ThreadGateway } from '@/backend/infrastructure/threadGateway';
 import { verifyAndAuthenticateUser } from '@/backend/utils/verifyAndAuthenticateUser';
-import { ChatRecord } from '@/backend/infrastructure/chatRecord';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -19,23 +18,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     switch (req.method) {
       case 'GET':
         const threadRecords = await threadGateway.getAll(user.uid);
-        const threads = threadRecords.map((threadRecord) => {
-          return { threadId: threadRecord.threadId, name: threadRecord.name };
-        });
 
-        console.log('リクエストきたー');
-
-        // threadId[]からchatRecordsを取得する
-        threadRecords.forEach(async (threadRecord) => {
-          // console.log(threadRecord.threadId);
-          console.log('threadId', threadRecord.threadId);
-          let chatRecords = await chatGateway.getWithThread(threadRecord.docRef);
-          // chatRecords.forEach((chatRecord) => {
-          //   console.log(chatRecord.chatId, chatRecord.updatedAt);
-          // });
-        });
-
-        const result = '';
+        let result: { threadId: string; name: string; chatId: string }[] = [];
+        let chatId: string = '';
+        // ループの中で非同期の解決を行うために、for ofを使う。forEachは非同期の解決を行わない。
+        for (const threadRecord of threadRecords) {
+          chatId = await chatGateway.getLatestChatIdByThread(threadRecord.docRef);
+          if (chatId) {
+            result.push({
+              threadId: threadRecord.threadId,
+              name: threadRecord.name,
+              chatId: chatId,
+            });
+          }
+        }
 
         const resGetBody = {
           body: result,
