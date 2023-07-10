@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ChatGateway } from '@/backend/infrastructure/chatGateway';
-import { ThreadGateway } from '@/backend/infrastructure/threadGateway';
 import { verifyAndAuthenticateUser } from '@/backend/utils/verifyAndAuthenticateUser';
 import { ResGetChat } from '@/bff/types/chat';
 
