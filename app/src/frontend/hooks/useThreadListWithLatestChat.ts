@@ -1,4 +1,5 @@
 import useSWR from 'swr';
+import { ResGetThreadListWithLatestChat } from '@/bff/types/thread';
 
 export const useThreadListWithLatestChat = (token: string) => {
   const fetchWithToken = async (url: string, token: string) => {
@@ -9,7 +10,7 @@ export const useThreadListWithLatestChat = (token: string) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    const resBody = await response.json();
+    const resBody: ResGetThreadListWithLatestChat = await response.json();
     return resBody;
   };
   const { data, error, isLoading } = useSWR(['/api/threads/latest/chat', token], ([url, token]) =>

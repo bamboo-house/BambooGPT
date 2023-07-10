@@ -29,3 +29,14 @@ export type ResGetThread = {
     message: string;
   };
 };
+
+export type ResGetThreadListWithLatestChat = {
+  body?: {
+    threadId: string;
+    name: string;
+    chatId: string;
+  }[];
+  error?: {
+    message: string;
+  };
+};

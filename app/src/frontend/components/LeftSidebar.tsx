@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { Key, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentUserState } from '../globalStates/atoms/currentUserAtom';
 import { threadListState } from '../globalStates/atoms/threadAtom';
@@ -49,28 +49,33 @@ export const LeftSidebar = () => {
           ログアウト
         </button>
         <div className="h-4/5 flex-1 overflow-y-auto overflow-x-hidden border border-gpt-dark border-b-zinc-500">
-          <Link
-            href={'/chats/' + 'SzHDZ2SlktYi94yQZyxZ'}
-            className="mx-2 flex cursor-pointer items-center gap-3 rounded-md p-3 hover:bg-gpt-gray"
-          >
-            <svg
-              stroke="currentColor"
-              fill="none"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-4 w-4"
-              height="1em"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-            <div className="w-full overflow-hidden text-ellipsis whitespace-nowrap break-all">
-              うんこffaeugauegjioaejggeijaゲオgjおい
-            </div>
-          </Link>
+          {data &&
+            data.body &&
+            data.body.map((thread, key: Key | null | undefined) => (
+              <Link
+                href={'/chats/' + thread.chatId}
+                className="mx-2 flex cursor-pointer items-center gap-3 rounded-md p-3 hover:bg-gpt-gray"
+                key={key}
+              >
+                <svg
+                  stroke="currentColor"
+                  fill="none"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-4 w-4"
+                  height="1em"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <div className="w-full overflow-hidden text-ellipsis whitespace-nowrap break-all">
+                  {thread.name}
+                </div>
+              </Link>
+            ))}
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { ChatGateway } from '@/backend/infrastructure/chatGateway';
 import { ThreadGateway } from '@/backend/infrastructure/threadGateway';
 import { verifyAndAuthenticateUser } from '@/backend/utils/verifyAndAuthenticateUser';
+import { ResGetThreadListWithLatestChat } from '@/bff/types/thread';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -33,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           }
         }
 
-        const resGetBody = {
+        const resGetBody: ResGetThreadListWithLatestChat = {
           body: result,
         };
         res.status(200).json(resGetBody);

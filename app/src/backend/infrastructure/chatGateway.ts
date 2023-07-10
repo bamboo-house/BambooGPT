@@ -106,7 +106,7 @@ export class ChatGateway {
     const q = query(
       this._collection,
       where('thread', '==', threadDoc),
-      orderBy('updatedAt'),
+      orderBy('updatedAt', 'desc'),
       limit(1)
     );
     const chatDocSnapshot = await getDocs(q);
