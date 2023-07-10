@@ -6,7 +6,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentUserState } from '../globalStates/atoms/currentUserAtom';
 import { threadListState } from '../globalStates/atoms/threadAtom';
 import { useThreadListWithLatestChat } from '../hooks/useThreadListWithLatestChat';
-import { useFirebaseAuth } from '@/frontend/hooks/firebaseAuth';
+import { useFirebaseAuth } from '@/frontend/hooks/useFirebaseAuth.ts';
 
 export const LeftSidebar = () => {
   const [threadList, setThreadList] = useRecoilState(threadListState);
@@ -19,10 +19,6 @@ export const LeftSidebar = () => {
   const handleChangeLogout = async () => {
     await logout();
   };
-
-  useEffect(() => {
-    console.log('data', data);
-  }, [data]);
 
   return (
     <div className="top-leftsidebar relative h-full w-64 flex-none md:w-0">

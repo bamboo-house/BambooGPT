@@ -1,6 +1,6 @@
 import { useRecoilValue } from 'recoil';
 import { currentUserState } from '../globalStates/atoms/currentUserAtom';
-import { useFirebaseAuth } from '../hooks/firebaseAuth';
+import { useFirebaseAuth } from '../hooks/useFirebaseAuth.ts';
 
 export const Firebase = () => {
   const { loginWithGoogle, logout } = useFirebaseAuth();
