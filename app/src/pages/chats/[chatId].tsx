@@ -28,7 +28,7 @@ export default function Home() {
   const { data } = useChat(chatId as string, currentUser.idToken);
 
   useEffect(() => {
-    console.log(data);
+    // 2023/7/10: 色々調べたけど、useSWRをgrobal stateとして使うのは複雑になりそうだからやめる
     // クエリによって得られたデータでchatAtom達のstateを更新する
     if (data && !data.error && data.body) {
       const body = data.body;

@@ -1,6 +1,7 @@
 import { ChatCompletionRequestMessage } from 'openai';
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { useSWRConfig } from 'swr';
 import {
   chatInfoState,
   chatMessageListState,
@@ -16,6 +17,7 @@ export const ChatMessageForm = () => {
   const currentUser = useRecoilValue(currentUserState);
   const [isReceiving, setIsReceiving] = useState(false);
   const [prompt, setPrompt] = useState('');
+  const { mutate } = useSWRConfig();
 
   const handleTextareaKeydown = (e: any) => {
     // 「cmd + Enter 」かつ「受信中でない」場合、送信する
@@ -50,6 +52,9 @@ export const ChatMessageForm = () => {
           return [...prev, { role: 'assistant', content: res }];
         })
     );
+
+    // LeftSidebarのthreadを更新する
+    mutate(['/api/threads/latest/chat', currentUser.idToken]);
 
     setIsReceiving(false);
   };
