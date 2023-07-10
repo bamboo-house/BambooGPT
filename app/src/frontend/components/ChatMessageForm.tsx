@@ -1,5 +1,5 @@
 import { ChatCompletionRequestMessage } from 'openai';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useSWRConfig } from 'swr';
 import {
@@ -78,6 +78,14 @@ export const ChatMessageForm = () => {
     // 高さを再計算
     textarea.style.height = lineHeight * lines + 'px';
   };
+
+  // textareaにautofocusする
+  useEffect(() => {
+    const textarea: any = document.getElementById('promptTextAreaId');
+    if (textarea) {
+      textarea.focus();
+    }
+  }, [chatInfo]);
 
   return (
     <div className="absolute inset-x-0 bottom-0 bg-gpt-linear-gradient pb-16">
