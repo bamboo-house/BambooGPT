@@ -4,25 +4,23 @@ import { Key, useState } from 'react';
 import { BiComment } from 'react-icons/bi';
 import { FiLogOut } from 'react-icons/fi';
 import { IoSettingsOutline } from 'react-icons/io5';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
+import { chatInfoState } from '../globalStates/atoms/chatAtom';
 import { currentUserState } from '../globalStates/atoms/currentUserAtom';
-import { threadListState } from '../globalStates/atoms/threadAtom';
 import { useThreadListWithLatestChat } from '../hooks/useThreadListWithLatestChat';
 import { Modal } from './Modal';
 import { useFirebaseAuth } from '@/frontend/hooks/useFirebaseAuth.ts';
 
 export const LeftSidebar = () => {
-  const [threadList, setThreadList] = useRecoilState(threadListState);
   const currentUser = useRecoilValue(currentUserState);
+  const chatInfo = useRecoilValue(chatInfoState);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const { data } = useThreadListWithLatestChat(currentUser.idToken);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(true);
-
   const { logout } = useFirebaseAuth();
 
   const handleChangeLogout = async () => {
     await logout();
   };
-
   return (
     <div className="top-leftsidebar relative h-full w-64 flex-none md:w-0">
       <div className="fixed left-0 top-0 z-10 h-full w-[inherit] bg-gpt-dark text-sm md:hidden">
@@ -68,18 +66,28 @@ export const LeftSidebar = () => {
         <div className="my-2 h-4/5 flex-1 overflow-y-auto overflow-x-hidden">
           {data &&
             data.body &&
-            data.body.map((thread, key: Key | null | undefined) => (
-              <Link
-                href={'/chats/' + thread.chatId}
-                className="mx-2 flex cursor-pointer items-center gap-3 rounded-md p-3 hover:bg-gpt-gray"
-                key={key}
-              >
-                <BiComment size={19} />
-                <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap break-all">
-                  {thread.name}
-                </p>
-              </Link>
-            ))}
+            data.body.map((thread, key: Key | null | undefined) => {
+              const cssOfSelected = () => {
+                if (chatInfo.threadId === thread.threadId) {
+                  return ' bg-gpt-gray';
+                }
+              };
+              return (
+                <Link
+                  href={'/chats/' + thread.chatId}
+                  className={
+                    'mx-2 flex cursor-pointer items-center gap-3 rounded-md p-3 hover:bg-gpt-gray' +
+                    cssOfSelected()
+                  }
+                  key={key}
+                >
+                  <BiComment size={19} />
+                  <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap break-all">
+                    {thread.name}
+                  </p>
+                </Link>
+              );
+            })}
         </div>
       </div>
     </div>
