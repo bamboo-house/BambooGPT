@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Key, useEffect, useState } from 'react';
 import { BiComment } from 'react-icons/bi';
+import { FiLogOut } from 'react-icons/fi';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentUserState } from '../globalStates/atoms/currentUserAtom';
@@ -15,7 +16,7 @@ export const LeftSidebar = () => {
   const [threadList, setThreadList] = useRecoilState(threadListState);
   const currentUser = useRecoilValue(currentUserState);
   const { data } = useThreadListWithLatestChat(currentUser.idToken);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(true);
 
   const { logout } = useFirebaseAuth();
 
@@ -51,19 +52,16 @@ export const LeftSidebar = () => {
         <Modal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)}>
           <div className="absolute left-60 top-[-40px] w-52 rounded bg-black">
             <ul className="p-3">
-              <li>
-                <Link href={''}>
-                  <IoSettingsOutline size={19} />
-                  Settings
-                </Link>
+              <li className="flex items-center gap-3 rounded p-2 ">
+                <IoSettingsOutline size={17} />
+                <div>Settings</div>
               </li>
-              <li>
-                <button
-                  className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-                  onClick={handleChangeLogout}
-                >
-                  ログアウト
-                </button>
+              <li
+                className="flex items-center gap-3 rounded p-2 hover:bg-gpt-gray"
+                onClick={handleChangeLogout}
+              >
+                <FiLogOut size={17} />
+                <div>Log out</div>
               </li>
             </ul>
           </div>
