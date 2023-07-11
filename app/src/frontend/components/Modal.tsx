@@ -18,8 +18,8 @@ export const Modal = ({ isOpen, onClose, children }: ModalType) => {
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('click', handleClickOutside, false);
+    return () => document.removeEventListener('click', handleClickOutside);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -30,7 +30,6 @@ export const Modal = ({ isOpen, onClose, children }: ModalType) => {
   return (
     <div className="relative" ref={modalRef}>
       {children}
-      <button onClick={onClose}>Close</button>
     </div>
   );
 };

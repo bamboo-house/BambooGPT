@@ -29,7 +29,10 @@ export const LeftSidebar = () => {
         {/* 下記、LeftSidebarコンポーネントにできる */}
         <button
           className="w-full cursor-pointer border border-gpt-dark border-b-zinc-500 p-3 hover:bg-gpt-gray"
-          onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+          onClick={(e) => {
+            setIsSettingsOpen(!isSettingsOpen);
+            e.stopPropagation();
+          }}
         >
           <div className="flex items-center">
             <Image
@@ -76,9 +79,9 @@ export const LeftSidebar = () => {
                 key={key}
               >
                 <BiComment size={19} />
-                <div className="w-full overflow-hidden text-ellipsis whitespace-nowrap break-all">
+                <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap break-all">
                   {thread.name}
-                </div>
+                </p>
               </Link>
             ))}
         </div>

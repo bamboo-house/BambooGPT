@@ -12,7 +12,7 @@ export const RightSidebar = () => {
   const isOpenedRightSidebar = useRecoilValue(isOpenedRightSidebarState);
 
   const showClass = isOpenedRightSidebar
-    ? 'w-64 flex-none transition-alltransition-all duration-300 ease-in-out'
+    ? 'w-64 flex-none transition-opacity ease-in duration-700 opacity-100 hover:opacity-0'
     : 'w-0 transition-all duration-300 ease-in-out';
 
   const handleChangeRange = (e: any) => {
