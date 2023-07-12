@@ -12,15 +12,15 @@ import { createChatCompletion } from '../utils/createChatCompletion';
 
 export const ChatMessageForm = () => {
   const chatInfo = useRecoilValue(chatInfoState);
-  const [chatMessageList, setChatMessageList] = useRecoilState(chatMessageListState);
   const chatOption = useRecoilValue(chatOptionState);
   const currentUser = useRecoilValue(currentUserState);
+  const [chatMessageList, setChatMessageList] = useRecoilState(chatMessageListState);
   const [isReceiving, setIsReceiving] = useState(false);
   const [prompt, setPrompt] = useState('');
   const { mutate } = useSWRConfig();
 
   const handleTextareaKeydown = (e: any) => {
-    // 「cmd + Enter 」かつ「受信中でない」場合、送信する
+    // 「cmd + Enter」かつ「レスポンスを受信中でない」場合、送信する
     if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && !isReceiving) {
       handleSubmit();
     }
@@ -53,7 +53,7 @@ export const ChatMessageForm = () => {
         })
     );
 
-    // LeftSidebarのthreadを更新する
+    // LeftSidebarのスレッド一覧を更新する
     mutate(['/api/threads/latest/chat', currentUser.idToken]);
 
     setIsReceiving(false);

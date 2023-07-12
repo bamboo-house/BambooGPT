@@ -7,6 +7,7 @@ export const ChatLog = () => {
   const chatMessageList = useRecoilValue(chatMessageListState);
 
   useEffect(() => {
+    // スクロールを常に一番下にする
     const scrollInner = document.getElementById('scroll_inner');
     if (scrollInner) {
       scrollInner.scrollTop = scrollInner.scrollHeight;
