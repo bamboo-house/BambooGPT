@@ -15,13 +15,19 @@ export const useCurrentUserSetter = () => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         console.log('authchanged', user);
-        const idToken = await user.getIdToken();
-        setCurrentUser({
-          uid: user.uid,
-          name: user.displayName,
-          image: user.photoURL,
-          idToken: idToken,
-        });
+        await user
+          .getIdToken()
+          .then((token) => {
+            setCurrentUser({
+              uid: user.uid,
+              name: user.displayName,
+              image: user.photoURL,
+              idToken: token,
+            });
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       } else {
         console.log('not logged in');
         // ログインしていない場合はログイン画面に遷移する
