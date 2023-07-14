@@ -54,7 +54,7 @@ export class OpenaiChatsService {
       await this._chatsGateway.create(uid, threadId, chatContent);
     } catch (error) {
       console.error(error);
-      throw new Error(error);
+      // 2023/07/14 streamでエラーが発生した場合、Promiseと競合してエラーが出る。解消難しいので、一旦放置
     }
   }
 }

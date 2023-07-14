@@ -15,30 +15,6 @@ import { currentUserState } from '@/frontend/globalStates/atoms/currentUserAtom'
 export default function Home() {
   const currentUser = useRecoilValue(currentUserState);
 
-  const createThread = async () => {
-    // idTokenを取得するが、これは後々クッキーで管理すべき
-
-    const user = getAuth().currentUser;
-    if (!user) {
-      return;
-    }
-    const idToken = await user.getIdToken();
-    // console.log('idToken', idToken);
-
-    const response = await fetch('/api/threads', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${idToken}`,
-      },
-    });
-
-    const resBody: ResPostThread = await response.json();
-    console.log('resBody of createThread:', resBody);
-
-    console.log('threadList', resBody);
-  };
-
   return (
     <>
       <Head>
@@ -48,13 +24,6 @@ export default function Home() {
         <LeftSidebar />
         <div className="top-body flex w-full flex-auto flex-col">
           <TopBar />
-
-          <button
-            className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
-            onClick={createThread}
-          >
-            thread作る
-          </button>
           <div className="top-chat flex h-full flex-1">
             <div className="top-content relative flex h-screen min-w-0 flex-auto flex-col">
               <ChatLog />

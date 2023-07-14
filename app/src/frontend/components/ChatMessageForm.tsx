@@ -9,6 +9,7 @@ import {
 } from '../globalStates/atoms/chatAtom';
 import { currentUserState } from '../globalStates/atoms/currentUserAtom';
 import { createChatCompletion } from '../utils/createChatCompletion';
+import { createThread } from '../utils/createThread';
 
 export const ChatMessageForm = () => {
   const chatInfo = useRecoilValue(chatInfoState);
@@ -35,26 +36,38 @@ export const ChatMessageForm = () => {
     ];
     setChatMessageList(newChatMessageList);
 
-    // 2023/0704: ここでカスタムフックは実行できないので関数にする。
-    // また、関数にすると、関数内部でフックが使えないので、引数で渡す。
-    await createChatCompletion(
-      currentUser.uid,
-      chatInfo.threadId,
-      currentUser.idToken,
-      newChatMessageList,
-      chatOption,
-      (res: string) =>
-        setChatMessageList((prev) => {
-          let lastEle = prev[prev.length - 1];
-          if (lastEle.role == 'assistant') {
-            return [...prev.slice(0, -1), { role: 'assistant', content: lastEle.content + res }];
-          }
-          return [...prev, { role: 'assistant', content: res }];
-        })
-    );
+    // Todo: エラーをキャッチした時、フォールバックする
+    try {
+      let threadId = chatInfo.threadId;
+      // topページの時、スレッドが作られてないので、ここで作る
+      if (!chatInfo.threadId) {
+        const body = await createThread();
+        threadId = body.threadId;
+      }
 
-    // LeftSidebarのスレッド一覧を更新する
-    mutate(['/api/threads/latest/chat', currentUser.idToken]);
+      // 2023/0704: ここでカスタムフックは実行できないので関数にする。
+      // また、関数にすると、関数内部でフックが使えないので、引数で渡す。
+      await createChatCompletion(
+        currentUser.uid,
+        threadId,
+        currentUser.idToken,
+        newChatMessageList,
+        chatOption,
+        (res: string) =>
+          setChatMessageList((prev) => {
+            let lastEle = prev[prev.length - 1];
+            if (lastEle.role == 'assistant') {
+              return [...prev.slice(0, -1), { role: 'assistant', content: lastEle.content + res }];
+            }
+            return [...prev, { role: 'assistant', content: res }];
+          })
+      );
+
+      // LeftSidebarのスレッド一覧を更新する
+      mutate(['/api/threads/latest/chat', currentUser.idToken]);
+    } catch (e) {
+      console.error(e);
+    }
 
     setIsReceiving(false);
   };

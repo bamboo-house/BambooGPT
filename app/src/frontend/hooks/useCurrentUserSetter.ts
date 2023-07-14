@@ -5,10 +5,12 @@ import { useSetRecoilState } from 'recoil';
 import { currentUserState } from '../globalStates/atoms/currentUserAtom';
 import { useFirebaseAuth } from './useFirebaseAuth.ts';
 
+// Todo: 2023/7/14 idTokenはcurrentUserStateで管理しない、
+// アクセスした時一番にcurrentUserを埋める、埋めれない場合はログイン画面に遷移する
+
 export const useCurrentUserSetter = () => {
   const auth = getAuth();
   const setCurrentUser = useSetRecoilState(currentUserState);
-  const { logout } = useFirebaseAuth();
   const router = useRouter();
 
   useEffect(() => {

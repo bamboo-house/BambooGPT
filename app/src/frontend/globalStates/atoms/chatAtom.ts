@@ -27,7 +27,7 @@ export const chatOptionState = atom<ChatOption>({
 
 export const chatMessageListState = atom<ChatCompletionRequestMessage[]>({
   key: 'chatMessageListState',
-  default: [{ role: 'system', content: '' }],
+  default: [{ role: 'system', content: 'You are a helpful assistant.' }],
 });
 
 export const chatInfoState = atom<ChatInfo>({
