@@ -41,6 +41,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     openaiChatsService.run(uid, threadId, chatContent, resWrite, resEnd);
   } catch (e) {
     console.error('Error(500): ', e);
-    res.status(500).json({ error: { message: e } });
+    res.status(500).json({ error: { message: e.message } });
   }
 }

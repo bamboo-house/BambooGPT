@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Key, useState } from 'react';
+import { Key, useEffect, useState } from 'react';
 import { BiComment } from 'react-icons/bi';
 import { FiLogOut } from 'react-icons/fi';
 import { IoSettingsOutline } from 'react-icons/io5';
@@ -17,6 +17,10 @@ export const LeftSidebar = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const { data } = useThreadListWithLatestChat(currentUser.idToken);
   const { logout } = useFirebaseAuth();
+
+  useEffect(() => {
+    console.log(data);
+  });
 
   const handleChangeLogout = async () => {
     await logout();
