@@ -1,11 +1,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Key, useState } from 'react';
+import { AiOutlinePlus } from 'react-icons/ai';
 import { BiComment } from 'react-icons/bi';
 import { FiLogOut } from 'react-icons/fi';
 import { IoSettingsOutline } from 'react-icons/io5';
-import { useRecoilValue } from 'recoil';
-import { chatInfoState } from '../globalStates/atoms/chatAtom';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
+import { chatInfoState, chatMessageListState } from '../globalStates/atoms/chatAtom';
 import { currentUserState } from '../globalStates/atoms/currentUserAtom';
 import { useThreadListWithLatestChat } from '../hooks/useThreadListWithLatestChat';
 import { Modal } from './Modal';
@@ -14,6 +15,8 @@ import { useFirebaseAuth } from '@/frontend/hooks/useFirebaseAuth.ts';
 export const LeftSidebar = () => {
   const currentUser = useRecoilValue(currentUserState);
   const chatInfo = useRecoilValue(chatInfoState);
+  const resetChatMessageList = useResetRecoilState(chatMessageListState);
+
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const { data } = useThreadListWithLatestChat(currentUser.idToken);
   const { logout } = useFirebaseAuth();
@@ -64,20 +67,29 @@ export const LeftSidebar = () => {
           </div>
         </Modal>
 
+        <Link
+          href={'/'}
+          className="mb-5 ml-2 mr-8 mt-3 flex cursor-pointer items-center gap-3 rounded-md border border-zinc-500 p-3 hover:bg-[#2A2B32]"
+          onClick={resetChatMessageList}
+        >
+          <AiOutlinePlus size={19} />
+          <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap break-all">
+            New Chat
+          </p>
+        </Link>
+
         <div className="my-2 h-4/5 flex-1 overflow-y-auto overflow-x-hidden">
           {data &&
             data.body &&
             data.body.map((thread, key: Key | null | undefined) => {
-              const cssOfSelected = () => {
-                if (chatInfo.threadId === thread.threadId) {
-                  return ' bg-gpt-gray';
-                }
-              };
+              const cssOfSelected = () =>
+                chatInfo.threadId === thread.threadId ? ' bg-gpt-gray' : '';
+
               return (
                 <Link
                   href={'/chats/' + thread.chatId}
                   className={
-                    'mx-2 flex cursor-pointer items-center gap-3 rounded-md p-3 hover:bg-gpt-gray' +
+                    'mx-2 flex cursor-pointer items-center gap-3 rounded-md p-3 hover:bg-[#2A2B32]' +
                     cssOfSelected()
                   }
                   key={key}
