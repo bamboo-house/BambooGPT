@@ -14,7 +14,7 @@ module.exports = {
     extend: {
       colors: {
         'gpt-dark': '#202123',
-        'gpt-gray': '#353740',
+        'gpt-gray': '#353742',
         'gpt-gray2': '#40414E',
       },
       backgroundImage: {

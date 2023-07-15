@@ -1,20 +1,13 @@
 /* eslint-disable tailwindcss/no-custom-classname */
-import { getAuth } from 'firebase/auth';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { ResPostThread } from '@/bff/types/thread';
+import React from 'react';
 import { ChatLog } from '@/frontend/components/ChatLog';
 import { ChatMessageForm } from '@/frontend/components/ChatMessageForm';
 import { LeftSidebar } from '@/frontend/components/LeftSidebar';
 import { RightSidebar } from '@/frontend/components/RightSidebar';
 import { TopBar } from '@/frontend/components/TopBar';
-import { currentUserState } from '@/frontend/globalStates/atoms/currentUserAtom';
 
 export default function Home() {
-  const currentUser = useRecoilValue(currentUserState);
-
   return (
     <>
       <Head>
