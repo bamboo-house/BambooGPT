@@ -15,6 +15,7 @@ import { useFirebaseAuth } from '@/frontend/hooks/useFirebaseAuth.ts';
 export const LeftSidebar = () => {
   const currentUser = useRecoilValue(currentUserState);
   const chatInfo = useRecoilValue(chatInfoState);
+  const resetChatInfo = useResetRecoilState(chatInfoState);
   const resetChatMessageList = useResetRecoilState(chatMessageListState);
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -70,7 +71,10 @@ export const LeftSidebar = () => {
         <Link
           href={'/'}
           className="mb-5 ml-2 mr-8 mt-3 flex cursor-pointer items-center gap-3 rounded-md border border-zinc-500 p-3 hover:bg-[#2A2B32]"
-          onClick={resetChatMessageList}
+          onClick={() => {
+            resetChatMessageList();
+            resetChatInfo();
+          }}
         >
           <AiOutlinePlus size={19} />
           <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap break-all">
