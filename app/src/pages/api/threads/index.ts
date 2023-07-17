@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ThreadGateway } from '@/backend/infrastructure/threadGateway';
 import { verifyAndAuthenticateUser } from '@/backend/utils/verifyAndAuthenticateUser';
-import { ResGetThreads, ResPostThread } from '@/bff/types/thread';
+import { ReqCreateThread, ResGetThreads, ResPostThread } from '@/bff/types/thread';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -27,7 +27,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(200).json(resGetBody);
         break;
       case 'POST':
-        const threadRecord = await threadGateway.create(user.uid, 'new thread');
+        const reqBody: ReqCreateThread = req.body;
+        const { name } = reqBody;
+
+        const threadRecord = await threadGateway.create(user.uid, name);
 
         const resPostBody: ResPostThread = {
           body: {

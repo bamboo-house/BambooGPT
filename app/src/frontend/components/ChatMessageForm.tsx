@@ -42,7 +42,8 @@ export const ChatMessageForm = () => {
       let threadId = chatInfo.threadId;
       // topページの時、スレッドが作られてないので、ここで作る
       if (!chatInfo.threadId) {
-        const body = await createThread();
+        const maxLength = 50;
+        const body = await createThread(prompt.slice(0, maxLength));
         threadId = body.threadId;
         setChatInfo({ uid: '', threadId: threadId, chatId: '' });
       }

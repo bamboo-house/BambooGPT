@@ -1,13 +1,6 @@
-export type ReqCreateThread = {};
-
-export type ResGetThreads = {
-  body?: {
-    threadId: string;
-    name: string;
-  }[];
-  error?: {
-    message: string;
-  };
+// POST
+export type ReqCreateThread = {
+  name: string;
 };
 
 export type ResPostThread = {
@@ -15,6 +8,17 @@ export type ResPostThread = {
     threadId: string;
     name: string;
   };
+  error?: {
+    message: string;
+  };
+};
+
+// GET
+export type ResGetThreads = {
+  body?: {
+    threadId: string;
+    name: string;
+  }[];
   error?: {
     message: string;
   };

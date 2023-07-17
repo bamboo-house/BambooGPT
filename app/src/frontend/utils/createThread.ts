@@ -1,7 +1,7 @@
 import { getAuth } from 'firebase/auth';
-import { ResPostThread } from '@/bff/types/thread';
+import { ReqCreateThread, ResPostThread } from '@/bff/types/thread';
 
-export const createThread = async (): Promise<{ threadId: string; name: string }> => {
+export const createThread = async (name: string): Promise<{ threadId: string; name: string }> => {
   // Todo: idTokenを取得するが、これは後々クッキーで管理すべき
 
   const user = getAuth().currentUser;
@@ -10,12 +10,15 @@ export const createThread = async (): Promise<{ threadId: string; name: string }
   }
   const idToken = await user.getIdToken();
 
+  const reqBody: ReqCreateThread = { name: name };
+
   const response = await fetch('/api/threads', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${idToken}`,
     },
+    body: JSON.stringify(reqBody),
   });
 
   const resBody: ResPostThread = await response.json();

@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Key, useState } from 'react';
+import { Key, useEffect, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { BiComment } from 'react-icons/bi';
 import { FiLogOut } from 'react-icons/fi';
