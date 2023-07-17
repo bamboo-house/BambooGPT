@@ -1,5 +1,6 @@
 import { ChatCompletionRequestMessage } from 'openai';
 import { useEffect, useState } from 'react';
+import { set } from 'react-hook-form';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useSWRConfig } from 'swr';
 import {
@@ -12,7 +13,7 @@ import { createChatCompletion } from '../utils/createChatCompletion';
 import { createThread } from '../utils/createThread';
 
 export const ChatMessageForm = () => {
-  const chatInfo = useRecoilValue(chatInfoState);
+  const [chatInfo, setChatInfo] = useRecoilState(chatInfoState);
   const chatOption = useRecoilValue(chatOptionState);
   const currentUser = useRecoilValue(currentUserState);
   const [chatMessageList, setChatMessageList] = useRecoilState(chatMessageListState);
@@ -43,6 +44,7 @@ export const ChatMessageForm = () => {
       if (!chatInfo.threadId) {
         const body = await createThread();
         threadId = body.threadId;
+        setChatInfo({ uid: '', threadId: threadId, chatId: '' });
       }
 
       // 2023/0704: ここでカスタムフックは実行できないので関数にする。
