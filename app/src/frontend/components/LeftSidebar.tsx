@@ -1,3 +1,4 @@
+import { getAuth } from 'firebase/auth';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Key, useEffect, useState } from 'react';
@@ -5,12 +6,14 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { BiComment } from 'react-icons/bi';
 import { FiLogOut } from 'react-icons/fi';
 import { IoSettingsOutline } from 'react-icons/io5';
+import { RiDeleteBinLine } from 'react-icons/ri';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { chatInfoState, chatMessageListState } from '../globalStates/atoms/chatAtom';
 import { currentUserState } from '../globalStates/atoms/currentUserAtom';
 import { useThreadListWithLatestChat } from '../hooks/useThreadListWithLatestChat';
 import { Modal } from './Modal';
 import { useFirebaseAuth } from '@/frontend/hooks/useFirebaseAuth.ts';
+import { deleteThread } from '../utils/deleteThread';
 
 export const LeftSidebar = () => {
   const currentUser = useRecoilValue(currentUserState);
@@ -24,6 +27,12 @@ export const LeftSidebar = () => {
 
   const handleChangeLogout = async () => {
     await logout();
+  };
+
+  const handleDeleteThread = async () => {
+    // idTokenを取得するが、これは後々クッキーで管理すべき
+
+    deleteThread('hogehoge');
   };
 
   return (
@@ -93,15 +102,20 @@ export const LeftSidebar = () => {
                 <Link
                   href={'/chats/' + thread.chatId}
                   className={
-                    'mx-2 flex cursor-pointer items-center gap-3 rounded-md p-3 hover:bg-[#2A2B32]' +
+                    'group mx-2 flex h-12 cursor-pointer items-center gap-3 rounded-md p-2 hover:bg-[#2A2B32]' +
                     cssOfSelected()
                   }
                   key={key}
                 >
-                  <BiComment size={19} />
+                  <BiComment size={20} />
                   <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap break-all">
                     {thread.name}
                   </p>
+                  <RiDeleteBinLine
+                    size={20}
+                    className="invisible rounded text-gray-300 hover:bg-gray-500 hover:text-white group-hover:visible"
+                    onClick={handleDeleteThread}
+                  />
                 </Link>
               );
             })}

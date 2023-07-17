@@ -13,10 +13,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await verifyAndAuthenticateUser(idToken as string);
 
     const threadGateway = new ThreadGateway();
+    const threadId = req.query.threadId as string;
 
     switch (req.method) {
       case 'GET':
-        const threadId = req.query.threadId as string;
         const threadRecord = await threadGateway.get(threadId);
         if (threadRecord === undefined) {
           res.status(400).json({ error: { message: 'スレッドが存在しません' } });
@@ -27,6 +27,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           body: { threadId: threadRecord.threadId, name: threadRecord.name },
         };
         res.status(200).json(resGetBody);
+        break;
+      case 'DELETE':
+        console.log('DELETEするよー');
+        console.log(threadId);
+        // await threadGateway.delete(threadId);
+        res.status(200).json({ success: true });
         break;
       default:
         res.status(400).json({ error: { message: '無効なリクエストです' } });
