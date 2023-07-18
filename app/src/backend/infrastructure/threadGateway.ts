@@ -118,12 +118,39 @@ export class ThreadGateway {
       const docRef = doc(this._collection, threadId);
       const deletedAt = serverTimestamp();
 
-      updateDoc(docRef, { deletedAt: deletedAt }).then(() => {
+      await updateDoc(docRef, { deletedAt: deletedAt }).then(() => {
         console.log('Document successfully updated!');
       });
     } catch (error) {
       console.error(error);
       throw new Error(`Threadを削除できませんでした: ${error}`);
+    }
+  }
+
+  async deleteAll(uid: string): Promise<void> {
+    const userDocRef = doc(getFirestore(), 'users', uid);
+    if (!userDocRef) {
+      console.error('threadGateway.ts：ユーザーが存在しません');
+      throw new Error('threadGateway.ts：ユーザーが存在しません');
+    }
+
+    const deletedAt = serverTimestamp();
+
+    const q = query(
+      this._collection,
+      where('user', '==', userDocRef),
+      where('deletedAt', '==', null)
+    );
+    try {
+      const threadDocSnapshot = await getDocs(q);
+      threadDocSnapshot.forEach(async (doc) => {
+        await updateDoc(doc.ref, { deletedAt: deletedAt }).then(() => {
+          console.log('Document successfully updated!');
+        });
+      });
+    } catch (error) {
+      console.error(error);
+      throw new Error(`全てのThreadを削除できませんでした: ${error}`);
     }
   }
 }

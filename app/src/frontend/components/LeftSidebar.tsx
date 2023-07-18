@@ -12,6 +12,7 @@ import { mutate } from 'swr';
 import { chatInfoState, chatMessageListState } from '../globalStates/atoms/chatAtom';
 import { currentUserState } from '../globalStates/atoms/currentUserAtom';
 import { useThreadListWithLatestChat } from '../hooks/useThreadListWithLatestChat';
+import { deleteAllThread } from '../utils/deleteAllThread';
 import { deleteThread } from '../utils/deleteThread';
 import { Modal } from './Modal';
 import { useFirebaseAuth } from '@/frontend/hooks/useFirebaseAuth.ts';
@@ -35,7 +36,15 @@ export const LeftSidebar = () => {
     resetChatInfo();
   };
 
+  const handleAllDeleteThread = async (e: any) => {
+    e.preventDefault();
+    await deleteAllThread();
+    mutate(['/api/threads/latest/chat', currentUser.idToken]);
+    handleChangeStateReset;
+  };
+
   const handleDeleteThread = async (e: any) => {
+    e.preventDefault();
     const threadId = e.currentTarget.id;
     await deleteThread(threadId);
     mutate(['/api/threads/latest/chat', currentUser.idToken]);
@@ -94,6 +103,13 @@ export const LeftSidebar = () => {
             New Chat
           </p>
         </Link>
+
+        <button
+          className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
+          onClick={handleAllDeleteThread}
+        >
+          delete All
+        </button>
 
         <div className="my-2 h-4/5 flex-1 overflow-y-auto overflow-x-hidden">
           {data &&

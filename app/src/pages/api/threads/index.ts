@@ -40,6 +40,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         };
         res.status(200).json(resPostBody);
         break;
+      case 'DELETE':
+        await threadGateway.deleteAll(user.uid);
 
       default:
         res.status(400).json({ error: { message: '無効なリクエストです' } });
