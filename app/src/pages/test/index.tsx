@@ -61,7 +61,6 @@ export default function Home() {
       return;
     }
     const idToken = await user.getIdToken();
-    // console.log('idToken', idToken);
 
     const response = await fetch('/api/threads', {
       method: 'POST',

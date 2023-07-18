@@ -1,5 +1,5 @@
 import { getFirestore, collection, doc, setDoc, serverTimestamp } from '@firebase/firestore';
-import { DocumentReference, getDoc, getDocs, query, where } from 'firebase/firestore';
+import { DocumentReference, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { ThreadRecord } from './threadRecord';
 
 export class ThreadGateway {
@@ -85,7 +85,11 @@ export class ThreadGateway {
       throw new Error('threadGateway.ts：ユーザーが存在しません');
     }
 
-    const q = query(this._collection, where('user', '==', userDocRef));
+    const q = query(
+      this._collection,
+      where('user', '==', userDocRef),
+      where('deletedAt', '==', null)
+    );
     let threadRecords: ThreadRecord[] = [];
     try {
       const threadDocSnapshot = await getDocs(q);
@@ -107,5 +111,19 @@ export class ThreadGateway {
       throw new Error(`Threadを取得できませんでした: ${error}`);
     }
     return threadRecords;
+  }
+
+  async delete(threadId: string): Promise<void> {
+    try {
+      const docRef = doc(this._collection, threadId);
+      const deletedAt = serverTimestamp();
+
+      updateDoc(docRef, { deletedAt: deletedAt }).then((docRef) => {
+        console.log('Document successfully updated!', docRef);
+      });
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Threadを削除できませんでした: ${error}`);
+    }
   }
 }

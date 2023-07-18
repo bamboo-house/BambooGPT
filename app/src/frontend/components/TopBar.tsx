@@ -12,7 +12,7 @@ export const TopBar = () => {
         <div className="w-64 flex-none">
           <div className="flex flex-row-reverse">
             <button
-              className={`mr-4 mt-[6px] rounded-[3px] px-1 py-[2px] ${
+              className={`mr-4 mt-[6px] rounded-[3px] px-1 py-[2px] hover:bg-gray-600 ${
                 isOpenedRightSidebar ? 'bg-gray-500' : ''
               }`}
               onClick={() => {

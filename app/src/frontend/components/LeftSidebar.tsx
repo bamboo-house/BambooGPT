@@ -1,4 +1,3 @@
-import { getAuth } from 'firebase/auth';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Key, useEffect, useState } from 'react';
@@ -8,12 +7,13 @@ import { FiLogOut } from 'react-icons/fi';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
+import { mutate } from 'swr';
 import { chatInfoState, chatMessageListState } from '../globalStates/atoms/chatAtom';
 import { currentUserState } from '../globalStates/atoms/currentUserAtom';
 import { useThreadListWithLatestChat } from '../hooks/useThreadListWithLatestChat';
+import { deleteThread } from '../utils/deleteThread';
 import { Modal } from './Modal';
 import { useFirebaseAuth } from '@/frontend/hooks/useFirebaseAuth.ts';
-import { deleteThread } from '../utils/deleteThread';
 
 export const LeftSidebar = () => {
   const currentUser = useRecoilValue(currentUserState);
@@ -30,9 +30,8 @@ export const LeftSidebar = () => {
   };
 
   const handleDeleteThread = async () => {
-    // idTokenを取得するが、これは後々クッキーで管理すべき
-
-    deleteThread('hogehoge');
+    deleteThread(chatInfo.threadId);
+    mutate(['/api/threads/latest/chat', currentUser.idToken]);
   };
 
   return (
@@ -94,13 +93,13 @@ export const LeftSidebar = () => {
         <div className="my-2 h-4/5 flex-1 overflow-y-auto overflow-x-hidden">
           {data &&
             data.body &&
-            data.body.map((thread, key: Key | null | undefined) => {
+            data.body.map((body, key: Key | null | undefined) => {
               const cssOfSelected = () =>
-                chatInfo.threadId === thread.threadId ? ' bg-gpt-gray' : '';
+                chatInfo.threadId === body.threadId ? ' bg-gpt-gray' : '';
 
               return (
                 <Link
-                  href={'/chats/' + thread.chatId}
+                  href={'/chats/' + body.chatId}
                   className={
                     'group mx-2 flex h-12 cursor-pointer items-center gap-3 rounded-md p-2 hover:bg-[#2A2B32]' +
                     cssOfSelected()
@@ -109,7 +108,7 @@ export const LeftSidebar = () => {
                 >
                   <BiComment size={20} />
                   <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap break-all">
-                    {thread.name}
+                    {body.name}
                   </p>
                   <RiDeleteBinLine
                     size={20}

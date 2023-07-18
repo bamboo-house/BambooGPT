@@ -28,6 +28,9 @@ export const ChatMessageForm = () => {
   };
 
   const handleSubmit = async () => {
+    if (!prompt) {
+      return;
+    }
     setIsReceiving(true);
 
     const newChatMessageList: ChatCompletionRequestMessage[] = [

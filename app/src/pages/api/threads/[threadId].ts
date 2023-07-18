@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'DELETE':
         console.log('DELETEするよー');
         console.log(threadId);
-        // await threadGateway.delete(threadId);
+        await threadGateway.delete(threadId);
         res.status(200).json({ success: true });
         break;
       default:
