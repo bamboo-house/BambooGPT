@@ -22,6 +22,7 @@ export const LeftSidebar = () => {
   const chatInfo = useRecoilValue(chatInfoState);
   const resetChatInfo = useResetRecoilState(chatInfoState);
   const resetChatMessageList = useResetRecoilState(chatMessageListState);
+  const router = useRouter();
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const { data } = useThreadListWithLatestChat(currentUser.idToken);
@@ -40,7 +41,8 @@ export const LeftSidebar = () => {
     e.preventDefault();
     await deleteAllThread();
     mutate(['/api/threads/latest/chat', currentUser.idToken]);
-    handleChangeStateReset;
+    handleChangeStateReset();
+    router.push('/');
   };
 
   const handleDeleteThread = async (e: any) => {
@@ -48,7 +50,8 @@ export const LeftSidebar = () => {
     const threadId = e.currentTarget.id;
     await deleteThread(threadId);
     mutate(['/api/threads/latest/chat', currentUser.idToken]);
-    handleChangeStateReset;
+    handleChangeStateReset();
+    router.push('/');
   };
 
   return (

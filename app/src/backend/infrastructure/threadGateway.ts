@@ -144,9 +144,7 @@ export class ThreadGateway {
     try {
       const threadDocSnapshot = await getDocs(q);
       threadDocSnapshot.forEach(async (doc) => {
-        await updateDoc(doc.ref, { deletedAt: deletedAt }).then(() => {
-          console.log('Document successfully updated!');
-        });
+        await updateDoc(doc.ref, { deletedAt: deletedAt });
       });
     } catch (error) {
       console.error(error);
