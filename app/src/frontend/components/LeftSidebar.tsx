@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Key, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { Key, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { BiComment } from 'react-icons/bi';
 import { FiLogOut } from 'react-icons/fi';
@@ -29,9 +30,16 @@ export const LeftSidebar = () => {
     await logout();
   };
 
-  const handleDeleteThread = async () => {
-    deleteThread(chatInfo.threadId);
+  const handleChangeStateReset = () => {
+    resetChatMessageList();
+    resetChatInfo();
+  };
+
+  const handleDeleteThread = async (e: any) => {
+    const threadId = e.currentTarget.id;
+    await deleteThread(threadId);
     mutate(['/api/threads/latest/chat', currentUser.idToken]);
+    handleChangeStateReset;
   };
 
   return (
@@ -79,10 +87,7 @@ export const LeftSidebar = () => {
         <Link
           href={'/'}
           className="mb-5 ml-2 mr-8 mt-3 flex cursor-pointer items-center gap-3 rounded-md border border-zinc-500 p-3 hover:bg-[#2A2B32]"
-          onClick={() => {
-            resetChatMessageList();
-            resetChatInfo();
-          }}
+          onClick={handleChangeStateReset}
         >
           <AiOutlinePlus size={19} />
           <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap break-all">
@@ -112,8 +117,9 @@ export const LeftSidebar = () => {
                   </p>
                   <RiDeleteBinLine
                     size={20}
-                    className="invisible rounded text-gray-300 hover:bg-gray-500 hover:text-white group-hover:visible"
-                    onClick={handleDeleteThread}
+                    className="rounded text-gray-300 hover:bg-gray-500 hover:text-white"
+                    id={body.threadId}
+                    onClick={(e) => handleDeleteThread(e)}
                   />
                 </Link>
               );

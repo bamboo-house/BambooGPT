@@ -118,8 +118,8 @@ export class ThreadGateway {
       const docRef = doc(this._collection, threadId);
       const deletedAt = serverTimestamp();
 
-      updateDoc(docRef, { deletedAt: deletedAt }).then((docRef) => {
-        console.log('Document successfully updated!', docRef);
+      updateDoc(docRef, { deletedAt: deletedAt }).then(() => {
+        console.log('Document successfully updated!');
       });
     } catch (error) {
       console.error(error);

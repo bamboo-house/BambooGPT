@@ -83,6 +83,7 @@ export class ChatGateway {
       if (chatDocSnapshot.exists() && chatDocSnapshot.data() !== undefined) {
         chat = chatDocSnapshot.data();
         if (!chat) return undefined;
+        if (chat.deletedAt !== null) return undefined;
       } else {
         return undefined;
       }
@@ -106,6 +107,7 @@ export class ChatGateway {
     const q = query(
       this._collection,
       where('thread', '==', threadDoc),
+      where('deletedAt', '==', null),
       orderBy('updatedAt', 'desc'),
       limit(1)
     );
