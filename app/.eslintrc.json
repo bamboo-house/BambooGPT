@@ -19,7 +19,7 @@
     "tailwindcss/no-custom-classname": [
       1,
       {
-        "whitelist": ["(bg-|border-|'')gpt\\-(dark|gray|gray2)", "bg-gpt-linear-gradient"]
+        "whitelist": ["(bg-|border-|'')gpt\\-(dark|gray|gray2|delete)", "bg-gpt-linear-gradient"]
       }
     ],
     // カスタムクラスを作ると、prettierと競合するので無効にする（prettierで自動整形されるのでOK）

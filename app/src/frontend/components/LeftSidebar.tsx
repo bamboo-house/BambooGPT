@@ -37,7 +37,7 @@ export const LeftSidebar = () => {
     resetChatInfo();
   };
 
-  const handleAllDeleteThread = async (e: any) => {
+  const handleDeleteAllThread = async (e: any) => {
     e.preventDefault();
     await deleteAllThread();
     mutate(['/api/threads/latest/chat', currentUser.idToken]);
@@ -81,12 +81,19 @@ export const LeftSidebar = () => {
         <Modal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)}>
           <div className="absolute left-60 top-[-40px] w-52 rounded bg-black">
             <ul className="p-3">
-              <li className="flex items-center gap-3 rounded p-2 ">
+              {/* <li className="flex items-center gap-3 rounded p-2 ">
                 <IoSettingsOutline size={17} />
                 <div>Settings</div>
+              </li> */}
+              <li
+                className="flex cursor-pointer items-center gap-3 rounded p-2 hover:bg-gpt-delete"
+                onClick={handleDeleteAllThread}
+              >
+                <RiDeleteBinLine size={17} />
+                <div>Clear all chats</div>
               </li>
               <li
-                className="flex items-center gap-3 rounded p-2 hover:bg-gpt-gray"
+                className="flex cursor-pointer items-center gap-3 rounded p-2 hover:bg-gpt-gray"
                 onClick={handleChangeLogout}
               >
                 <FiLogOut size={17} />
@@ -106,13 +113,6 @@ export const LeftSidebar = () => {
             New Chat
           </p>
         </Link>
-
-        <button
-          className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
-          onClick={handleAllDeleteThread}
-        >
-          delete All
-        </button>
 
         <div className="my-2 h-4/5 flex-1 overflow-y-auto overflow-x-hidden">
           {data &&
@@ -136,7 +136,7 @@ export const LeftSidebar = () => {
                   </p>
                   <RiDeleteBinLine
                     size={20}
-                    className="rounded text-gray-300 hover:bg-gray-500 hover:text-white"
+                    className="invisible rounded text-gray-300 hover:bg-gray-500 hover:text-white group-hover:visible"
                     id={body.threadId}
                     onClick={(e) => handleDeleteThread(e)}
                   />

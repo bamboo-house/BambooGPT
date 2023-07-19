@@ -16,6 +16,7 @@ module.exports = {
         'gpt-dark': '#202123',
         'gpt-gray': '#353742',
         'gpt-gray2': '#40414E',
+        'gpt-delete': '#430D12',
       },
       backgroundImage: {
         'gpt-linear-gradient': 'linear-gradient(180deg,rgba(53,55,64,0),#353740 58.85%)',
