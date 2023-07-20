@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { ThreadGateway } from '@/backend/infrastructure/threadGateway';
 import { verifyAndAuthenticateUser } from '@/backend/utils/verifyAndAuthenticateUser';
 import { ResGetThread } from '@/bff/types/thread';
+import { ChatGateway } from '@/backend/infrastructure/chatGateway';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -13,6 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await verifyAndAuthenticateUser(idToken as string);
 
     const threadGateway = new ThreadGateway();
+    const chatGateway = new ChatGateway();
     const threadId = req.query.threadId as string;
 
     switch (req.method) {
@@ -29,7 +31,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(200).json(resGetBody);
         break;
       case 'DELETE':
+        /* 
+          threadを削除するとき、threadに紐づくchatも削除しても良い。
+          「threadは削除されているが、chatは残っている」という状態は、ビジネス的にもないため。（フロントでリクエストを分けることもない）
+          ThreadGateWayでchat削除しないのは、ThreadGatewayはthreadに対してのみ操作対象とするため。
+        */
         await threadGateway.delete(threadId);
+        await chatGateway.deleteAllByThreadId(threadId);
         res.status(200).json({ success: true });
         break;
       default:

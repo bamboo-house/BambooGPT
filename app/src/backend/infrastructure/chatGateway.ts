@@ -10,6 +10,7 @@ import {
   query,
   serverTimestamp,
   setDoc,
+  updateDoc,
   where,
 } from 'firebase/firestore';
 import { CreateChatCompletionRequest } from 'openai';
@@ -153,5 +154,30 @@ export class ChatGateway {
       throw new Error(`chatドキュメントを取得できませんでした: ${error}`);
     }
     return chatRecords;
+  }
+
+  async deleteAllByThreadId(threadId: string): Promise<void> {
+    const threadDocRef = doc(getFirestore(), 'threads', threadId);
+    if (!threadDocRef) {
+      console.error('chatGateway.ts：スレッドが存在しません');
+      throw new Error('chatGateway.ts：スレッドが存在しません');
+    }
+    const deletedAt = serverTimestamp();
+    const q = query(
+      this._collection,
+      where('thread', '==', threadDocRef),
+      where('deletedAt', '==', null)
+    );
+    try {
+      const chatDocSnapshot = await getDocs(q);
+      chatDocSnapshot.forEach(async (doc) => {
+        await updateDoc(doc.ref, { deletedAt: deletedAt }).then(() => {
+          console.log('Chat Document successfully deleted!', doc.ref.id);
+        });
+      });
+    } catch (error) {
+      console.error(error);
+      throw new Error(`全てのchatを削除できませんでした: ${error}`);
+    }
   }
 }

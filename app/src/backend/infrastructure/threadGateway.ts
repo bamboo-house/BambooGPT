@@ -119,7 +119,7 @@ export class ThreadGateway {
       const deletedAt = serverTimestamp();
 
       await updateDoc(docRef, { deletedAt: deletedAt }).then(() => {
-        console.log('Document successfully updated!');
+        console.log('Thread Document successfully deleted!', docRef.id);
       });
     } catch (error) {
       console.error(error);
@@ -144,7 +144,9 @@ export class ThreadGateway {
     try {
       const threadDocSnapshot = await getDocs(q);
       threadDocSnapshot.forEach(async (doc) => {
-        await updateDoc(doc.ref, { deletedAt: deletedAt });
+        await updateDoc(doc.ref, { deletedAt: deletedAt }).then(() => {
+          console.log('Thread Document successfully deleted!', doc.ref.id);
+        });
       });
     } catch (error) {
       console.error(error);

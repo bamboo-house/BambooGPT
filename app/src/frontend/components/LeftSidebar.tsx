@@ -5,7 +5,6 @@ import { Key, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { BiComment } from 'react-icons/bi';
 import { FiLogOut } from 'react-icons/fi';
-import { IoSettingsOutline } from 'react-icons/io5';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { mutate } from 'swr';
