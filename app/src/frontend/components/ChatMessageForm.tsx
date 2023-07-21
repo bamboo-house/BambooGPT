@@ -78,23 +78,14 @@ export const ChatMessageForm = () => {
   };
 
   const resizeTextarea = () => {
-    // textarea要素
     const textarea: any = document.getElementById('promptTextAreaId');
     if (!textarea) {
       return;
     }
-    // textareaそ要素のlineheight
-    let lineHeight: any = getComputedStyle(textarea).lineHeight;
-    // "19.6px" のようなピクセル値が返ってくるので、数字だけにする
-    lineHeight = lineHeight.replace(/[^-\d\.]/g, '');
-
-    // textarea要素に入力された値の行数
-    const lines = (textarea.value + '\n').match(/\n/g)?.length;
-    if (!lines) {
-      return;
-    }
-    // 高さを再計算
-    textarea.style.height = lineHeight * lines + 'px';
+    // textareaの高さを初期化して元のサイズに戻す
+    textarea.style.height = 'auto';
+    const scrollHeight = textarea.scrollHeight;
+    textarea.style.height = scrollHeight + 'px';
   };
 
   // textareaにautofocusする
