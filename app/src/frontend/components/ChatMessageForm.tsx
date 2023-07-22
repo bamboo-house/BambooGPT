@@ -20,6 +20,9 @@ export const ChatMessageForm = () => {
   const [prompt, setPrompt] = useState('');
   const { mutate } = useSWRConfig();
 
+  const abortController = new AbortController();
+  const signal = abortController.signal;
+
   const handleTextareaKeydown = (e: any) => {
     // 「cmd + Enter」かつ「レスポンスを受信中でない」場合、送信する
     if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && !isReceiving) {
@@ -65,7 +68,8 @@ export const ChatMessageForm = () => {
               return [...prev.slice(0, -1), { role: 'assistant', content: lastEle.content + res }];
             }
             return [...prev, { role: 'assistant', content: res }];
-          })
+          }),
+        abortController
       );
 
       // LeftSidebarのスレッド一覧を更新する
@@ -96,8 +100,19 @@ export const ChatMessageForm = () => {
     }
   }, [chatInfo]);
 
+  const cancel = () => {
+    console.log(abortController);
+    abortController.abort();
+  };
+
   return (
     <div className="absolute inset-x-0 bottom-0 bg-gpt-linear-gradient pb-16">
+      <button
+        className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
+        onClick={cancel}
+      >
+        cancelするべ
+      </button>
       <div className="relative mx-auto my-2 max-w-3xl rounded-xl pb-2 pl-3 pt-3 dark:bg-gpt-gray2 tb:mx-3">
         <textarea
           id="promptTextAreaId"
