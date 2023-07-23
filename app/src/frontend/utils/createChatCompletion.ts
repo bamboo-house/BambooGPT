@@ -9,7 +9,7 @@ export const createChatCompletion = async (
   messages: ChatCompletionRequestMessage[],
   chatOption: ChatOption,
   resText: (text: string) => void,
-  abortController: AbortController
+  signal: AbortSignal
 ) => {
   const reqBody: ReqPostOpenaiChat = {
     uid: uid,
@@ -37,7 +37,7 @@ export const createChatCompletion = async (
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(reqBody),
-    signal: abortController.signal,
+    signal: signal,
   });
 
   if (!response.body) {

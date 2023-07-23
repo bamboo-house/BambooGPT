@@ -19,9 +19,7 @@ export const ChatMessageForm = () => {
   const [isReceiving, setIsReceiving] = useState(false);
   const [prompt, setPrompt] = useState('');
   const { mutate } = useSWRConfig();
-
-  const abortController = new AbortController();
-  const signal = abortController.signal;
+  const [abortController, setAbortController] = useState(new AbortController());
 
   const handleTextareaKeydown = (e: any) => {
     // 「cmd + Enter」かつ「レスポンスを受信中でない」場合、送信する
@@ -69,13 +67,17 @@ export const ChatMessageForm = () => {
             }
             return [...prev, { role: 'assistant', content: res }];
           }),
-        abortController
+        abortController.signal
       );
 
       // LeftSidebarのスレッド一覧を更新する
       mutate(['/api/threads/latest/chat', currentUser.idToken]);
     } catch (e) {
-      console.error(e);
+      if (e.name === 'AbortError') {
+        console.log('Fetch aborted by user.');
+      } else {
+        console.error(e);
+      }
     }
 
     setIsReceiving(false);
@@ -101,8 +103,10 @@ export const ChatMessageForm = () => {
   }, [chatInfo]);
 
   const cancel = () => {
-    console.log(abortController);
-    abortController.abort();
+    if (abortController) {
+      abortController.abort();
+      setAbortController(new AbortController());
+    }
   };
 
   return (
