@@ -58,7 +58,7 @@ export const ChatLog = () => {
                       />
                     </div>
                     <div
-                      className="w-[calc(100%-50px)] gap-3 text-[#d1d5db]"
+                      className="w-[calc(100%-50px)] gap-3 text-gray-300"
                       style={{ whiteSpace: 'pre-line' }}
                     >
                       {data.content}

@@ -2,6 +2,14 @@ import { ChatCompletionRequestMessage } from 'openai';
 import { ChatOption } from '../globalStates/atoms/chatAtom';
 import { ReqPostOpenaiChat } from '@/bff/types/openai/chats';
 
+/*
+  仕様メモ
+  ・リクエストの度に、新しいドキュメントデータを作成する
+  ・途中でabortした場合でも、ドキュメントには完全なresponseが保存される
+  ・よって、チャットの途中でstate更新されなくなるが、
+    /chats/:id にアクセスすると、完全なresponseを含めたドキュメントが返る
+*/
+
 export const createChatCompletion = async (
   uid: string,
   threadId: string,
