@@ -2,12 +2,14 @@ import { ChatCompletionRequestMessage } from 'openai';
 import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useSWRConfig } from 'swr';
+import { chatAbortControllerState } from '../globalStates/atoms/chatAbortControllerAtom';
 import {
   chatInfoState,
   chatMessageListState,
   chatOptionState,
 } from '../globalStates/atoms/chatAtom';
 import { currentUserState } from '../globalStates/atoms/currentUserAtom';
+import { useChatAbortController } from '../hooks/useChatAbortController';
 import { createChatCompletion } from '../utils/createChatCompletion';
 import { createThread } from '../utils/createThread';
 
@@ -19,7 +21,7 @@ export const ChatMessageForm = () => {
   const [isReceiving, setIsReceiving] = useState(false);
   const [prompt, setPrompt] = useState('');
   const { mutate } = useSWRConfig();
-  const [abortController, setAbortController] = useState(new AbortController());
+  const { chatAbortController, abortChat } = useChatAbortController();
 
   const handleTextareaKeydown = (e: any) => {
     // 「cmd + Enter」かつ「レスポンスを受信中でない」場合、送信する
@@ -67,7 +69,7 @@ export const ChatMessageForm = () => {
             }
             return [...prev, { role: 'assistant', content: res }];
           }),
-        abortController.signal
+        chatAbortController.signal
       );
 
       // LeftSidebarのスレッド一覧を更新する
@@ -81,6 +83,10 @@ export const ChatMessageForm = () => {
     }
 
     setIsReceiving(false);
+  };
+
+  const handleAbort = () => {
+    abortChat();
   };
 
   const resizeTextarea = () => {
@@ -102,18 +108,11 @@ export const ChatMessageForm = () => {
     }
   }, [chatInfo]);
 
-  const cancel = () => {
-    if (abortController) {
-      abortController.abort();
-      setAbortController(new AbortController());
-    }
-  };
-
   return (
     <div className="absolute inset-x-0 bottom-0 bg-gpt-linear-gradient pb-16">
       <button
         className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
-        onClick={cancel}
+        onClick={handleAbort}
       >
         cancelするべ
       </button>

@@ -10,6 +10,7 @@ import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { mutate } from 'swr';
 import { chatInfoState, chatMessageListState } from '../globalStates/atoms/chatAtom';
 import { currentUserState } from '../globalStates/atoms/currentUserAtom';
+import { useChatAbortController } from '../hooks/useChatAbortController';
 import { useThreadListWithLatestChat } from '../hooks/useThreadListWithLatestChat';
 import { deleteAllThread } from '../utils/deleteAllThread';
 import { deleteThread } from '../utils/deleteThread';
@@ -21,11 +22,11 @@ export const LeftSidebar = () => {
   const chatInfo = useRecoilValue(chatInfoState);
   const resetChatInfo = useResetRecoilState(chatInfoState);
   const resetChatMessageList = useResetRecoilState(chatMessageListState);
-  const router = useRouter();
-
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const { data } = useThreadListWithLatestChat(currentUser.idToken);
   const { logout } = useFirebaseAuth();
+  const { abortChat } = useChatAbortController();
+  const router = useRouter();
 
   const handleChangeLogout = async () => {
     await logout();
@@ -50,7 +51,13 @@ export const LeftSidebar = () => {
     await deleteThread(threadId);
     mutate(['/api/threads/latest/chat', currentUser.idToken]);
     handleChangeStateReset();
+    // トップページに戻さないと、削除したchatのurlのままになる。
+    // ユーザー体験上は問題ないが、バグ回避の為にも戻す。
     router.push('/');
+  };
+
+  const handleAbort = () => {
+    abortChat();
   };
 
   return (
@@ -128,6 +135,7 @@ export const LeftSidebar = () => {
                     cssOfSelected()
                   }
                   key={key}
+                  onClick={handleAbort}
                 >
                   <BiComment size={20} />
                   <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap break-all">

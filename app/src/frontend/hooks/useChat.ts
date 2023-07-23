@@ -1,4 +1,3 @@
-import { useRecoilState } from 'recoil';
 import useSWR from 'swr';
 import { ResGetChat } from '@/bff/types/chat';
 
