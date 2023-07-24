@@ -1,4 +1,5 @@
 import hljs from 'highlight.js';
+import { escape } from 'lodash';
 import Image from 'next/image';
 import { useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
@@ -65,12 +66,9 @@ export const ChatLog = () => {
                           className="rounded-sm"
                         />
                       </div>
-                      <div
-                        className="w-[calc(100%-50px)] gap-3 text-gray-300"
-                        style={{ whiteSpace: 'pre-line' }}
-                      >
+                      <div className="w-[calc(100%-50px)] gap-3 whitespace-pre-line text-gray-300	">
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                          {data.content || ''}
+                          {data.content ? data.content : ''}
                         </ReactMarkdown>
                       </div>
                     </div>

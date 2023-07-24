@@ -12,9 +12,11 @@
     "test:watch": "jest -- watch"
   },
   "dependencies": {
+    "@types/lodash": "^4.14.195",
     "firebase": "^9.19.1",
     "firebase-admin": "^11.5.0",
     "highlight.js": "^11.8.0",
+    "lodash": "^4.17.21",
     "next": "13.2.4",
     "next-themes": "^0.2.1",
     "openai": "^3.2.1",
