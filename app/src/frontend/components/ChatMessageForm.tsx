@@ -35,6 +35,7 @@ export const ChatMessageForm = () => {
       return;
     }
     setIsReceiving(true);
+    setPrompt('');
 
     const newChatMessageList: ChatCompletionRequestMessage[] = [
       ...chatMessageList,

@@ -1,6 +1,9 @@
+import hljs from 'highlight.js';
 import Image from 'next/image';
 import { useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { useRecoilValue } from 'recoil';
+import remarkGfm from 'remark-gfm';
 import { chatMessageListState } from '../globalStates/atoms/chatAtom';
 
 export const ChatLog = () => {
@@ -13,6 +16,10 @@ export const ChatLog = () => {
       scrollInner.scrollTop = scrollInner.scrollHeight;
     }
   }, [chatMessageList]);
+
+  useEffect(() => {
+    hljs.highlightAll();
+  }, []);
 
   return (
     <div className="flex-1 overflow-y-auto overflow-x-hidden" id="scroll_inner">
@@ -61,7 +68,8 @@ export const ChatLog = () => {
                       className="w-[calc(100%-50px)] gap-3 text-gray-300"
                       style={{ whiteSpace: 'pre-line' }}
                     >
-                      {data.content}
+                      <CodeBlock props={data.content} />
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{[data?.content]}</ReactMarkdown>
                     </div>
                   </div>
                 </div>
@@ -74,4 +82,9 @@ export const ChatLog = () => {
       </div>
     </div>
   );
+};
+
+const CodeBlock = (props: any) => {
+  console.log(props);
+  return <ReactMarkdown remarkPlugins={[remarkGfm]}>{props.props}</ReactMarkdown>;
 };

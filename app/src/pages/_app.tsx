@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { RecoilRoot, useRecoilSnapshot } from 'recoil';
 import { AppWrapper } from './AppWrapper';
 import { initializeFirebaseForFE } from '@/frontend/utils/initializeFirebaseForFE';
+import 'highlight.js/styles/github-dark.css';
 
 export default function App({ Component, pageProps }: AppProps) {
   // firebase/authの初期化
