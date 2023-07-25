@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Key, useState } from 'react';
+import { Key, useEffect, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { BiComment } from 'react-icons/bi';
 import { FiLogOut } from 'react-icons/fi';
@@ -60,6 +60,9 @@ export const LeftSidebar = () => {
     abortChat();
   };
 
+  useEffect(() => {
+    console.log(data);
+  });
   return (
     <div className="top-leftsidebar relative h-full w-64 flex-none md:w-0">
       <div className="fixed left-0 top-0 z-10 h-full w-[inherit] bg-gpt-dark text-sm md:hidden">
@@ -112,7 +115,10 @@ export const LeftSidebar = () => {
         <Link
           href={'/'}
           className="mb-5 ml-2 mr-8 mt-3 flex cursor-pointer items-center gap-3 rounded-md border border-zinc-500 p-3 hover:bg-[#2A2B32]"
-          onClick={handleChangeStateReset}
+          onClick={() => {
+            handleAbort();
+            handleChangeStateReset();
+          }}
         >
           <AiOutlinePlus size={19} />
           <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap break-all">
