@@ -60,9 +60,6 @@ export const LeftSidebar = () => {
     abortChat();
   };
 
-  useEffect(() => {
-    console.log(data);
-  });
   return (
     <div className="top-leftsidebar relative h-full w-64 flex-none md:w-0">
       <div className="fixed left-0 top-0 z-10 h-full w-[inherit] bg-gpt-dark text-sm md:hidden">
