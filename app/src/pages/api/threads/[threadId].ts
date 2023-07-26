@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { ChatGateway } from '@/backend/infrastructure/chatGateway';
 import { ThreadGateway } from '@/backend/infrastructure/threadGateway';
 import { verifyAndAuthenticateUser } from '@/backend/utils/verifyAndAuthenticateUser';
 import { ResGetThread } from '@/bff/types/thread';
-import { ChatGateway } from '@/backend/infrastructure/chatGateway';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {

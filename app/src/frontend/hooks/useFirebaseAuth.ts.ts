@@ -49,7 +49,6 @@ export const useFirebaseAuth = () => {
 
       // ログイン成功の処理
       const resBody: ResLoginGoogle = await response.json();
-      console.log('resBody', resBody);
 
       if (resBody.body) {
         setCurrentUser({

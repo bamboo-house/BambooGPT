@@ -83,8 +83,10 @@ export const ChatLog = () => {
                                   />
                                 </div>
                               ) : (
-                                <code {...props} className={className}>
+                                <code {...props} style={{ color: 'white' }} className={className}>
+                                  <span>`</span>
                                   {children}
+                                  <span>`</span>
                                 </code>
                               );
                             },
