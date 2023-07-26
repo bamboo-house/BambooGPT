@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import okaidia from 'react-syntax-highlighter/dist/cjs/styles/prism/okaidia';
 import { useRecoilValue } from 'recoil';
+import remarkGfm from 'remark-gfm';
 import { chatMessageListState } from '../globalStates/atoms/chatAtom';
 
 export const ChatLog = () => {
@@ -17,6 +18,20 @@ export const ChatLog = () => {
       scrollInner.scrollTop = scrollInner.scrollHeight;
     }
   }, [chatMessageList]);
+
+  const markdown = `A paragraph with *emphasis* and **strong importance**.
+
+  > A block quote with ~strikethrough~ and a URL: https://reactjs.org.
+
+  * Lists
+  * [ ] todo
+  * [x] done
+
+  A table:
+
+  | a | b |
+  | - | - |
+  `;
 
   return (
     <div className="flex-1 overflow-y-auto overflow-x-hidden" id="scroll_inner">
@@ -62,11 +77,12 @@ export const ChatLog = () => {
                           className="rounded-sm"
                         />
                       </div>
-                      <div className="w-[calc(100%-50px)] gap-3 whitespace-pre-line text-gray-300	">
+                      <div className="-my-5 w-[calc(100%-50px)] gap-3	text-gray-300">
                         <ReactMarkdown
                           children={data.content || ''}
+                          remarkPlugins={[remarkGfm]}
                           components={{
-                            code({ node, inline, className, children, ...props }) {
+                            code({ inline, className, children, ...props }) {
                               const match = /language-(\w+)/.exec(className || '');
                               return !inline && match ? (
                                 <div>
@@ -90,6 +106,21 @@ export const ChatLog = () => {
                                 </code>
                               );
                             },
+                            p: ({ children, ...props }) => (
+                              <p className="my-5" {...props}>
+                                {children}
+                              </p>
+                            ),
+                            ul: ({ children, ...props }) => (
+                              <ul className="ml-5 list-disc" {...props}>
+                                {children}
+                              </ul>
+                            ),
+                            ol: ({ children, ...props }) => (
+                              <ol className="ml-5 list-decimal" {...props}>
+                                {children}
+                              </ol>
+                            ),
                           }}
                         />
                       </div>
