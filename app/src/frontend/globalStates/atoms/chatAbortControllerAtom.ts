@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
 
 export const chatAbortControllerState = atom<AbortController>({
-  key: 'abortControllerState',
+  key: 'chatAbortControllerState',
   default: new AbortController(),
 });

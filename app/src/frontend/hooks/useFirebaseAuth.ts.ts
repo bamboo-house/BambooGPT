@@ -50,6 +50,12 @@ export const useFirebaseAuth = () => {
       // ログイン成功の処理
       const resBody: ResLoginGoogle = await response.json();
 
+      // Todo：ログイン失敗の処理を作り込む
+      if (resBody.error) {
+        console.log(resBody.error.message);
+        throw new Error(resBody.error.message);
+      }
+
       if (resBody.body) {
         setCurrentUser({
           uid: result.user.uid,
@@ -60,6 +66,7 @@ export const useFirebaseAuth = () => {
       }
     } catch (error) {
       console.log(error);
+      throw new Error(error.message);
     }
   };
 
