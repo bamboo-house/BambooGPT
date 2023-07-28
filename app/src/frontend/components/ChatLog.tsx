@@ -111,12 +111,12 @@ export const ChatLog = () => {
                                 {children}
                               </p>
                             ),
-                            ul: ({ children, ...props }) => (
+                            ul: ({ children, ordered, ...props }) => (
                               <ul className="ml-5 list-disc" {...props}>
                                 {children}
                               </ul>
                             ),
-                            ol: ({ children, ...props }) => (
+                            ol: ({ children, ordered, ...props }) => (
                               <ol className="ml-5 list-decimal" {...props}>
                                 {children}
                               </ol>
