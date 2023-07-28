@@ -19,7 +19,7 @@ export const chatOptionState = atom<ChatOption>({
     n: 1,
     stream: true,
     stop: undefined,
-    max_tokens: undefined,
+    max_tokens: 256,
     presence_penalty: 0,
     frequency_penalty: 0,
     logit_bias: undefined,

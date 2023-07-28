@@ -33,6 +33,8 @@ export class OpenaiChatsService {
         user,
       } = chatContent;
 
+      console.log('chatContent', chatContent);
+
       // Todo：引数にコールバック関数を渡さずに、pipeで結果を取得するなどして責務で分離すべき
       const result = await this._openaiFeature.createChatCompletion({
         model: model,
@@ -42,7 +44,7 @@ export class OpenaiChatsService {
         n: n,
         stream: true,
         stop: stop,
-        max_tokens: 250,
+        max_tokens: max_tokens,
         presence_penalty: presence_penalty,
         frequency_penalty: frequency_penalty,
         logit_bias: logit_bias,
