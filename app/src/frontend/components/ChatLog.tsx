@@ -19,20 +19,6 @@ export const ChatLog = () => {
     }
   }, [chatMessageList]);
 
-  const markdown = `A paragraph with *emphasis* and **strong importance**.
-
-  > A block quote with ~strikethrough~ and a URL: https://reactjs.org.
-
-  * Lists
-  * [ ] todo
-  * [x] done
-
-  A table:
-
-  | a | b |
-  | - | - |
-  `;
-
   return (
     <div className="flex-1 overflow-y-auto overflow-x-hidden" id="scroll_inner">
       {/* 2023/06/05 良いかわからないが「flex: 1;」で、スクロールとメッセージフォームの固定を実現する。 
@@ -112,12 +98,12 @@ export const ChatLog = () => {
                               </p>
                             ),
                             ul: ({ children, ordered, ...props }) => (
-                              <ul className="ml-5 list-disc" {...props}>
+                              <ul className="my-5 ml-5 list-disc" {...props}>
                                 {children}
                               </ul>
                             ),
                             ol: ({ children, ordered, ...props }) => (
-                              <ol className="ml-5 list-decimal" {...props}>
+                              <ol className="my-5 ml-5 list-decimal" {...props}>
                                 {children}
                               </ol>
                             ),

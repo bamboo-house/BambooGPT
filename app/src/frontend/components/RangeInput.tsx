@@ -25,7 +25,7 @@ export const RangeInput = ({
         <span className="flex-auto">{label}</span>
         <input
           type="text"
-          className="w-10 bg-transparent pr-1 text-right"
+          className="w-12 bg-transparent pr-1 text-right"
           name={name}
           value={displayValue}
           onInput={onInput}

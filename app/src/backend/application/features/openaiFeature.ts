@@ -119,7 +119,6 @@ export class OpenaiFeature {
           reject(error);
         });
       } catch (error) {
-        console.error(error);
         reject(error);
       }
     });

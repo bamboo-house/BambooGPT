@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { chatOptionState } from '../globalStates/atoms/chatAtom';
 import { isOpenedRightSidebarState } from '../globalStates/atoms/isOpenedRightSidebarAtom';
@@ -6,7 +6,7 @@ import { CreatableSelectWrapper } from './CreatableSelectWrapper';
 import { RangeInput } from './RangeInput';
 
 export const RightSidebar = () => {
-  const [chatOption, setChatOption] = useRecoilState<any>(chatOptionState);
+  const [chatOption, setChatOption] = useRecoilState(chatOptionState);
   // バー入力と数値入力の共存を実現させるために別のstateを定義する
   const [chatOptionForDisplay, setChatOptionForDisplay] = useState<any>(chatOption);
   const isOpenedRightSidebar = useRecoilValue(isOpenedRightSidebarState);
@@ -30,18 +30,32 @@ export const RightSidebar = () => {
 
   const handleChangeCreatableSelect = (e: any) => {
     const values = e.map((element: any) => element.value);
-    setChatOption({ ...chatOption, stop: values });
+    if (values.length < 5) {
+      setChatOption({ ...chatOption, stop: values });
+    } else {
+      console.log("You can't select more than 5 items.");
+    }
   };
 
   const rangeInputValidation = (name: string, value: string): string => {
     let result: any = value;
     switch (name) {
       case 'temperature':
-      case 'presence_penalty':
-      case 'frequency_penalty':
         if (isNaN(Number(value))) {
           result = 1;
         } else if (result < 0) {
+          result = 0;
+        } else if (result > 2) {
+          result = 2;
+        }
+        break;
+      case 'presence_penalty':
+      case 'frequency_penalty':
+        if (value === '-') {
+          return value;
+        } else if (isNaN(Number(value))) {
+          result = 1;
+        } else if (result < -2) {
           result = 0;
         } else if (result > 2) {
           result = 2;
@@ -70,7 +84,7 @@ export const RightSidebar = () => {
             label="Temperature"
             name="temperature"
             displayValue={chatOptionForDisplay.temperature}
-            rangeValue={chatOption.temperature}
+            rangeValue={chatOption.temperature || 1}
             min={0.0}
             max={2.0}
             step={0.01}
@@ -81,7 +95,7 @@ export const RightSidebar = () => {
             label="Top P"
             name="top_p"
             displayValue={chatOptionForDisplay.top_p}
-            rangeValue={chatOption.top_p}
+            rangeValue={chatOption.top_p || 1}
             min={0.0}
             max={1}
             step={0.01}
@@ -99,8 +113,8 @@ export const RightSidebar = () => {
             label="Frequency Penalty"
             name="frequency_penalty"
             displayValue={chatOptionForDisplay.frequency_penalty}
-            rangeValue={chatOption.frequency_penalty}
-            min={0.0}
+            rangeValue={chatOption.frequency_penalty || 0}
+            min={-2.0}
             max={2.0}
             step={0.01}
             onInput={handleChangeRange}
@@ -110,8 +124,8 @@ export const RightSidebar = () => {
             label="Presence Penalty"
             name="presence_penalty"
             displayValue={chatOptionForDisplay.presence_penalty}
-            rangeValue={chatOption.presence_penalty}
-            min={0.0}
+            rangeValue={chatOption.presence_penalty || 0}
+            min={-2.0}
             max={2.0}
             step={0.01}
             onInput={handleChangeRange}

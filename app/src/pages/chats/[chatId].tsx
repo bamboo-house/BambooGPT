@@ -36,19 +36,19 @@ export default function Home() {
 
       setChatInfo({ uid: body.uid, threadId: body.threadId, chatId: body.chatId });
       setChatMessageList(chatContent.messages);
-      // setChatOption({
-      //   model: chatContent.model,
-      //   temperature: chatContent.temperature,
-      //   top_p: chatContent.top_p,
-      //   n: chatContent.n,
-      //   stream: chatContent.stream,
-      //   stop: chatContent.stop,
-      //   max_tokens: chatContent.max_tokens,
-      //   presence_penalty: chatContent.presence_penalty,
-      //   frequency_penalty: chatContent.frequency_penalty,
-      //   logit_bias: chatContent.logit_bias,
-      //   user: chatContent.user,
-      // });
+      setChatOption({
+        model: chatContent.model,
+        temperature: chatContent.temperature,
+        top_p: chatContent.top_p,
+        n: chatContent.n,
+        stream: chatContent.stream,
+        stop: chatContent.stop,
+        max_tokens: chatContent.max_tokens,
+        presence_penalty: chatContent.presence_penalty,
+        frequency_penalty: chatContent.frequency_penalty,
+        logit_bias: chatContent.logit_bias,
+        user: undefined,
+      });
     }
   }, [data, setChatInfo, setChatMessageList, setChatOption]);
 

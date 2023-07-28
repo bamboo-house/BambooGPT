@@ -2,12 +2,14 @@ import { ChatCompletionRequestMessage, CreateChatCompletionRequest } from 'opena
 import { atom } from 'recoil';
 
 export type ChatOption = Omit<CreateChatCompletionRequest, 'messages'>;
+
 type ChatInfo = {
   uid: string;
   chatId: string;
   threadId: string;
 };
 
+// firestoreに保存するとき、undefinedはnullになるので、注意すること
 export const chatOptionState = atom<ChatOption>({
   key: 'chatOptionState',
   default: {
