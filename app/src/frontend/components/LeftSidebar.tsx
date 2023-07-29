@@ -8,7 +8,12 @@ import { FiLogOut } from 'react-icons/fi';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { mutate } from 'swr';
-import { chatInfoState, chatMessageListState } from '../globalStates/atoms/chatAtom';
+import {
+  chatInfoState,
+  chatMessageListState,
+  chatOptionForDisplayState,
+  chatOptionState,
+} from '../globalStates/atoms/chatAtom';
 import { currentUserState } from '../globalStates/atoms/currentUserAtom';
 import { useChatAbortController } from '../hooks/useChatAbortController';
 import { useThreadListWithLatestChat } from '../hooks/useThreadListWithLatestChat';
@@ -22,6 +27,8 @@ export const LeftSidebar = () => {
   const chatInfo = useRecoilValue(chatInfoState);
   const resetChatInfo = useResetRecoilState(chatInfoState);
   const resetChatMessageList = useResetRecoilState(chatMessageListState);
+  const resetChatOption = useResetRecoilState(chatOptionState);
+  const resetChatOptionForDisplay = useResetRecoilState(chatOptionForDisplayState);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const { data } = useThreadListWithLatestChat(currentUser.idToken);
   const { logout } = useFirebaseAuth();
@@ -35,6 +42,8 @@ export const LeftSidebar = () => {
   const handleChangeStateReset = () => {
     resetChatMessageList();
     resetChatInfo();
+    resetChatOption();
+    resetChatOptionForDisplay();
   };
 
   const handleDeleteAllThread = async (e: any) => {

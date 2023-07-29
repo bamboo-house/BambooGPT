@@ -36,3 +36,20 @@ export const chatInfoState = atom<ChatInfo>({
   key: 'chatInfoState',
   default: { uid: '', chatId: '', threadId: '' },
 });
+
+export const chatOptionForDisplayState = atom<any>({
+  key: 'chatOptionForDisplayState',
+  default: {
+    model: 'gpt-3.5-turbo',
+    temperature: 1,
+    top_p: 1,
+    n: 1,
+    stream: true,
+    stop: undefined,
+    max_tokens: 256,
+    presence_penalty: 0,
+    frequency_penalty: 0,
+    logit_bias: undefined,
+    user: undefined,
+  },
+});

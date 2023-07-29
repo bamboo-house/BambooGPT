@@ -55,8 +55,9 @@ export class OpenaiFeature {
             max_tokens: max_tokens,
             presence_penalty: presence_penalty,
             frequency_penalty: frequency_penalty,
-            logit_bias: logit_bias,
-            user: user,
+            // 使う時が来るまでコメントアウトする
+            // logit_bias: logit_bias,
+            // user: user,
           },
           { responseType: 'stream' }
         );

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { chatOptionState } from '../globalStates/atoms/chatAtom';
+import { chatOptionForDisplayState, chatOptionState } from '../globalStates/atoms/chatAtom';
 import { isOpenedRightSidebarState } from '../globalStates/atoms/isOpenedRightSidebarAtom';
 import { CreatableSelectWrapper } from './CreatableSelectWrapper';
 import { RangeInput } from './RangeInput';
@@ -8,12 +8,8 @@ import { RangeInput } from './RangeInput';
 export const RightSidebar = () => {
   const [chatOption, setChatOption] = useRecoilState(chatOptionState);
   // バー入力と数値入力の共存を実現させるために別のstateを定義する
-  const [chatOptionForDisplay, setChatOptionForDisplay] = useState<any>(chatOption);
+  const [chatOptionForDisplay, setChatOptionForDisplay] = useRecoilState(chatOptionForDisplayState);
   const isOpenedRightSidebar = useRecoilValue(isOpenedRightSidebarState);
-
-  const showClass = isOpenedRightSidebar
-    ? 'w-64 flex-none transition-all duration-300 ease-in-out'
-    : 'w-0 transition-all duration-300 ease-in-out';
 
   const handleChangeRange = (e: any) => {
     e.preventDefault();
@@ -76,6 +72,10 @@ export const RightSidebar = () => {
     return result.toString();
   };
 
+  const showClass = isOpenedRightSidebar
+    ? 'w-64 flex-none transition-all duration-300 ease-in-out'
+    : 'w-0 transition-all duration-300 ease-in-out';
+
   return (
     <div className={showClass}>
       <div className="fixed h-full w-[inherit] border border-gpt-gray border-l-zinc-500">
@@ -112,7 +112,7 @@ export const RightSidebar = () => {
           <RangeInput
             label="Frequency Penalty"
             name="frequency_penalty"
-            displayValue={chatOptionForDisplay.frequency_penalty}
+            displayValue={chatOptionForDisplay.frequency_penalty || 0}
             rangeValue={chatOption.frequency_penalty || 0}
             min={-2.0}
             max={2.0}
@@ -123,7 +123,7 @@ export const RightSidebar = () => {
           <RangeInput
             label="Presence Penalty"
             name="presence_penalty"
-            displayValue={chatOptionForDisplay.presence_penalty}
+            displayValue={chatOptionForDisplay.presence_penalty || 0}
             rangeValue={chatOption.presence_penalty || 0}
             min={-2.0}
             max={2.0}

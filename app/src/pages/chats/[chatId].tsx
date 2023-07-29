@@ -11,6 +11,7 @@ import { TopBar } from '@/frontend/components/TopBar';
 import {
   chatInfoState,
   chatMessageListState,
+  chatOptionForDisplayState,
   chatOptionState,
 } from '@/frontend/globalStates/atoms/chatAtom';
 import { currentUserState } from '@/frontend/globalStates/atoms/currentUserAtom';
@@ -20,6 +21,7 @@ export default function Home() {
   const setChatInfo = useSetRecoilState(chatInfoState);
   const setChatMessageList = useSetRecoilState(chatMessageListState);
   const setChatOption = useSetRecoilState(chatOptionState);
+  const setChatOptionForDisplay = useSetRecoilState(chatOptionForDisplayState);
   const currentUser = useRecoilValue(currentUserState);
   const router = useRouter();
   const { chatId } = router.query;
@@ -33,10 +35,7 @@ export default function Home() {
     if (data && !data.error && data.body) {
       const body = data.body;
       const chatContent = body.chatContent;
-
-      setChatInfo({ uid: body.uid, threadId: body.threadId, chatId: body.chatId });
-      setChatMessageList(chatContent.messages);
-      setChatOption({
+      const chatOption = {
         model: chatContent.model,
         temperature: chatContent.temperature,
         top_p: chatContent.top_p,
@@ -44,13 +43,18 @@ export default function Home() {
         stream: chatContent.stream,
         stop: chatContent.stop,
         max_tokens: chatContent.max_tokens,
-        presence_penalty: chatContent.presence_penalty,
-        frequency_penalty: chatContent.frequency_penalty,
+        presence_penalty: chatContent.presence_penalty || 0,
+        frequency_penalty: chatContent.frequency_penalty || 0,
         logit_bias: chatContent.logit_bias,
         user: undefined,
-      });
+      };
+
+      setChatInfo({ uid: body.uid, threadId: body.threadId, chatId: body.chatId });
+      setChatMessageList(chatContent.messages);
+      setChatOption(chatOption);
+      setChatOptionForDisplay(chatOption);
     }
-  }, [data, setChatInfo, setChatMessageList, setChatOption]);
+  }, [data, setChatInfo, setChatMessageList, setChatOption, setChatOptionForDisplay]);
 
   return (
     <>
