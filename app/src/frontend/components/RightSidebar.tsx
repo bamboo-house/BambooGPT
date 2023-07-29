@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { chatOptionState } from '../globalStates/atoms/chatAtom';
 import { isOpenedRightSidebarState } from '../globalStates/atoms/isOpenedRightSidebarAtom';
