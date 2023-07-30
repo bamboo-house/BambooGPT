@@ -39,7 +39,7 @@ export const ChatLog = () => {
                     <div className="m-auto flex max-w-2xl gap-6 px-0 py-8">
                       <div className="shrink-0">
                         <Image
-                          src="/sample_icon.png"
+                          src="/sample-icon.png"
                           width={30}
                           height={30}
                           alt="user"
@@ -56,7 +56,7 @@ export const ChatLog = () => {
                     <div className="m-auto flex max-w-2xl gap-6 px-0 py-8">
                       <div className="shrink-0 ">
                         <Image
-                          src="/bamboogpt_icon.png"
+                          src="/bamboogpt-icon.png"
                           width={30}
                           height={30}
                           alt="assistant"

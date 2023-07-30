@@ -81,7 +81,7 @@ export const LeftSidebar = () => {
         >
           <div className="flex items-center">
             <Image
-              src="/sample_icon.png"
+              src="/sample-icon.png"
               width={27}
               height={27}
               alt="user"
