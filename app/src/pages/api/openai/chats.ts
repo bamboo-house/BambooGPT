@@ -27,7 +27,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       });
     }
-    console.log('messages', reqBody.chatContent.messages);
 
     // メイン処理
     // resはできるだけプレゼンテーション層で管理する

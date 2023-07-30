@@ -33,8 +33,6 @@ export class OpenaiChatsService {
         user,
       } = chatContent;
 
-      console.log('chatContent', chatContent);
-
       // Todo：引数にコールバック関数を渡さずに、pipeで結果を取得するなどして責務で分離すべき
       const result = await this._openaiFeature.createChatCompletion({
         model: model,
