@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { OpenaiChatsService } from '@/backend/application/openaiChatsService';
-import { verifyAndAuthForFirestore } from '@/backend/utils/verifyAndAuthForFirestore';
+import { verifyAndAuthenticateUser } from '@/backend/utils/verifyAndAuthenticateUser';
 import { ReqPostOpenaiChat } from '@/bff/types/openai/chats';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       console.error('idToken is null');
       res.status(400).json({ error: { message: '無効なリクエストです' } });
     }
-    await verifyAndAuthForFirestore(idToken as string);
+    await verifyAndAuthenticateUser(idToken as string);
 
     // リクエストボディの取得・検証
     const reqBody: ReqPostOpenaiChat = req.body;
@@ -27,7 +27,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       });
     }
-    console.log('messages', reqBody.chatContent.messages);
 
     // メイン処理
     // resはできるだけプレゼンテーション層で管理する
@@ -41,6 +40,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     openaiChatsService.run(uid, threadId, chatContent, resWrite, resEnd);
   } catch (e) {
     console.error('Error(500): ', e);
-    res.status(500).json({ error: { message: e } });
+    res.status(500).json({ error: { message: e.message } });
   }
 }

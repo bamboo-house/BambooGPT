@@ -9,12 +9,21 @@
   "ignorePatterns": ["*.config.js"],
   "rules": {
     "import/order": [
-      "error",
+      "warn",
       {
         "alphabetize": {
           "order": "asc"
         }
       }
-    ]
-  }
+    ],
+    "tailwindcss/no-custom-classname": [
+      1,
+      {
+        "whitelist": ["(bg-|border-|'')gpt\\-(dark|gray|gray2|delete)", "bg-gpt-linear-gradient"]
+      }
+    ],
+    // カスタムクラスを作ると、prettierと競合するので無効にする（prettierで自動整形されるのでOK）
+    "tailwindcss/classnames-order": "off"
+  },
+  "plugins": ["tailwindcss"]
 }

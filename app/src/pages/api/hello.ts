@@ -13,11 +13,10 @@ import { connectAuthEmulator, getAuth, signInWithCustomToken } from 'firebase/au
 import * as admin from 'firebase-admin';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { initializeFirebaseForBE } from '@/backend/utils/initializeFirebaseForBE';
-import { verifyAndAuthForFirestore } from '@/backend/utils/verifyAndAuthForFirestore';
+import { verifyAndAuthenticateUser } from '@/backend/utils/verifyAndAuthenticateUser';
 
 // クライアントサイドからのGoogleログイン処理
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  console.log('process.env', process.env.NODE_ENV);
   if (req.method === 'POST') {
     // クライアントサイドから送信されたIDトークンを取得
     const idToken = req.headers.authorization?.split('Bearer ')[1];
@@ -25,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.status(400).json({ success: false, message: '無効なリクエストです' });
     }
 
-    const user = await verifyAndAuthForFirestore(idToken as string);
+    const user = await verifyAndAuthenticateUser(idToken as string);
 
     try {
       const threadCol = collection(getFirestore(), 'threads');

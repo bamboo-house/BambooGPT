@@ -1,37 +1,14 @@
 import {
   getAuth,
   GoogleAuthProvider,
-  onAuthStateChanged,
   signInWithPopup,
   signOut,
+  UserCredential,
 } from 'firebase/auth';
-import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { currentUserState } from '../globalStates/atoms/currentUserAtom';
 import { GoogleUserInfo } from '@/bff/types/firestore/usersCollection';
 import { ReqLoginGoogle, ResLoginGoogle } from '@/bff/types/login';
-
-export const useCurrentUserSetter = () => {
-  const auth = getAuth();
-  const setCurrentUser = useSetRecoilState(currentUserState);
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log('authchanged', user);
-        setCurrentUser({
-          uid: user.uid,
-          name: user.displayName,
-          image: user.photoURL,
-        });
-      } else {
-        console.log('なし');
-      }
-    });
-    console.log('currentUser', auth.currentUser);
-    return unsubscribe;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-};
 
 export const useFirebaseAuth = () => {
   const auth = getAuth();
@@ -40,10 +17,10 @@ export const useFirebaseAuth = () => {
   const loginWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      const result: any = await signInWithPopup(auth, provider);
+      const result: UserCredential = await signInWithPopup(auth, provider);
       // ログイン成功時にサーバーサイドのAPIにIDトークンを送信
       const idToken = await result.user.getIdToken(true);
-      console.log('ログインに成功です', idToken);
+      console.log('ログインに成功しました', idToken);
 
       const metadata: any = result.user.metadata;
       const googleUserInfo: GoogleUserInfo = {
@@ -72,18 +49,24 @@ export const useFirebaseAuth = () => {
 
       // ログイン成功の処理
       const resBody: ResLoginGoogle = await response.json();
-      console.log('resBody', resBody);
 
-      // console.log(result.user);
+      // Todo：ログイン失敗の処理を作り込む
+      if (resBody.error) {
+        console.log(resBody.error.message);
+        throw new Error(resBody.error.message);
+      }
+
       if (resBody.body) {
         setCurrentUser({
           uid: result.user.uid,
           name: resBody.body.name,
           image: resBody.body.image,
+          idToken: idToken,
         });
       }
     } catch (error) {
       console.log(error);
+      throw new Error(error.message);
     }
   };
 
@@ -98,9 +81,10 @@ export const useFirebaseAuth = () => {
       });
 
     setCurrentUser({
-      uid: null,
+      uid: '',
       name: null,
       image: null,
+      idToken: '',
     });
   };
 

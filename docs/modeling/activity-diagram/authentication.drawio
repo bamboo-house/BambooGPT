@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="z8kBm7TspygcvmiUF80F" name="ページ1">
-        <mxGraphModel dx="840" dy="1090" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="1851" dy="862" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -99,8 +99,22 @@
                 <mxCell id="59" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=15;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;" parent="1" vertex="1">
                     <mxGeometry x="455" y="1020" width="30" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="70" value="◽️ frontendとbackendのユーザー認証" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;" parent="1" vertex="1">
-                    <mxGeometry x="70" y="390" width="480" height="30" as="geometry"/>
+                <mxCell id="70" value="◽️ frontendとbackendのユーザー認証（DB操作前の認証処理）" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;" parent="1" vertex="1">
+                    <mxGeometry x="70" y="390" width="540" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="72" style="edgeStyle=none;html=1;exitX=0;exitY=0;exitDx=90;exitDy=65;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="71" target="35">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="71" value="&lt;div style=&quot;color: rgb(212, 212, 212); background-color: rgb(30, 30, 30); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; line-height: 20px;&quot;&gt;&lt;div&gt;    &lt;span style=&quot;color: #569cd6;&quot;&gt;const&lt;/span&gt; &lt;span style=&quot;color: #4fc1ff;&quot;&gt;user&lt;/span&gt; = &lt;span style=&quot;color: #dcdcaa;&quot;&gt;getAuth&lt;/span&gt;().&lt;span style=&quot;color: #4fc1ff;&quot;&gt;currentUser&lt;/span&gt;;&lt;/div&gt;&lt;div&gt;    &lt;span style=&quot;color: #c586c0;&quot;&gt;if&lt;/span&gt; (!&lt;span style=&quot;color: #4fc1ff;&quot;&gt;user&lt;/span&gt;) {&lt;/div&gt;&lt;div&gt;      &lt;span style=&quot;color: #c586c0;&quot;&gt;return&lt;/span&gt;;&lt;/div&gt;&lt;div&gt;    }&lt;/div&gt;&lt;div&gt;    &lt;span style=&quot;color: #569cd6;&quot;&gt;const&lt;/span&gt; &lt;span style=&quot;color: #4fc1ff;&quot;&gt;idToken&lt;/span&gt; = &lt;span style=&quot;color: #c586c0;&quot;&gt;await&lt;/span&gt; &lt;span style=&quot;color: #4fc1ff;&quot;&gt;user&lt;/span&gt;.&lt;span style=&quot;color: #dcdcaa;&quot;&gt;getIdToken&lt;/span&gt;();&lt;/div&gt;&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;fillColor=#a0522d;fontColor=#ffffff;strokeColor=#6D1F00;" vertex="1" parent="1">
+                    <mxGeometry x="-220" y="430" width="200" height="190" as="geometry"/>
+                </mxCell>
+                <mxCell id="75" style="edgeStyle=none;html=1;exitX=0;exitY=0;exitDx=80;exitDy=30;exitPerimeter=0;" edge="1" parent="1" source="74">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="230" y="580" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="74" value="DBを操作する全てのリクエストにidTokenを送る&lt;br&gt;&lt;div style=&quot;color: rgb(212, 212, 212); background-color: rgb(30, 30, 30); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; line-height: 20px;&quot;&gt;&lt;div&gt;&lt;span style=&quot;color: #9cdcfe;&quot;&gt;headers&lt;/span&gt;&lt;span style=&quot;color: #9cdcfe;&quot;&gt;:&lt;/span&gt; {&lt;/div&gt;&lt;div&gt;        &lt;span style=&quot;color: #ce9178;&quot;&gt;'Content-Type'&lt;/span&gt;&lt;span style=&quot;color: #9cdcfe;&quot;&gt;:&lt;/span&gt; &lt;span style=&quot;color: #ce9178;&quot;&gt;'application/json'&lt;/span&gt;,&lt;/div&gt;&lt;div&gt;        &lt;span style=&quot;color: #9cdcfe;&quot;&gt;Authorization&lt;/span&gt;&lt;span style=&quot;color: #9cdcfe;&quot;&gt;:&lt;/span&gt; &lt;span style=&quot;color: #ce9178;&quot;&gt;`Bearer &lt;/span&gt;&lt;span style=&quot;color: #569cd6;&quot;&gt;${&lt;/span&gt;&lt;span style=&quot;color: #4fc1ff;&quot;&gt;idToken&lt;/span&gt;&lt;span style=&quot;color: #569cd6;&quot;&gt;}&lt;/span&gt;&lt;span style=&quot;color: #ce9178;&quot;&gt;`&lt;/span&gt;,&lt;/div&gt;&lt;div&gt;      },&lt;/div&gt;&lt;/div&gt;" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#a0522d;fontColor=#ffffff;strokeColor=#6D1F00;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="-250" y="710" width="280" height="170" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

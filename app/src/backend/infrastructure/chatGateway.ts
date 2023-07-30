@@ -1,17 +1,20 @@
 import {
+  DocumentReference,
   collection,
   doc,
   getDoc,
   getDocs,
   getFirestore,
+  limit,
+  orderBy,
   query,
   serverTimestamp,
   setDoc,
+  updateDoc,
   where,
 } from 'firebase/firestore';
 import { CreateChatCompletionRequest } from 'openai';
 import { ChatRecord } from './chatRecord';
-import { ThreadRecord } from './threadRecord';
 
 export class ChatGateway {
   private _collection: ReturnType<typeof collection>;
@@ -81,6 +84,7 @@ export class ChatGateway {
       if (chatDocSnapshot.exists() && chatDocSnapshot.data() !== undefined) {
         chat = chatDocSnapshot.data();
         if (!chat) return undefined;
+        if (chat.deletedAt !== null) return undefined;
       } else {
         return undefined;
       }
@@ -98,6 +102,25 @@ export class ChatGateway {
       chat.updatedAt,
       chat.createdAt
     );
+  }
+
+  async getLatestChatIdByThread(threadDoc: DocumentReference): Promise<string> {
+    const q = query(
+      this._collection,
+      where('thread', '==', threadDoc),
+      where('deletedAt', '==', null),
+      orderBy('updatedAt', 'desc'),
+      limit(1)
+    );
+    const chatDocSnapshot = await getDocs(q);
+    if (chatDocSnapshot.empty) return '';
+
+    let chatId: string = '';
+    chatDocSnapshot.forEach((doc) => {
+      if (doc.ref.id === undefined) return '';
+      chatId = doc.ref.id;
+    });
+    return chatId;
   }
 
   async getAll(uid: string): Promise<ChatRecord[]> {
@@ -131,5 +154,30 @@ export class ChatGateway {
       throw new Error(`chatドキュメントを取得できませんでした: ${error}`);
     }
     return chatRecords;
+  }
+
+  async deleteAllByThreadId(threadId: string): Promise<void> {
+    const threadDocRef = doc(getFirestore(), 'threads', threadId);
+    if (!threadDocRef) {
+      console.error('chatGateway.ts：スレッドが存在しません');
+      throw new Error('chatGateway.ts：スレッドが存在しません');
+    }
+    const deletedAt = serverTimestamp();
+    const q = query(
+      this._collection,
+      where('thread', '==', threadDocRef),
+      where('deletedAt', '==', null)
+    );
+    try {
+      const chatDocSnapshot = await getDocs(q);
+      chatDocSnapshot.forEach(async (doc) => {
+        await updateDoc(doc.ref, { deletedAt: deletedAt }).then(() => {
+          console.log('Chat Document successfully deleted!', doc.ref.id);
+        });
+      });
+    } catch (error) {
+      console.error(error);
+      throw new Error(`全てのchatを削除できませんでした: ${error}`);
+    }
   }
 }
