@@ -1,1 +1,1 @@
-# BambooGPT
+# BambooAGI

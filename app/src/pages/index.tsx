@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>BambooGPT</title>
+        <title>BambooAGI</title>
       </Head>
       <div className="top-main flex h-full w-full">
         <LeftSidebar />
