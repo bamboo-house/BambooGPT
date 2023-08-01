@@ -14,7 +14,6 @@ import {
   serverTimestamp,
   setDoc,
   updateDoc,
-  where,
 } from 'firebase/firestore';
 import { v4 } from 'uuid';
 
