@@ -5,6 +5,7 @@ services:
     build:
       context: ./app
       dockerfile: ./docker/app.dockerfile
+    container_name: bambooagi-app
     tty: true
     volumes:
       - ./app:/usr/src/app
@@ -12,10 +13,12 @@ services:
       - 3000:3000
       - 9229:9229
     command: sh -c "npm run dev"
+
   firebase:
     build:
       context: ./app
       dockerfile: ./docker/firebase.dockerfile
+    container_name: bambooagi-firebase
     volumes:
       - ./app/.firebaserc:/opt/firebase/.firebaserc
       - ./app/firebase.json:/opt/firebase/firebase.json
@@ -30,3 +33,28 @@ services:
     working_dir: /opt/firebase
     command: firebase emulators:start --import=./dump
     tty: true
+
+  db:
+    image: mysql:8.0.33
+    container_name: bambooagi-db
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      # 開発環境はハードコードしても問題ない
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: bambooagi_development_db
+    volumes:
+      # 設定ファイルディレクトリにマウントする
+      - ./mysql/conf.d:/etc/mysql/conf.d
+      # DB初期化ディレクトリにマウントする
+      # - ./mysql/init.d:/docker-entrypoint-initdb.d
+      - bambooagi-db-data:/var/lib/mysql
+    # ネットワーク
+    networks:
+      - default
+
+volumes:
+  bambooagi-db-data:
