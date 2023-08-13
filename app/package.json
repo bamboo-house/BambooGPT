@@ -21,6 +21,7 @@
     "next-themes": "^0.2.1",
     "openai": "^3.2.1",
     "postcss": "^8.4.21",
+    "prisma": "^5.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.44.3",
@@ -34,6 +35,7 @@
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "^2.0.7",
+    "@prisma/client": "^5.1.1",
     "@types/firebase": "^3.2.1",
     "@types/jest": "^29.5.2",
     "@types/node": "^18.15.11",
