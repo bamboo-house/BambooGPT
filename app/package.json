@@ -11,6 +11,9 @@
     "test": "jest",
     "test:watch": "jest -- watch"
   },
+  "prisma": {
+    "schema": "src/backend/prisma/schema.prisma"
+  },
   "dependencies": {
     "@types/lodash": "^4.14.195",
     "firebase": "^9.19.1",
