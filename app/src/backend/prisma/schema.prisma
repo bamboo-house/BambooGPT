@@ -11,9 +11,57 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id               Int      @id @default(autoincrement())
+  name             String?
+  displayName      String?
+  email            String?  @unique
+  phoneNumber      String?
+  photoURL         String?
+  uid              String   @unique
+  providerId       String
+  userCreatedAt    String
+  userCreationTime String
+  lastLoginAt      String
+  lastSignInTime   String
+  lastRefreshAt    String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  deletedAt        DateTime?
+  threads          Thread[]
+}
+
+model Thread {
+  id        Int       @id @default(autoincrement())
+  userId    Int
   name      String
-  image     String?   
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  chats     Chat[]
+
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Chat {
+  id        Int       @id @default(autoincrement())
+  threadId  Int
+  model     String
+  message   String[]
+  function  String[]
+  function_call String
+  temperature Float?
+  top_p     Float?
+  n        Int?
+  stream    Boolean?
+  stop      String[]
+  max_tokens Int?
+  presence_penalty Float?
+  frequency_penalty Float?
+  logit_bias String?
+  user      String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  thread    Thread   @relation(fields: [threadId], references: [id])
 }
