@@ -43,25 +43,43 @@ model Thread {
 }
 
 model Chat {
+  id                 Int       @id @default(autoincrement())
+  threadId           Int
+  model              String
+  temperature        Float?
+  topP               Float?
+  n                  Int?
+  stream             Boolean?
+  stop               String?
+  maxTokens          Int?
+  presencePenalty   Float?
+  frequencyPenalty  Float?
+  logitBias          String?
+  user               String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  deletedAt          DateTime?
+  messages           Message[]
+
+  thread             Thread   @relation(fields: [threadId], references: [id])
+}
+
+enum Role {
+  System
+  User
+  Assistant
+  Function
+}
+
+model Message {
   id        Int       @id @default(autoincrement())
-  threadId  Int
-  model     String
-  message   String[]
-  function  String[]
-  function_call String
-  temperature Float?
-  top_p     Float?
-  n        Int?
-  stream    Boolean?
-  stop      String[]
-  max_tokens Int?
-  presence_penalty Float?
-  frequency_penalty Float?
-  logit_bias String?
-  user      String?
+  chatId    Int
+  role      Role
+  content   String?
+  name      String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  thread    Thread   @relation(fields: [threadId], references: [id])
+  chat      Chat     @relation(fields: [chatId], references: [id])
 }
