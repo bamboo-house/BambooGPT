@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { OpenaiChatsService } from '@/backend/application/openaiChatsService';
-import { verifyAndAuthenticateUser } from '@/backend/utils/verifyAndAuthenticateUser';
 import { ReqPostOpenaiChat } from '@/bff/types/openai/chats';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -10,16 +9,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // headersの取得・認証
-    const idToken = req.headers.authorization?.split('Bearer ')[1];
-    if (!idToken) {
-      console.error('idToken is null');
-      res.status(400).json({ error: { message: '無効なリクエストです' } });
-    }
-    await verifyAndAuthenticateUser(idToken as string);
+    // const idToken = req.headers.authorization?.split('Bearer ')[1];
+    // if (!idToken) {
+    //   console.error('idToken is null');
+    //   res.status(400).json({ error: { message: '無効なリクエストです' } });
+    // }
+    // await verifyAndAuthenticateUser(idToken as string);
 
     // リクエストボディの取得・検証
     const reqBody: ReqPostOpenaiChat = req.body;
-    const { uid, threadId, chatContent } = reqBody;
+    const { threadId, chatContent } = reqBody;
     if (reqBody.chatContent.messages[reqBody.chatContent.messages.length - 1].content === '') {
       res.status(400).json({
         error: {
@@ -37,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.end();
     };
     const openaiChatsService = new OpenaiChatsService();
-    openaiChatsService.run(uid, threadId, chatContent, resWrite, resEnd);
+    openaiChatsService.run(threadId, chatContent, resWrite, resEnd);
   } catch (e) {
     console.error('Error(500): ', e);
     res.status(500).json({ error: { message: e.message } });

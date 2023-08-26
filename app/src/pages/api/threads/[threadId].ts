@@ -1,43 +1,66 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { ChatGateway } from '@/backend/infrastructure/chatGateway';
-import { ThreadGateway } from '@/backend/infrastructure/threadGateway';
-import { verifyAndAuthenticateUser } from '@/backend/utils/verifyAndAuthenticateUser';
+import { DefaultSession, getServerSession } from 'next-auth';
+import { authOptions } from '../auth/[...nextauth]';
+import prisma from '@/backend/utils/prisma';
 import { ResGetThread } from '@/bff/types/thread';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    // headersの取得・認証
-    const idToken = req.headers.authorization?.split('Bearer ')[1];
-    if (!idToken) {
-      return res.status(400).json({ success: false, message: '無効なリクエストです' });
-    }
-    await verifyAndAuthenticateUser(idToken as string);
+    const session = await getServerSession(req, res, authOptions);
 
-    const threadGateway = new ThreadGateway();
-    const chatGateway = new ChatGateway();
+    if (!session || !session.user || !session.user) {
+      return res.status(400).json({ error: { message: 'ログインしてください' } });
+    }
+    const { user, expires }: DefaultSession = session;
+    if (!user || !user.email) {
+      return res.status(400).json({ error: { message: '再ログインしてください' } });
+    }
+
+    const userRecord = await prisma.user.findUnique({
+      where: { email: user.email },
+    });
+
+    if (!userRecord || !userRecord.id) {
+      return res.status(400).json({ error: { message: 'ユーザーが存在しません' } });
+    }
+
     const threadId = req.query.threadId as string;
 
     switch (req.method) {
       case 'GET':
-        const threadRecord = await threadGateway.get(threadId);
-        if (threadRecord === undefined) {
-          res.status(400).json({ error: { message: 'スレッドが存在しません' } });
-          break;
+        const threadRecord = await prisma.thread.findUnique({
+          where: { id: Number(threadId) },
+        });
+        if (!threadRecord) {
+          return res.status(400).json({ error: { message: 'スレッドが存在しません' } });
+        }
+
+        if (threadRecord.userId !== userRecord.id) {
+          return res.status(400).json({ error: { message: 'リソースへのアクセスが無効です' } });
         }
 
         const resGetBody: ResGetThread = {
-          body: { threadId: threadRecord.threadId, name: threadRecord.name },
+          body: {
+            id: threadRecord.id,
+            userId: threadRecord.userId,
+            name: threadRecord.name,
+            createdAt: threadRecord.createdAt,
+            updatedAt: threadRecord.updatedAt,
+          },
         };
         res.status(200).json(resGetBody);
         break;
       case 'DELETE':
-        /* 
-          threadを削除するとき、threadに紐づくchatも削除しても良い。
-          「threadは削除されているが、chatは残っている」という状態は、ビジネス的にもないため。（フロントでリクエストを分けることもない）
-          ThreadGateWayでchat削除しないのは、ThreadGatewayはthreadに対してのみ操作対象とするため。
-        */
-        await threadGateway.delete(threadId);
-        await chatGateway.deleteAllByThreadId(threadId);
+        await prisma.thread
+          .delete({
+            where: {
+              id: Number(threadId),
+              userId: userRecord.id,
+            },
+          })
+          .catch((e) => {
+            throw new Error('スレッドが存在しません or 無効なユーザーです');
+          });
         res.status(200).json({ success: true });
         break;
       default:

@@ -34,7 +34,7 @@ export const useCurrentUserSetter = () => {
         console.log('not logged in');
         // ログインしていない場合はログイン画面に遷移する
         // Todo:2023/6/23 AppWrapperで実行しているので全てのページでリダイレクトする仕様だが、ページによって処理を変える場合は、カスタムフックなどでカプセル化する
-        router.push('/login');
+        // router.push('/login');
       }
     });
     console.log('currentUser', auth.currentUser);

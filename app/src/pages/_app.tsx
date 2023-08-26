@@ -1,5 +1,6 @@
 import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
+import { SessionProvider } from 'next-auth/react';
 import { ThemeProvider } from 'next-themes';
 import { useEffect } from 'react';
 import { RecoilRoot, useRecoilSnapshot } from 'recoil';
@@ -7,7 +8,7 @@ import { AppWrapper } from './AppWrapper';
 import { initializeFirebaseForFE } from '@/frontend/utils/initializeFirebaseForFE';
 import 'highlight.js/styles/github-dark.css';
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   // firebase/authの初期化
   initializeFirebaseForFE();
 
@@ -26,9 +27,11 @@ export default function App({ Component, pageProps }: AppProps) {
     <RecoilRoot>
       <DebugObserver />
       <ThemeProvider attribute="class" defaultTheme="dark">
-        <AppWrapper>
-          <Component {...pageProps} />
-        </AppWrapper>
+        <SessionProvider session={session}>
+          <AppWrapper>
+            <Component {...pageProps} />
+          </AppWrapper>
+        </SessionProvider>
       </ThemeProvider>
     </RecoilRoot>
   );

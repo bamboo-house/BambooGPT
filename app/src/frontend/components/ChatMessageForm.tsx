@@ -50,7 +50,7 @@ export const ChatMessageForm = () => {
       if (!chatInfo.threadId) {
         const maxLength = 50;
         const body = await createThread(prompt.slice(0, maxLength));
-        threadId = body.threadId;
+        threadId = body.id;
         setChatInfo({ uid: '', threadId: threadId, chatId: '' });
       }
 

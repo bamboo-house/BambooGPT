@@ -5,8 +5,11 @@ export type ReqCreateThread = {
 
 export type ResPostThread = {
   body?: {
-    threadId: string;
+    id: number;
+    userId: string;
     name: string;
+    createdAt: Date;
+    updatedAt: Date;
   };
   error?: {
     message: string;
@@ -16,8 +19,11 @@ export type ResPostThread = {
 // GET
 export type ResGetThreads = {
   body?: {
-    threadId: string;
+    id: number;
+    userId: string;
     name: string;
+    createdAt: Date;
+    updatedAt: Date;
   }[];
   error?: {
     message: string;
@@ -26,8 +32,11 @@ export type ResGetThreads = {
 
 export type ResGetThread = {
   body?: {
-    threadId: string;
+    id: number;
+    userId: string;
     name: string;
+    createdAt: Date;
+    updatedAt: Date;
   };
   error?: {
     message: string;

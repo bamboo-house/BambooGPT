@@ -1,61 +1,62 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { ChatGateway } from '@/backend/infrastructure/chatGateway';
-import { ThreadGateway } from '@/backend/infrastructure/threadGateway';
-import { ThreadRecord } from '@/backend/infrastructure/threadRecord';
-import { verifyAndAuthenticateUser } from '@/backend/utils/verifyAndAuthenticateUser';
-import { ReqCreateThread, ResGetThreads, ResPostThread } from '@/bff/types/thread';
+import { DefaultSession } from 'next-auth';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '../auth/[...nextauth]';
+import prisma from '@/backend/utils/prisma';
+import { ResGetThreads, ResPostThread } from '@/bff/types/thread';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    // headersの取得・認証
-    const idToken = req.headers.authorization?.split('Bearer ')[1];
-    if (!idToken) {
-      return res.status(400).json({ error: { message: 'idTokenで無効なリクエストです' } });
-    }
-    const user = await verifyAndAuthenticateUser(idToken as string);
+    const session = await getServerSession(req, res, authOptions);
 
-    const threadGateway = new ThreadGateway();
-    const chatGateway = new ChatGateway();
-    let threadRecords: ThreadRecord[];
+    if (!session || !session.user || !session.user) {
+      return res.status(400).json({ error: { message: 'ログインしてください' } });
+    }
+    const { user, expires }: DefaultSession = session;
+    if (!user || !user.email) {
+      return res.status(400).json({ error: { message: '再ログインしてください' } });
+    }
+
+    const userRecord = await prisma.user.findUnique({
+      where: { email: user.email },
+    });
+
+    if (!userRecord || !userRecord.id) {
+      return res.status(400).json({ error: { message: 'ユーザーが存在しません' } });
+    }
 
     switch (req.method) {
       case 'GET':
-        threadRecords = await threadGateway.getAll(user.uid);
-        const result = threadRecords.map((threadRecord) => {
-          return { threadId: threadRecord.threadId, name: threadRecord.name };
+        const threadRecords = await prisma.thread.findMany({
+          where: {
+            userId: userRecord.id,
+          },
         });
 
         const resGetBody: ResGetThreads = {
-          body: result,
+          body: threadRecords,
         };
         res.status(200).json(resGetBody);
         break;
       case 'POST':
-        const reqBody: ReqCreateThread = req.body;
-        const { name } = reqBody;
-
-        const threadRecord = await threadGateway.create(user.uid, name);
+        const threadRecord = await prisma.thread.create({
+          data: {
+            userId: userRecord.id,
+            name: 'test',
+          },
+        });
 
         const resPostBody: ResPostThread = {
-          body: {
-            threadId: threadRecord.threadId,
-            name: threadRecord.name,
-          },
+          body: threadRecord,
         };
         res.status(200).json(resPostBody);
         break;
       case 'DELETE':
-        /* 
-          threadを削除するとき、threadに紐づくchatも削除しても良い。
-          「threadは削除されているが、chatは残っている」という状態は、ビジネス的にもないため。（フロントでリクエストを分けることもない）
-          ThreadGateWayでchat削除しないのは、ThreadGatewayはthreadに対してのみ操作対象とするため。
-        */
-        threadRecords = await threadGateway.getAll(user.uid);
-        await threadGateway.deleteAll(user.uid);
-        threadRecords.forEach(async (threadRecord) => {
-          await chatGateway.deleteAllByThreadId(threadRecord.threadId);
+        await prisma.thread.deleteMany({
+          where: {
+            userId: userRecord.id,
+          },
         });
-
       default:
         res.status(400).json({ error: { message: '無効なリクエストです' } });
     }

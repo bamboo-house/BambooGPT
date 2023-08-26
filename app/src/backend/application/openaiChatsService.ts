@@ -1,23 +1,26 @@
+import { Role } from '@prisma/client';
+import { capitalize } from 'lodash';
 import { CreateChatCompletionRequest } from 'openai';
 import { ChatGateway } from '../infrastructure/chatGateway';
+import prisma from '../utils/prisma';
 import { OpenaiFeature } from '@/backend/application/features/openaiFeature';
 
 export class OpenaiChatsService {
-  private _chatsGateway: ChatGateway;
+  // private _chatsGateway: ChatGateway;
   private _openaiFeature: OpenaiFeature;
   constructor() {
-    this._chatsGateway = new ChatGateway();
+    // this._chatsGateway = new ChatGateway();
     this._openaiFeature = new OpenaiFeature();
   }
 
   async run(
-    uid: string,
     threadId: string,
     chatContent: CreateChatCompletionRequest,
     resWrite: (text: string) => void,
     resEnd: () => void
   ) {
     try {
+      /* openAIのapiにアクセスして、レスポンスを得る */
       const {
         model,
         messages,
@@ -50,8 +53,36 @@ export class OpenaiChatsService {
         resWrite: resWrite,
         resEnd: resEnd,
       });
+
+      /* チャット履歴を保存する */
       chatContent.messages.push({ role: 'assistant', content: result });
-      await this._chatsGateway.create(uid, threadId, chatContent);
+      const newMessages: { role: Role; content: string | undefined }[] = chatContent.messages.map(
+        (message) => {
+          return {
+            role: (message.role.substring(0, 1).toUpperCase() + message.role.substring(1)) as Role,
+            content: message.content,
+          };
+        }
+      );
+      await prisma.chat.create({
+        data: {
+          threadId: Number(threadId),
+          model: model,
+          temperature: temperature,
+          topP: top_p,
+          n: n,
+          stream: stream,
+          stop: stop?.toString(),
+          maxTokens: max_tokens,
+          presencePenalty: presence_penalty,
+          frequencyPenalty: frequency_penalty,
+          logitBias: logit_bias?.toString(),
+          user: user,
+          messages: {
+            create: newMessages,
+          },
+        },
+      });
     } catch (error) {
       console.error(error);
       // 2023/07/14 streamでエラーが発生した場合、Promiseと競合してエラーが出る。解消難しいので、一旦放置
